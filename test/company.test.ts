@@ -23,6 +23,8 @@ test("mint creates and validates the complete company repository", async () => {
     evals: 0,
     labels: 0,
     routes: 0,
+    calls: 0,
+    contexts: 0,
   });
 });
 

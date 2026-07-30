@@ -4,6 +4,8 @@ Tailered AI mints AI-native companies as plain files in a Git repository. v1 con
 
 The platform keeps no parallel company state. Product code, decisions, policies, labels, routes, and run accounting stay in the company repository.
 
+The [Full-System Blueprint](docs/full-system-blueprint.md) is the staged trajectory. The [v1 execution map](docs/blueprint-execution.md) records which foundations are active and which remain data-gated.
+
 ## Requirements
 
 - Node.js 24 or newer
@@ -63,6 +65,8 @@ Process-agent runs execute generated acceptance checks. `--allow-local-execution
 - `GateLabel` exists only after a human gate occurred.
 - The next agent call reserves a hard cost ceiling before execution. A projected total greater than or equal to $5.00 is refused. The call settles actual usage afterward.
 - The router is stateless. `route(taskKind, { attempts })` maps the third code-generation attempt to the frontier tier and leaves every decision measurable in `evals/routes.jsonl`.
+- Model aliases are loaded from `tailered.config.json` for every run. Swapping an alias changes model identity without changing orchestration code.
+- Every executed model call stores an append-only trace. Distinct repository contexts are stored once per run and referenced by hash; route logs carry cache, byte, and assembly telemetry.
 - Accepted ADR files are never edited. A new ADR uses `supersedes` and includes the replaced ADR in `caused_by`; dashboard rendering derives the old ADR's `superseded` state.
 
 See [docs/v1-contract.md](docs/v1-contract.md) for the complete scope ruling and [docs/agent-protocol.md](docs/agent-protocol.md) for the vendor-neutral process boundary.
@@ -76,7 +80,7 @@ loops/               closed-loop definitions
 seats/               human and agent accountabilities
 evals/ledger.jsonl   one terminal row per run
 evals/routes.jsonl   measured model allocation
-evals/runs/          specs and generated acceptance tests
+evals/runs/          specs, shared contexts, and exact model-call traces
 labels/ledger.jsonl  human gate preference labels
 policies/            irreversible-action gates
 AGENTS.md            machine-checkable company constitution

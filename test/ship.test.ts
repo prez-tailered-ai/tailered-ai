@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp } from "node:fs/promises";
+import { mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -47,6 +47,21 @@ test("gating demo ships with approve, zero edits, and complete accounting", asyn
   assert.equal(labels[0]?.verdict, "approve");
   assert.equal(labels[0]?.edit_diff, undefined);
   assert.ok(routes.length >= 4);
+  assert.equal(routes[0]?.context.cache_hit, false);
+  assert.ok(routes.some((row) => row.context.cache_hit));
+  assert.ok(new Set(routes.map((row) => row.context.snapshot_ref)).size >= 2);
+  const firstRoute = routes[0];
+  assert.ok(firstRoute);
+  const firstTrace = JSON.parse(
+    await readFile(join(root, firstRoute.trace_ref), "utf8"),
+  ) as {
+    route_log_id: string;
+    context_ref: string;
+    payload: unknown;
+  };
+  assert.equal(firstTrace.route_log_id, firstRoute.id);
+  assert.equal(firstTrace.context_ref, firstRoute.context.snapshot_ref);
+  assert.ok(firstTrace.payload);
   assert.ok(receipt.costUsd < 5);
   await assertGatingDefinitionOfDone(root, receipt);
   await validateCompany(root);
@@ -105,6 +120,56 @@ test("budget refusal happens before agent invocation and still writes a terminal
   await validateCompany(root);
 });
 
+test("accounting violations preserve the measured call before halting", async () => {
+  const root = await makeCompany();
+  const receipt = await taileredShip({
+    root,
+    specText: "Exercise settlement above the agent's hard reservation ceiling.",
+    agent: new ScenarioAgent("accounting"),
+    gate: new FixedGate(approval()),
+  });
+  const ledger = new CompanyLedger(root);
+  const routes = await ledger.routes();
+
+  assert.equal(receipt.outcome, "halted_budget");
+  assert.equal(routes.length, 1);
+  assert.equal(routes[0]?.status, "accounting_violation");
+  assert.equal(routes[0]?.cost_usd, 0.02);
+  assert.match(receipt.blocker ?? "", /Accounting invariant failed/u);
+  await validateCompany(root);
+});
+
+test("a repo registry string swap changes every runtime model request", async () => {
+  const root = await makeCompany();
+  const configPath = join(root, "tailered.config.json");
+  const config = JSON.parse(await readFile(configPath, "utf8")) as {
+    models: Record<"frontier" | "mid" | "cheap", string>;
+  };
+  config.models.frontier = "frontier-generation-next";
+  config.models.mid = "mid-generation-next";
+  config.models.cheap = "cheap-generation-next";
+  await writeFile(configPath, `${JSON.stringify(config, null, 2)}\n`, "utf8");
+  const agent = new ScenarioAgent("green");
+
+  const receipt = await taileredShip({
+    root,
+    specText: "Prove that model identity is sourced from one repository registry.",
+    agent,
+    gate: new FixedGate(approval()),
+    previewDeployer: async () => "file:///registry-swap-preview",
+  });
+
+  assert.equal(receipt.outcome, "shipped");
+  assert.ok(agent.models.includes("mid-generation-next"));
+  assert.ok(agent.models.includes("cheap-generation-next"));
+  assert.ok(
+    agent.models.every((model) =>
+      ["mid-generation-next", "cheap-generation-next"].includes(model),
+    ),
+  );
+  await validateCompany(root);
+});
+
 test("rejection captures both the preference label and terminal eval", async () => {
   const root = await makeCompany();
   const receipt = await taileredShip({
@@ -159,9 +224,10 @@ test("edit is valid platform behavior but fails the gating DoD assertion", async
 
 class ScenarioAgent implements Agent {
   invocations = 0;
+  readonly models: string[] = [];
 
   constructor(
-    readonly scenario: "never-green" | "budget" | "green",
+    readonly scenario: "never-green" | "budget" | "green" | "accounting",
   ) {}
 
   project(_request: AgentRequest): AgentProjection {
@@ -173,6 +239,7 @@ class ScenarioAgent implements Agent {
 
   async invoke(request: AgentRequest): Promise<AgentResponse> {
     this.invocations += 1;
+    this.models.push(request.model);
     let payload: unknown;
     switch (request.taskKind) {
       case "testgen":
@@ -214,7 +281,11 @@ class ScenarioAgent implements Agent {
     }
     return {
       payload,
-      usage: { input: 5, output: 5, costUsd: 0.001 },
+      usage: {
+        input: 5,
+        output: 5,
+        costUsd: this.scenario === "accounting" ? 0.02 : 0.001,
+      },
     };
   }
 }

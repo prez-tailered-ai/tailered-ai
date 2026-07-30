@@ -38,6 +38,8 @@ Each projection is a hard ceiling, not an average. Tailered reserves it before s
 
 `taskKind` is `testgen`, `codegen`, `critique`, `adr_draft`, `narrate`, or `judge`. `contextSnapshot` contains bounded UTF-8 repository files and a deterministic hash. Ledgers, build output, caches, and Git internals are excluded.
 
+The runtime stores each distinct `contextSnapshot` once under `evals/runs/<run-id>/contexts/`. Every executed call stores an append-only trace under `evals/runs/<run-id>/calls/` containing the route, projection, exact response payload or failure, usage, and causal edges. `evals/routes.jsonl` references both files and records context bytes, cache hit, and assembly time. Replay therefore uses stored inputs rather than reconstructing historical repository state.
+
 ## Response envelope
 
 ```json

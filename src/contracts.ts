@@ -20,13 +20,19 @@ export const BOUNDS = Object.freeze({
   demoTimeMinutes: 10,
 });
 
-export const MODEL_REGISTRY = Object.freeze({
-  frontier: "best-available",
-  mid: "mid-available",
-  cheap: "cheap-available",
-});
+export type ModelTier = "frontier" | "mid" | "cheap";
+export type ModelRegistry = Record<ModelTier, string>;
 
-export type ModelTier = keyof typeof MODEL_REGISTRY;
+export interface CompanyConfig {
+  version: 1;
+  models: ModelRegistry;
+  bounds: {
+    maxAttemptsPerCheck: number;
+    maxCostPerRunUsdExclusive: number;
+    demoTimeMinutes: number;
+  };
+}
+
 export type TaskKind =
   | "testgen"
   | "codegen"
@@ -144,6 +150,7 @@ export interface TokenUsage {
 
 export interface RouteLog {
   id: string;
+  call_id: string;
   run_id: string;
   task_kind: TaskKind;
   tier: ModelTier;
@@ -152,6 +159,42 @@ export interface RouteLog {
   attempts: number;
   tokens: TokenUsage;
   cost_usd: number;
+  status: AgentCallStatus;
+  context: ContextTelemetry;
+  trace_ref: string;
+  created_at: string;
+  caused_by: string[];
+}
+
+export interface ContextTelemetry {
+  repo_hash: string;
+  snapshot_ref: string;
+  bytes: number;
+  cache_hit: boolean;
+  assembly_ms: number;
+}
+
+export type AgentCallStatus =
+  | "completed"
+  | "failed"
+  | "accounting_violation";
+
+export interface AgentCallTrace {
+  id: string;
+  route_log_id: string;
+  run_id: string;
+  task_kind: TaskKind;
+  tier: ModelTier;
+  model: string;
+  status: AgentCallStatus;
+  signals: RouteSignals;
+  spec_id: string;
+  context_ref: string;
+  projection: AgentProjection;
+  usage: TokenUsage & { cost_usd: number };
+  payload?: unknown;
+  failure_output?: string;
+  error?: string;
   created_at: string;
   caused_by: string[];
 }

@@ -6,6 +6,7 @@ import type {
   Charter,
   RenderedADR,
 } from "./contracts.js";
+import { DEFAULT_COMPANY_CONFIG } from "./config.js";
 import {
   AppendOnlyViolationError,
   ValidationError,
@@ -341,6 +342,9 @@ ${charter.constraints}
 - Critique against this constitution before the human deploy gate.
 - Deployment requires an approve or edit verdict; rejection halts.
 - Accepted decisions are append-only. Supersession creates a new ADR.
+- Model identity comes only from tailered.config.json.
+- Store each executed agent call and each distinct context snapshot for replay.
+- Every persisted record carries caused_by links.
 - Claims use VERIFIED, INFERRED, or UNKNOWN and include their evidence.
 `;
 }
@@ -374,6 +378,13 @@ terminal_outcomes:
   - halted_attempts
   - halted_budget
   - rejected
+capture:
+  spec: evals/runs/{run_id}/spec.json
+  contexts: evals/runs/{run_id}/contexts/{repo_hash}.json
+  calls: evals/runs/{run_id}/calls/{call_id}.json
+  routes: evals/routes.jsonl
+  gate_labels: labels/ledger.jsonl
+  terminal_evals: evals/ledger.jsonl
 `;
 
 const ROSTER_YAML = `version: 1
@@ -399,20 +410,4 @@ gates:
     capture_label: true
 `;
 
-const CONFIG_JSON = `${JSON.stringify(
-  {
-    version: 1,
-    models: {
-      frontier: "best-available",
-      mid: "mid-available",
-      cheap: "cheap-available",
-    },
-    bounds: {
-      maxAttemptsPerCheck: 3,
-      maxCostPerRunUsdExclusive: 5,
-      demoTimeMinutes: 10,
-    },
-  },
-  null,
-  2,
-)}\n`;
+const CONFIG_JSON = `${JSON.stringify(DEFAULT_COMPANY_CONFIG, null, 2)}\n`;

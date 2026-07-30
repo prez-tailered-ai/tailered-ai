@@ -9,6 +9,8 @@ import {
   BOUNDS,
   type AcceptanceTest,
   type AdrDraftPayload,
+  type AgentCallStatus,
+  type AgentCallTrace,
   type AgentRequest,
   type CodegenPayload,
   type CritiquePayload,
@@ -22,6 +24,8 @@ import {
   type TaskKind,
   type TestgenPayload,
 } from "./contracts.js";
+import { loadCompanyConfig } from "./config.js";
+import { RunContextCache } from "./context.js";
 import {
   appendAdr,
   newRunId,
@@ -39,7 +43,6 @@ import {
 import {
   hashDirectory,
   resolveRepoPath,
-  snapshotRepository,
   writeAtomic,
 } from "./files.js";
 import { CompanyLedger } from "./ledger.js";
@@ -78,7 +81,10 @@ export async function taileredShip(options: ShipOptions): Promise<RunReceipt> {
   const runId = options.runId ?? newRunId(now());
   const startedAt = performance.now();
   const ledger = new CompanyLedger(root);
-  const budget = new ReserveSettleBudget(BOUNDS.maxCostPerRunUsd);
+  const config = await loadCompanyConfig(root);
+  const budget = new ReserveSettleBudget(
+    config.bounds.maxCostPerRunUsdExclusive,
+  );
   const adrs = await readAdrs(root);
   const causeAdr = adrs.at(-1);
   if (!causeAdr) {
@@ -95,7 +101,7 @@ export async function taileredShip(options: ShipOptions): Promise<RunReceipt> {
     throw new ValidationError("Spec text is required.");
   }
 
-  const contextCache = new Map<string, string>();
+  const contextCache = new RunContextCache(root, runId, spec.id, ledger);
   const attempts = new Map<string, number>();
   const passed = new Set<string>();
   let specWritten = false;
@@ -107,27 +113,13 @@ export async function taileredShip(options: ShipOptions): Promise<RunReceipt> {
   let evalRow: EvalRow | undefined;
   let terminalAdrId: string | undefined;
 
-  const getContext = async (): Promise<string> => {
-    const hash = await hashDirectory(root, {
-      excludeTopLevel: ["evals", "labels", ".tailered"],
-    });
-    const cached = contextCache.get(hash);
-    if (cached) {
-      return cached;
-    }
-    const snapshot = await snapshotRepository(root, {
-      excludeTopLevel: ["evals", "labels", ".tailered"],
-    });
-    contextCache.set(hash, snapshot);
-    return snapshot;
-  };
-
   const invoke = async (
     taskKind: TaskKind,
     signals: { attempts: number },
     failureOutput?: string,
   ): Promise<unknown> => {
-    const decision = route(taskKind, signals);
+    const decision = route(taskKind, signals, config.models);
+    const context = await contextCache.get();
     const request: AgentRequest = {
       runId,
       taskKind,
@@ -135,7 +127,7 @@ export async function taileredShip(options: ShipOptions): Promise<RunReceipt> {
       tier: decision.tier,
       signals,
       spec: spec.text,
-      contextSnapshot: await getContext(),
+      contextSnapshot: context.snapshot,
       ...(failureOutput ? { failureOutput } : {}),
     };
     const projection = options.agent.project(request);
@@ -144,53 +136,115 @@ export async function taileredShip(options: ShipOptions): Promise<RunReceipt> {
       projection.maxCostUsd,
       projection.maxTokens,
     );
+    const routeLogId = await ledger.nextRouteId();
+    const callId = routeLogId.replace(/^ROUTE-/u, "CALL-");
+    const traceRef = ledger.callTraceRef(runId, callId);
+
+    const recordCall = async (input: {
+      status: AgentCallStatus;
+      usage: { input: number; output: number };
+      costUsd: number;
+      payload?: unknown;
+      error?: string;
+      reason?: string;
+    }): Promise<void> => {
+      const createdAt = now().toISOString();
+      const trace: AgentCallTrace = {
+        id: callId,
+        route_log_id: routeLogId,
+        run_id: runId,
+        task_kind: taskKind,
+        tier: decision.tier,
+        model: decision.model,
+        status: input.status,
+        signals: { ...signals },
+        spec_id: spec.id,
+        context_ref: context.telemetry.snapshot_ref,
+        projection: { ...projection },
+        usage: {
+          input: input.usage.input,
+          output: input.usage.output,
+          cost_usd: input.costUsd,
+        },
+        ...(input.payload !== undefined ? { payload: input.payload } : {}),
+        ...(failureOutput ? { failure_output: failureOutput } : {}),
+        ...(input.error ? { error: input.error } : {}),
+        created_at: createdAt,
+        caused_by: [routeLogId, spec.id],
+      };
+      const writtenTraceRef = await ledger.writeCallTrace(trace);
+      if (writtenTraceRef !== traceRef) {
+        throw new AccountingInvariantError(
+          `Call trace path mismatch: expected ${traceRef}, wrote ${writtenTraceRef}.`,
+        );
+      }
+      await ledger.appendRouteLog(
+        createRouteLog({
+          id: routeLogId,
+          callId,
+          runId,
+          decision: {
+            ...decision,
+            ...(input.reason ? { reason: input.reason } : {}),
+          },
+          usage: input.usage,
+          costUsd: input.costUsd,
+          status: input.status,
+          context: context.telemetry,
+          traceRef,
+          causedBy: [spec.id],
+          createdAt,
+        }),
+      );
+    };
 
     let response;
     try {
       response = await options.agent.invoke(request);
     } catch (error) {
       budget.settleProjection(reservationId);
-      await ledger.appendRouteLog(
-        createRouteLog({
-          id: await ledger.nextRouteId(),
-          runId,
-          decision: {
-            ...decision,
-            reason: `${decision.reason} Agent failed; the reservation settled at its ceiling.`,
-          },
-          usage: {
-            input: projection.maxTokens,
-            output: 0,
-          },
-          costUsd: projection.maxCostUsd,
-          causedBy: [spec.id],
-          createdAt: now().toISOString(),
-        }),
-      );
+      const errorText = error instanceof Error ? error.message : String(error);
+      await recordCall({
+        status: "failed",
+        usage: {
+          input: projection.maxTokens,
+          output: 0,
+        },
+        costUsd: projection.maxCostUsd,
+        error: errorText,
+        reason: `${decision.reason} Agent failed; the reservation settled at its ceiling.`,
+      });
       throw new AttemptsHaltError(
-        `Agent ${taskKind} call failed: ${error instanceof Error ? error.message : String(error)}`,
+        `Agent ${taskKind} call failed: ${errorText}`,
       );
     }
 
-    budget.settle(
-      reservationId,
-      response.usage.costUsd,
-      response.usage.input + response.usage.output,
-    );
-    await ledger.appendRouteLog(
-      createRouteLog({
-        id: await ledger.nextRouteId(),
-        runId,
-        decision,
-        usage: {
-          input: response.usage.input,
-          output: response.usage.output,
-        },
-        costUsd: response.usage.costUsd,
-        causedBy: [spec.id],
-        createdAt: now().toISOString(),
-      }),
-    );
+    let settlementError: unknown;
+    try {
+      budget.settle(
+        reservationId,
+        response.usage.costUsd,
+        response.usage.input + response.usage.output,
+      );
+    } catch (error) {
+      settlementError = error;
+    }
+    await recordCall({
+      status:
+        settlementError === undefined ? "completed" : "accounting_violation",
+      usage: {
+        input: response.usage.input,
+        output: response.usage.output,
+      },
+      costUsd: response.usage.costUsd,
+      payload: response.payload,
+      ...(settlementError instanceof Error
+        ? { error: settlementError.message }
+        : {}),
+    });
+    if (settlementError !== undefined) {
+      throw settlementError;
+    }
     return response.payload;
   };
 
@@ -201,7 +255,7 @@ export async function taileredShip(options: ShipOptions): Promise<RunReceipt> {
     let failure = initialFailure;
     while (!failure.passed) {
       const usedAttempts = attempts.get(check.id) ?? 0;
-      if (usedAttempts >= BOUNDS.maxAttemptsPerCheck) {
+      if (usedAttempts >= config.bounds.maxAttemptsPerCheck) {
         throw new AttemptsHaltError(
           `Check "${check.title}" did not pass after ${usedAttempts} implementation attempts. Last failure: ${failure.output}`,
         );
@@ -210,6 +264,7 @@ export async function taileredShip(options: ShipOptions): Promise<RunReceipt> {
       const payload = await invoke("codegen", { attempts: usedAttempts }, failure.output);
       const codegen = parseCodegenPayload(payload);
       await applyProductFiles(root, codegen.files);
+      contextCache.invalidate();
       attempts.set(check.id, usedAttempts + 1);
       failure = await runCheck(root, check);
     }
@@ -269,6 +324,7 @@ export async function taileredShip(options: ShipOptions): Promise<RunReceipt> {
         ),
       );
       await applyProductFiles(root, repair.files);
+      contextCache.invalidate();
       await runFullSuite();
       const secondCritique = parseCritiquePayload(
         await invoke("critique", { attempts: 1 }),
@@ -323,6 +379,7 @@ export async function taileredShip(options: ShipOptions): Promise<RunReceipt> {
         throw new ValidationError("Edit verdict requires at least one exact file edit.");
       }
       await applyProductFiles(root, gateDecision.edits);
+      contextCache.invalidate();
       await runFullSuite();
       const editedCritique = parseCritiquePayload(
         await invoke("critique", { attempts: 0 }),

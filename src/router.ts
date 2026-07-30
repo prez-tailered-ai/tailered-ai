@@ -1,5 +1,7 @@
 import {
-  MODEL_REGISTRY,
+  type AgentCallStatus,
+  type ContextTelemetry,
+  type ModelRegistry,
   type RouteDecision,
   type RouteLog,
   type RouteSignals,
@@ -9,7 +11,8 @@ import {
 
 export function route(
   taskKind: TaskKind,
-  signals: RouteSignals = { attempts: 0 },
+  signals: RouteSignals,
+  registry: ModelRegistry,
 ): RouteDecision {
   if (!Number.isSafeInteger(signals.attempts) || signals.attempts < 0) {
     throw new TypeError("Router attempts signal must be a non-negative integer.");
@@ -19,7 +22,7 @@ export function route(
     return {
       task_kind: taskKind,
       tier: "frontier",
-      model: MODEL_REGISTRY.frontier,
+      model: registry.frontier,
       reason: "Third code-generation attempt escalates after two failed mid-tier attempts.",
       signals: { ...signals },
     };
@@ -35,7 +38,7 @@ export function route(
   return {
     task_kind: taskKind,
     tier,
-    model: MODEL_REGISTRY[tier],
+    model: registry[tier],
     reason:
       taskKind === "codegen"
         ? "Code generation remains mid-tier until the third attempt."
@@ -46,15 +49,20 @@ export function route(
 
 export function createRouteLog(input: {
   id: string;
+  callId: string;
   runId: string;
   decision: RouteDecision;
   usage: TokenUsage;
   costUsd: number;
+  status: AgentCallStatus;
+  context: ContextTelemetry;
+  traceRef: string;
   causedBy: string[];
   createdAt: string;
 }): RouteLog {
   return {
     id: input.id,
+    call_id: input.callId,
     run_id: input.runId,
     task_kind: input.decision.task_kind,
     tier: input.decision.tier,
@@ -63,6 +71,9 @@ export function createRouteLog(input: {
     attempts: input.decision.signals.attempts,
     tokens: { ...input.usage },
     cost_usd: input.costUsd,
+    status: input.status,
+    context: { ...input.context },
+    trace_ref: input.traceRef,
     created_at: input.createdAt,
     caused_by: [...input.causedBy],
   };

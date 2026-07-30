@@ -118,6 +118,22 @@ export async function snapshotRepository(
     maxBytes?: number;
   } = {},
 ): Promise<string> {
+  return (await captureRepositorySnapshot(root, options)).snapshot;
+}
+
+export interface RepositorySnapshot {
+  repoHash: string;
+  snapshot: string;
+  bytes: number;
+}
+
+export async function captureRepositorySnapshot(
+  root: string,
+  options: {
+    excludeTopLevel?: string[];
+    maxBytes?: number;
+  } = {},
+): Promise<RepositorySnapshot> {
   const excluded = new Set([
     ...HASH_EXCLUSIONS,
     ...(options.excludeTopLevel ?? []),
@@ -125,27 +141,41 @@ export async function snapshotRepository(
   const maxBytes = options.maxBytes ?? 512_000;
   const files = await listFiles(root, excluded);
   const entries: Array<{ path: string; content: string }> = [];
-  let bytes = 0;
+  const hash = createHash("sha256");
+  let includedBytes = 0;
 
   for (const path of files) {
+    const relativePath = relative(resolve(root), path).split(sep).join("/");
     const fileStat = await stat(path);
-    if (fileStat.size > maxBytes || bytes + fileStat.size > maxBytes) {
+    const content = await readFile(path);
+    hash.update(relativePath);
+    hash.update("\0");
+    hash.update(content);
+    hash.update("\0");
+
+    if (
+      fileStat.size > maxBytes ||
+      includedBytes + fileStat.size > maxBytes
+    ) {
       continue;
     }
-    const content = await readFile(path, "utf8");
-    bytes += Buffer.byteLength(content);
+    includedBytes += fileStat.size;
     entries.push({
-      path: relative(resolve(root), path).split(sep).join("/"),
-      content,
+      path: relativePath,
+      content: content.toString("utf8"),
     });
   }
 
-  return JSON.stringify({
-    repoHash: await hashDirectory(root, {
-      excludeTopLevel: [...excluded],
-    }),
+  const repoHash = hash.digest("hex");
+  const snapshot = JSON.stringify({
+    repoHash,
     files: entries,
   });
+  return {
+    repoHash,
+    snapshot,
+    bytes: Buffer.byteLength(snapshot),
+  };
 }
 
 async function listFiles(root: string, excludedTopLevel: Set<string>): Promise<string[]> {

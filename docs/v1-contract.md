@@ -49,6 +49,16 @@ route(taskKind, signals = { attempts: 0 })
 
 The caller supplies the stuck signal. The third code-generation call receives `attempts: 2` and escalates to the frontier tier. The router owns no run state. Each completed decision is appended to `evals/routes.jsonl` with its reason, tier, model alias, tokens, and cost.
 
+Model aliases come from the minted company's `tailered.config.json`. The runtime has no second active registry. Changing a tier alias changes subsequent model requests without touching routing or ship-loop code.
+
+## Replay and context capture
+
+Every executed agent call writes one immutable trace containing its route, hard projection, exact response payload or failure, metered usage, and causal links. Every distinct repository context is stored once per run and referenced from call traces by its content hash.
+
+Route logs record context bytes, cache hit, and assembly time. This makes the v1 context cache measurable and preserves the inputs required for later replay tooling without building the v3 replay engine.
+
+`EvalRow.outcome` is the v1 terminal outcome ledger. A second physical outcomes ledger would duplicate terminal state and create a drift risk, so v1 does not add one. The v2 format specification may split that logical ledger only with migration and consistency rules.
+
 ## ADR supersession
 
 On-disk ADR status is `proposed` or `accepted`. Supersession appends a new ADR with `supersedes: old_id`; it never touches the old file. The new ADR also carries the old ID in `caused_by`, making `supersedes` a typed causal edge. Renderers derive the old decision's `superseded` status.

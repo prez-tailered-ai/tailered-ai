@@ -17,3 +17,10 @@ terminal_outcomes:
   - halted_attempts
   - halted_budget
   - rejected
+capture:
+  spec: evals/runs/{run_id}/spec.json
+  contexts: evals/runs/{run_id}/contexts/{repo_hash}.json
+  calls: evals/runs/{run_id}/calls/{call_id}.json
+  routes: evals/routes.jsonl
+  gate_labels: labels/ledger.jsonl
+  terminal_evals: evals/ledger.jsonl

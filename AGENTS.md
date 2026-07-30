@@ -26,6 +26,10 @@ A founder completes a short prose charter and ships a tested preview in the same
 - The gating demo requires an approve verdict and zero human edits.
 - Accepted decisions are immutable. Supersession appends a new ADR with `supersedes`; renderers derive old status.
 - Keep the router stateless. The caller supplies `{ attempts }`; every completed route is logged with actual tokens and cost.
+- Source model identity only from `tailered.config.json`; a model upgrade changes registry strings, not orchestration code.
+- Store each executed agent call as an append-only trace and store each distinct context snapshot once per run.
+- Log context hash, snapshot reference, bytes, cache hit, and assembly time on every executed route.
+- Every persisted record carries `caused_by`; unlinked records invalidate the company format.
 - Deterministic code calculates money, tokens, tests, hashes, timing, and ledger aggregates.
 - Emit whole files or exact diffs. Never emit placeholders, TODOs, or “rest unchanged.”
 - Use plain, precise prose. Label completion claims `VERIFIED`, `INFERRED`, or `UNKNOWN`.
