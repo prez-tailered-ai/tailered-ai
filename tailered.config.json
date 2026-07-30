@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "models": {
+    "frontier": "best-available",
+    "mid": "mid-available",
+    "cheap": "cheap-available"
+  },
+  "bounds": {
+    "maxAttemptsPerCheck": 3,
+    "maxCostPerRunUsdExclusive": 5,
+    "demoTimeMinutes": 10
+  }
+}

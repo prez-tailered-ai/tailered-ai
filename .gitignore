@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.tailered/cache/
+.DS_Store
+coverage/
+*.log

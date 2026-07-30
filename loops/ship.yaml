@@ -1,0 +1,19 @@
+version: 1
+name: ship
+sequence:
+  - capture_spec
+  - generate_acceptance_tests
+  - implement_until_green
+  - constitutional_critique
+  - human_deploy_gate
+  - deploy_preview
+  - append_adr
+  - append_terminal_eval
+bounds:
+  max_attempts_per_check: 3
+  max_cost_per_run_usd_exclusive: 5.00
+terminal_outcomes:
+  - shipped
+  - halted_attempts
+  - halted_budget
+  - rejected

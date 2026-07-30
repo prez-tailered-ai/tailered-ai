@@ -1,0 +1,10 @@
+version: 1
+gates:
+  deploy:
+    actor: founder
+    required: true
+    verdicts:
+      - approve
+      - reject
+      - edit
+    capture_label: true

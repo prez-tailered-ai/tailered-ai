@@ -1,0 +1,12 @@
+{
+  "id": "BENCH-TODO-AUTH-001",
+  "gating": false,
+  "spec": "Build a todo application with account registration, sign-in, sign-out, authenticated task isolation, persistent sessions, and acceptance tests covering unauthorized access. Authentication belongs to the minted product; it does not add multi-user authentication to the Tailered platform.",
+  "purpose": "Measure the cost, correctness, and failure behavior of a materially harder minted-product specification without blocking the v1 loop proof.",
+  "acceptedOutcomes": [
+    "shipped",
+    "halted_attempts",
+    "halted_budget",
+    "rejected"
+  ]
+}

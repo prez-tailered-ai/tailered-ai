@@ -1,0 +1,9 @@
+version: 1
+seats:
+  founder:
+    kind: human
+    accountable_for: intent_and_irreversible_actions
+  builder:
+    kind: agent
+    model_registry: tailered.config.json
+    accountable_for: implementation_and_self_critique
