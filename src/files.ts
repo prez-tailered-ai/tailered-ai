@@ -1,9 +1,11 @@
 import { createHash, randomUUID } from "node:crypto";
 import {
+  lstat,
   mkdir,
   open,
   readFile,
   readdir,
+  realpath,
   rename,
   stat,
   writeFile,
@@ -29,6 +31,94 @@ export function resolveRepoPath(root: string, relativePath: string): string {
     throw new ValidationError(`Path escapes repository root: ${relativePath}`);
   }
   return resolvedPath;
+}
+
+/**
+ * Resolves a repository-relative path against a capability root and proves the
+ * destination lies strictly beneath that root's canonical subtree.
+ *
+ * This is the single enforcement point for externally supplied write paths —
+ * agent code generation, critique repair, and founder gate edits all route
+ * through it. A string prefix test is not sufficient: `product/../decisions/x`
+ * starts with `product/` yet resolves outside it, and a symlink beneath the root
+ * can redirect a lexically contained path anywhere on the filesystem.
+ *
+ * Fails closed: containment must be positively established, or the write is
+ * refused. The residual TOCTOU boundary is documented in
+ * docs/foundation/p0-agent-safety/p0-a/containment-contract.md.
+ */
+export async function resolveContainedWritePath(
+  root: string,
+  capabilityRoot: string,
+  relativePath: string,
+): Promise<string> {
+  const requested = resolveRepoPath(root, relativePath);
+  const lexicalCapabilityRoot = resolveRepoPath(root, capabilityRoot);
+
+  const withinRoot = relative(lexicalCapabilityRoot, requested);
+  if (
+    withinRoot === "" ||
+    withinRoot === ".." ||
+    withinRoot.startsWith(`..${sep}`) ||
+    isAbsolute(withinRoot)
+  ) {
+    throw new ValidationError(
+      `Path escapes the ${capabilityRoot} capability root: ${relativePath}`,
+    );
+  }
+
+  let canonicalCapabilityRoot: string;
+  try {
+    canonicalCapabilityRoot = await realpath(lexicalCapabilityRoot);
+  } catch (error) {
+    throw new ValidationError(
+      `Capability root ${capabilityRoot} is unavailable, so containment cannot be established: ${
+        error instanceof Error ? error.message : String(error)
+      }`,
+    );
+  }
+
+  // Walk each component that already exists. A symlink anywhere on the path can
+  // be repointed at any moment, so it can never be part of a proven containment
+  // decision — reject rather than resolve.
+  let inspected = canonicalCapabilityRoot;
+  for (const segment of withinRoot.split(sep)) {
+    const candidate = resolve(inspected, segment);
+    let entry;
+    try {
+      entry = await lstat(candidate);
+    } catch (error) {
+      if (isNodeError(error) && error.code === "ENOENT") {
+        // This component does not exist yet, so no deeper component can either.
+        break;
+      }
+      throw new ValidationError(
+        `Cannot establish containment for ${relativePath}: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+      );
+    }
+    if (entry.isSymbolicLink()) {
+      throw new ValidationError(
+        `Path traverses a symbolic link and cannot be contained: ${relativePath}`,
+      );
+    }
+    inspected = candidate;
+  }
+
+  const canonicalWithinRoot = relative(canonicalCapabilityRoot, inspected);
+  if (
+    canonicalWithinRoot !== "" &&
+    (canonicalWithinRoot === ".." ||
+      canonicalWithinRoot.startsWith(`..${sep}`) ||
+      isAbsolute(canonicalWithinRoot))
+  ) {
+    throw new ValidationError(
+      `Path resolves outside the ${capabilityRoot} capability root: ${relativePath}`,
+    );
+  }
+
+  return resolve(canonicalCapabilityRoot, withinRoot);
 }
 
 export async function writeAtomic(
