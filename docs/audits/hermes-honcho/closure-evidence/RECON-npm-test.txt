@@ -1,0 +1,11 @@
+# npm test on main 81bdfd7a (post-P0-B merge), Node v24.11.1, exit 0
+# Full output retained off-repo; counters below are the runner's own, reporter-agnostic.
+ℹ tests 142
+ℹ suites 0
+ℹ pass 142
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2024.008083
+containment tests counted: 20

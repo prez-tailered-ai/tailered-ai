@@ -8,6 +8,13 @@ have been removed rather than restated.
 
 ## A. Live risk in the target system
 
+> **Status supersession notice (2026-08-12, post-closure).** The **R-01 status below is
+> superseded**: the remediation specified in [25](25-concurrency-remediation-contract.md)
+> was implemented and merged via PR #7 (`81bdfd7a`), and R-01 is now **CLOSED_VERIFIED** —
+> see [`29-post-closure-remediation-receipt.md`](29-post-closure-remediation-receipt.md).
+> The original row is unedited below; its reason and evidence remain the historical record.
+> No other row's status changes.
+
 | ID | Risk | Severity | Evidence | Mitigation | Status |
 |---|---|---|---|---|---|
 | **R-01** | **Tailered's ledger is not concurrency-safe.** A started run can produce **no terminal `EvalRow`**, violating the constitution's unconditional law | **HIGH** (blocks all multi-agent work) | **POC-C, executed**: 4 duplicate route ids, 10 validator errors, `validate` true exit 1, orphan run `…3d5cc699` | Remediation contract in [25](25-concurrency-remediation-contract.md); reorder finalisation, then a CAS-style claim | **OPEN — prerequisite** |

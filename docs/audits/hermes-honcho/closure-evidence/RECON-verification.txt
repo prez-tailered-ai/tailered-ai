@@ -1,0 +1,22 @@
+# Post-P0-B main verification — reconciliation session 2026-08-12
+# Subject: origin/main = 81bdfd7a0d70e2b3bdd2c70dfadb1f581df2f3e4 (PR #7 merge)
+# Runner: disposable detached worktree at that SHA; Node v24.11.1; npm 11.x; exit codes read directly, no pipelines.
+
+npm-ci: exit 0
+npm-check: exit 0
+npm-test: exit 0
+npm-validate: exit 0
+npm-demo: exit 0
+npm-audit: exit 0
+git-diff-check: exit 0
+tooling-tests: exit 0
+
+npm test counters: tests 142 / pass 142 / fail 0 / skipped 0 (containment suite intact: 20)
+npm run validate: status VERIFIED, valid true, decisions 5
+npm run demo: outcome shipped, costUsd 0.068
+npm audit: found 0 vulnerabilities
+audit tooling regression tests: 8/8 pass
+worktree after all commands: clean (git status --porcelain empty)
+
+P0-A evidence manifest (p0-a/evidence-manifest.json): 47 entries, 0 mismatches, 0 missing
+P0-B evidence index (agent-platform-foundation/evidence-index.json): 235 artifacts, 234 hashed 0 mismatches, 1 self-entry excluded by design ("sha256": "SELF")

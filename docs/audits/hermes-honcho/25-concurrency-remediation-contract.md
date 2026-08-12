@@ -1,5 +1,10 @@
 # 25 — Ledger concurrency remediation contract
 
+> **Fulfilment notice (2026-08-12, post-closure).** This contract has been **implemented and
+> merged**: PR #7 (`81bdfd7a`, implementation `f2dfed89`), R1–R8 8/8 and A1–A7 7/7 VERIFIED.
+> See [`29-post-closure-remediation-receipt.md`](29-post-closure-remediation-receipt.md).
+> The contract text below is unedited and remains the specification of record.
+
 **Status: PREREQUISITE. Blocking for multi-agent execution in `prez-tailered-ai/tailered-ai`.**
 
 This defect was found by executing the target system, not by reading it. It is the single
