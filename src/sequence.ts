@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 import { AccountingInvariantError } from "./errors.js";
 import { isNodeError, readJsonLines, writeAtomic, writeNewFile } from "./files.js";
 import { assertLockHeld, type LockHandle } from "./lock.js";
+import { barrier } from "./barrier.js";
 import { readAdrs } from "./company.js";
 import type { EvalRow, GateLabel, RouteLog } from "./contracts.js";
 
@@ -455,6 +456,10 @@ export async function allocateIdentifiers(
   const state = await loadOrBootstrapState(root);
   const canonical = await deriveCanonicalMaxima(root);
   reconcile(state, canonical, "canonical state was ahead of the allocator");
+
+  // The exact point where the pre-fix allocator lost: state has been read, the next identifier
+  // is decided, and nothing is persisted yet. Inert unless a test installs a handler.
+  await barrier("allocate:after-read", handle.owner.token);
 
   const issued: AllocatedIdentifiers = { ROUTE_CALL: [], LABEL: [], EVAL: [], ADR: [] };
 
