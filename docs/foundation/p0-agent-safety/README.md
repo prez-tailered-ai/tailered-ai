@@ -1,5 +1,22 @@
 # P0 foundation hardening
 
+> ## ✅ P0-A IS CLOSED at `978fbcc31577f6378b8dca4564ceafa6473f1c5e`
+>
+> Corrective PR **#4** merged **2026-08-12T08:12:42Z**, PREZ merge gate **PASS**.
+>
+> **`978fbcc` is the minimum valid P0-B foundation.** Any later `main` containing it is
+> also valid.
+>
+> ### Superseded, not deleted
+>
+> **P0-A implementation v1 merged incomplete at `60adb63`. The capability-root symlink
+> class remained vulnerable, so P0-A was not complete at that merge.** That state is
+> preserved as history: `60adb63` is **never** a valid P0-B base. See
+> [`corrective/CLOSURE-RECEIPT.md`](corrective/CLOSURE-RECEIPT.md),
+> [`corrective/SCOPE-1-handoff.md`](corrective/SCOPE-1-handoff.md),
+> [`corrective/SCOPE-2-handoff.md`](corrective/SCOPE-2-handoff.md), and section 16 of
+> [`p0-a/report.md`](p0-a/report.md).
+
 Two scopes, one directional dependency. Both close defects found by **executing** Tailered
 AI, not by reading it.
 
@@ -7,7 +24,13 @@ AI, not by reading it.
 P0-A  Agent Write Containment
         │ establishes safe mutation authority
         ▼
-   PREZ MERGE GATE
+   PREZ MERGE GATE  (v1)  ──► 60adb63  MERGED INCOMPLETE, invalid base
+        │
+        ▼
+P0-A  corrective closure
+        │
+        ▼
+   PREZ MERGE GATE  (v2)  ──► 978fbcc  PASS — P0-A CLOSED
         │
         ▼
 P0-B  Ledger Concurrency + Exactly-Once Finalization
@@ -23,8 +46,9 @@ created by P0-A. Neither scope may begin the next until PREZ merges.
 
 | Scope | Objective | Status |
 |---|---|---|
-| **P0-A** | An agent or gate authorized to write `product/` can mutate only the canonical `product/` subtree | **COMPLETE — awaiting PREZ merge gate** |
-| **P0-B** | Concurrent runs preserve unique identities, immutable decisions, valid JSONL, and exactly one recoverable terminal `EvalRow` per started run | **NOT STARTED — blocked on the P0-A merge** |
+| **P0-A v1** | first implementation | **MERGED INCOMPLETE** at `60adb63` — capability-root symlink class open. Historical; never a valid P0-B base. |
+| **P0-A v2** | An agent or gate authorized to write `product/` can mutate only the canonical `product/` subtree, and the capability root itself is verified rather than resolved | **CLOSED** — PR #4 merged at `978fbcc`, PREZ gate PASS |
+| **P0-B** | Concurrent runs preserve unique identities, immutable decisions, valid JSONL, and exactly one recoverable terminal `EvalRow` per started run | **AUTHORIZED from `978fbcc`; NOT IMPLEMENTED by this branch** |
 
 ## Why these two, in this order
 
@@ -44,11 +68,17 @@ docs/foundation/p0-agent-safety/
 ├── README.md                 this file
 ├── execution-ledger.jsonl    append-only record of every executed step
 ├── p0-a/
-│   ├── report.md             completion report
-│   ├── containment-contract.md   the enforced invariant, in full
-│   ├── test-matrix.md        every escape class, before and after
+│   ├── report.md             the P0-A report, incl. §16 process failure and §17 chronology
+│   ├── containment-contract.md   the enforced invariant — 12 separately proven rules
+│   ├── test-matrix.md        every escape class across v0, v1 and v2
 │   ├── evidence-manifest.json    evidence index with hashes
 │   └── evidence/             raw command output, harnesses, hashes
+├── corrective/               the post-merge correction program
+│   ├── CLOSURE-RECEIPT.md    the PREZ merge-gate PASS record for P0-A
+│   ├── SCOPE-1-handoff.md    preservation and recoverable baseline
+│   ├── SCOPE-2-handoff.md    chronology, supersession, reconciliation
+│   ├── PREZ-GATE-PACKET.md   what the merge gate needs, in one place
+│   └── evidence/             Scope 1-3 raw command output
 └── handoffs/
     └── P0-A-to-P0-B.md       the merged-state assumptions P0-B requires
 ```
@@ -66,4 +96,9 @@ docs/foundation/p0-agent-safety/
 - **Hash-based assertions.** Protected surfaces are compared byte-for-byte, not by the
   absence of an exception.
 - **Caveats recorded, not hidden.** Where a harness could not test what it appeared to test,
-  the limitation is written down.
+  the limitation is written down — and it is scored `INVALID`, never `PASS`.
+- **Vary the boundary, not just the payload.** A threat model organised only around
+  attacker input cannot see an attack that moves the defender's reference point. This
+  convention exists because its absence cost this program a merge cycle.
+- **History is superseded, never rewritten.** A disproven conclusion stays in the ledger
+  with a `SUPERSEDED` successor pointing at it.

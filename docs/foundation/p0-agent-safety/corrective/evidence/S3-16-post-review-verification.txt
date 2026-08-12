@@ -1,0 +1,16 @@
+# S3-16 post-review verification (after the adversarial-review changes)
+# date (UTC): 2026-08-12T07:52:39Z
+# HEAD: 8244a77eae135f4b03e9b71c05632346850e7e14 + uncommitted review fixes
+
+npm run check    exit=0
+npm test         exit=0
+  # tests 38
+  # pass 38
+  # fail 0
+  # skipped 0
+npm run validate exit=0
+npm run demo     exit=0
+  "costUsd": 0.068
+
+protected surfaces:
+  12/12 byte-identical to baseline

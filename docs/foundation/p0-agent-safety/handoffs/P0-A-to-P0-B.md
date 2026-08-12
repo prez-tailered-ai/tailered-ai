@@ -1,33 +1,65 @@
 # Handoff — P0-A to P0-B
 
-P0-B may not begin until PREZ merges P0-A. This file records the exact merged-state
-assumptions P0-B is entitled to rely on.
+> ## ✅ P0-A IS CLOSED — the valid P0-B foundation is `978fbcc`
+>
+> **P0-A corrective merge SHA: `978fbcc31577f6378b8dca4564ceafa6473f1c5e`**
+>
+> PR **#4** merged into `main` at **2026-08-12T08:12:42Z**. PREZ recorded the merge gate as
+> **PASS**. P0-A is **CLOSED**.
+>
+> ### ⛔ `60adb63` IS NOT AN ACCEPTABLE P0-B BASE — this remains true
+>
+> PR #3 merged P0-A implementation **v1** at `60adb63`, and v1 still permits four
+> capability-root symlink escape classes — including a write outside the repository, and
+> one through the founder gate. Starting P0-B there would build concurrency work on an
+> unsound write boundary, which is exactly the ordering P0-A exists to prevent.
+>
+> **`978fbcc31577f6378b8dca4564ceafa6473f1c5e` is the MINIMUM valid P0-B foundation.**
+> Any later `main` that contains it is also valid. Nothing earlier is.
+
+This file records the exact merged-state assumptions P0-B is entitled to rely on. Those
+assumptions now hold, because the corrective merge has landed.
 
 ## Prerequisite
 
 | Item | Value |
 |---|---|
-| P0-A branch | `fix/p0-a-agent-write-containment` |
-| P0-A base | `main` @ `5eea7766bdc770c5a6e75ad2da5aded85b2356a3` |
-| P0-A final SHA | recorded in the PR; PREZ records the **merge** SHA on approval |
-| P0-B starts from | the PREZ-approved merge SHA on `main`, nothing else |
+| Original P0-A branch | `fix/p0-a-agent-write-containment` |
+| Original P0-A base | `main` @ `5eea7766bdc770c5a6e75ad2da5aded85b2356a3` |
+| v1 head / merge | `2f8fb9a` merged at **`60adb63`** — **incomplete, INVALID as a base** |
+| Corrective branch | `fix/p0-a-capability-root-symlink`, based on `60adb63` |
+| Corrective PR | **#4 — MERGED** |
+| Corrective PR head | **`b847abd98a3c2bb528f3810e81ef0cf33818d18e`** |
+| **Corrective merge SHA** | **`978fbcc31577f6378b8dca4564ceafa6473f1c5e`** |
+| Merge timestamp | **2026-08-12T08:12:42Z** |
+| Merge parents | `60adb63…` + `b847abd…` |
+| CI on the PR head | runs **31575978644** and **31575981756**, both `success` |
+| P0-B starts from | **`978fbcc`**, or any later `main` containing it — nothing earlier |
 
-**P0-B Step 1 must verify** that `main` contains the P0-A merge, that the containment tests
-pass, and that baseline validation is green — before any concurrency work begins.
+**P0-B Step 1 must verify** that `main` contains the **corrective** merge, that all
+containment tests pass (**20** containment tests, **38** total), and that baseline
+validation is green — before any concurrency work begins.
 
 ## What P0-A guarantees to P0-B
+
+These guarantees hold **only after the corrective merge**, not at `60adb63`.
 
 1. **A single enforcement point for externally supplied write paths.**
    `resolveContainedWritePath(root, capabilityRoot, relativePath)` in `src/files.ts`.
    `applyProductFiles` in `src/ship.ts` is the only caller, and it covers agent codegen,
    critique repair, and founder gate edits.
-2. **Protected surfaces are unreachable by agent or gate writes.** `decisions/`, `AGENTS.md`,
+2. **The capability root is verified, not derived.** Every component of `product/` from the
+   canonical repository root down must exist, be a directory, and not be a symbolic link.
+   A symlinked capability root is refused, so the boundary cannot be moved out from under
+   the checks that measure against it.
+3. **Protected surfaces are unreachable by agent or gate writes.** `decisions/`, `AGENTS.md`,
    `policies/`, `loops/`, `seats/`, ledgers and config all sit outside the capability root
    and are therefore out of reach — no denylist is involved.
-3. **Batch atomicity of the decision.** Every destination in a write batch is resolved before
+4. **Batch atomicity of the decision.** Every destination in a write batch is resolved before
    any byte is written, so a rejected batch leaves no partial artifact.
-4. **15 containment tests** in `test/containment.test.ts`, one per failure class.
-5. **All pre-existing invariants intact**: reserve/settle ordering, gate label capture, model
+5. **20 containment tests** in `test/containment.test.ts`, one per failure class, plus three
+   legitimate controls including an operator-owned parent alias.
+6. **All pre-existing invariants intact**: reserve/settle ordering, gate label capture, model
    registry sourcing, append-only ADRs, terminal `EvalRow` per started run, `$0.068` demo.
 
 ## What P0-A explicitly does NOT fix — this is P0-B's scope
@@ -60,6 +92,10 @@ Reproduction, root cause, and the full remediation contract:
   the product subtree and must not extend lock hold time.
 - **Rerun the P0-A tests.** P0-B Step 16 requires the containment suite to stay green;
   P0-B may not regress P0-A.
+- **Do not resolve an authority boundary.** The lesson that cost this scope a merge cycle
+  generalises: if P0-B introduces a lock path, a reservation directory or a run marker,
+  its location must be *verified* the way `product/` now is, never `realpath`'d and
+  trusted. Canonicalising a boundary hands its definition to whoever controls the link.
 
 ## Conventions to inherit
 

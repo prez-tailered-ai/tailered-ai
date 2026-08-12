@@ -1,0 +1,35 @@
+### git status --short --branch
+## fix/p0-a-capability-root-symlink...origin/main
+ M docs/foundation/p0-agent-safety/p0-a/containment-contract.md
+ M docs/foundation/p0-agent-safety/p0-a/report.md
+ M docs/foundation/p0-agent-safety/p0-a/test-matrix.md
+ M src/files.ts
+ M test/containment.test.ts
+
+### git status --porcelain=v1 -uall
+ M docs/foundation/p0-agent-safety/p0-a/containment-contract.md
+ M docs/foundation/p0-agent-safety/p0-a/report.md
+ M docs/foundation/p0-agent-safety/p0-a/test-matrix.md
+ M src/files.ts
+ M test/containment.test.ts
+
+### git diff --stat
+ .../p0-agent-safety/p0-a/containment-contract.md   | 43 +++++++++-
+ docs/foundation/p0-agent-safety/p0-a/report.md     | 94 ++++++++++++---------
+ .../foundation/p0-agent-safety/p0-a/test-matrix.md | 97 ++++++++++++++--------
+ src/files.ts                                       | 39 ++++++++-
+ test/containment.test.ts                           | 82 +++++++++++++++++-
+ 5 files changed, 275 insertions(+), 80 deletions(-)
+
+### git diff --name-status
+M	docs/foundation/p0-agent-safety/p0-a/containment-contract.md
+M	docs/foundation/p0-agent-safety/p0-a/report.md
+M	docs/foundation/p0-agent-safety/p0-a/test-matrix.md
+M	src/files.ts
+M	test/containment.test.ts
+
+### git diff --cached --stat
+(empty = nothing staged)
+
+### git diff --cached --name-status
+(empty = nothing staged)

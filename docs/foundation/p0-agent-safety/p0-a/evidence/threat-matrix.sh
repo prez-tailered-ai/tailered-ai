@@ -1,11 +1,17 @@
 #!/usr/bin/env bash
-# P0-A Steps 3+4: write-escape threat matrix against DISPOSABLE fixtures.
+# P0-A write-escape threat matrix against DISPOSABLE fixtures.
 # The canonical repository is never a target. Zero model calls, zero API spend.
+#
+# Cases 15-18 were added after the PREZ merge gate rejected the first submission:
+# the capability root ITSELF being a symbolic link was untested, and reproduced.
+#
+# Run with:  TAILERED_P0A_SCRATCH=$(mktemp -d) ./threat-matrix.sh
 set -u
-P=<scratch>
-TAILERED=$HOME/src/tailered-ai
-NODE=/usr/local/bin/node
-mkdir -p "$P/fixtures"
+P="${TAILERED_P0A_SCRATCH:?set TAILERED_P0A_SCRATCH to a disposable scratch directory}"
+TAILERED="${TAILERED_CHECKOUT:-$HOME/src/tailered-ai}"
+NODE="${NODE_BIN:-$(command -v node)}"
+OUTSIDE="$P/outside"
+mkdir -p "$P/fixtures" "$OUTSIDE"
 
 cat > "$P/charter.json" <<'JSON'
 {
@@ -41,6 +47,11 @@ run_case () {
   # optional fixture setup (symlinks etc.)
   if [ -n "$setup" ]; then ( cd "$T" && eval "$setup" ); fi
 
+  # Reset the out-of-repository escape detectors PER CASE so one case's escape
+  # cannot be attributed to the next.
+  rm -f /tmp/tailered-pwned
+  rm -rf "$OUTSIDE"; mkdir -p "$OUTSIDE"
+
   local a0 c0 g0 a1 c1 g1 outcome
   a0=$(hash_of "$T/decisions/ADR-000.md"); c0=$(hash_of "$T/AGENTS.md"); g0=$(hash_of "$T/policies/gates.yaml")
 
@@ -66,9 +77,13 @@ run_case () {
   [ "$c0" != "$c1" ] && prot="AGENTS.md MUTATED"
   [ "$g0" != "$g1" ] && prot="gates.yaml MUTATED"
   [ -e "/tmp/tailered-pwned" ] && prot="$prot + ROOT ESCAPE FILE CREATED"
+  [ -n "$(ls -A "$OUTSIDE" 2>/dev/null)" ] && prot="$prot + WROTE OUTSIDE THE REPOSITORY"
 
   local verdict
-  if [ "$expect" = "allow" ]; then
+  if [ "$expect" = "invalid" ]; then
+    # This harness cannot transmit the payload; see the caveat in test-matrix.md.
+    verdict="INVALID — NOT EXECUTED BY THIS HARNESS"
+  elif [ "$expect" = "allow" ]; then
     [ "$prot" = "INTACT" ] && verdict="PASS" || verdict="FAIL"
   else
     [ "$prot" = "INTACT" ] && verdict="PASS" || verdict="FAIL — ESCAPE SUCCEEDED"
@@ -76,7 +91,6 @@ run_case () {
   printf '%s|%s|%s|%s|%s\n' "$id" "${outcome:-no-receipt}" "$prot" "$expect" "$verdict"
 }
 
-rm -f /tmp/tailered-pwned
 echo "case|outcome|protected_surfaces|expected|verdict"
 run_case "01-allowed-control"        "product/index.html"                        allow
 run_case "02-direct-protected"       "decisions/ADR-000.md"                      deny
@@ -85,10 +99,16 @@ run_case "04-nested-traversal"       "product/a/../../decisions/ADR-000.md"     
 run_case "05-constitution-traversal" "product/../AGENTS.md"                      deny
 run_case "06-root-escape"            "product/../../../tmp/tailered-pwned"       deny
 run_case "07-absolute-path"          "/tmp/tailered-pwned"                       deny
-run_case "08-nul-path"               $'product/x\x00.html'                       deny
+# Bash truncates a variable at NUL, so this harness cannot transmit the payload.
+# The class is executed in TypeScript: "containment: NUL-containing path is denied".
+run_case "08-nul-path"               $'product/x\x00.html'                       invalid
 run_case "09-symlink-dir-escape"     "product/link/ADR-000.md"                   deny "" "ln -s ../decisions product/link"
 run_case "10-symlink-to-root"        "product/root/AGENTS.md"                    deny "" "ln -s .. product/root"
 run_case "11-symlink-leaf-target"    "product/pointer.html"                      deny "" "ln -s ../AGENTS.md product/pointer.html"
 run_case "12-capability-root-file"   "product"                                   deny
 run_case "13-gate-edit-traversal"    "product/../decisions/ADR-000.md"           deny "gate-edit"
 run_case "14-backslash-separator"    'product\..\decisions\ADR-000.md'           deny
+run_case "15-caproot-symlink-protected" "product/ADR-000.md"                     deny ""          "rm -rf product && ln -s decisions product"
+run_case "16-caproot-symlink-root"      "product/AGENTS.md"                      deny ""          "rm -rf product && ln -s . product"
+run_case "17-caproot-symlink-outside"   "product/index.html"                     deny ""          "rm -rf product && ln -s '$OUTSIDE' product"
+run_case "18-caproot-symlink-gate"      "product/ADR-000.md"                     deny "gate-edit" "rm -rf product && ln -s decisions product"

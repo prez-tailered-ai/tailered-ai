@@ -1,0 +1,49 @@
+# P0-A closure-receipt integrity audit (final pass)
+# date (UTC): 2026-08-12T09:17:45Z
+# base: 978fbcc31577f6378b8dca4564ceafa6473f1c5e
+
+## 1. Manifest hash re-verification (independent recomputation)
+  47 entries, 0 mismatches
+  manifest self-hash excluded by design: True
+
+## 2. Ledger: append-only, unique ids, valid JSON
+  33 events, 33 unique, all valid JSON, 0 duplicates
+  SUPERSEDED preserved: ['P0A-COR-EV-021']
+  PREZ merge-gate event P0A-COR-EV-032 present: True
+  pre-existing 31 events byte-identical: PASS (cmp before append)
+
+## 3. Internal markdown links
+  38 internal links, 0 broken
+
+## 4. Ledger evidence references resolve (repo-root OR program-relative)
+  53 evidence references, 0 unresolved
+  (older events cite repo-root paths such as src/files.ts; both forms are accepted)
+
+## 5. Secret scan over the full diff vs the merge commit
+  clean
+
+## 6. Literal NUL bytes in committed files
+  0 files with literal NUL bytes
+
+## 7. Machine-specific paths in committed docs
+  none
+
+## 8. PRODUCTION FILE CHANGES (must be zero)
+  ZERO production files changed
+
+## 9. Git diff classification
+  P0-A DOCUMENTATION         docs/foundation/p0-agent-safety/README.md
+  CLOSURE HANDOFF/RECEIPT    docs/foundation/p0-agent-safety/corrective/SCOPE-2-handoff.md
+  LEDGER RECORD              docs/foundation/p0-agent-safety/execution-ledger.jsonl
+  CLOSURE HANDOFF/RECEIPT    docs/foundation/p0-agent-safety/handoffs/P0-A-to-P0-B.md
+  P0-A DOCUMENTATION         docs/foundation/p0-agent-safety/p0-a/evidence-manifest.json
+  P0-A DOCUMENTATION         docs/foundation/p0-agent-safety/p0-a/evidence/threat-matrix.sh
+  P0-A DOCUMENTATION         docs/foundation/p0-agent-safety/p0-a/report.md
+  CLOSURE HANDOFF/RECEIPT    docs/foundation/p0-agent-safety/corrective/CLOSURE-RECEIPT.md
+  CLOSURE EVIDENCE           docs/foundation/p0-agent-safety/corrective/evidence/CLOSURE-integrity.txt
+  CLOSURE EVIDENCE           docs/foundation/p0-agent-safety/corrective/evidence/CLOSURE-node22-note.txt
+  CLOSURE EVIDENCE           docs/foundation/p0-agent-safety/corrective/evidence/CLOSURE-npm-test.txt
+  CLOSURE EVIDENCE           docs/foundation/p0-agent-safety/corrective/evidence/CLOSURE-npm-validate.txt
+  CLOSURE EVIDENCE           docs/foundation/p0-agent-safety/corrective/evidence/CLOSURE-protected-hashes.txt
+  CLOSURE EVIDENCE           docs/foundation/p0-agent-safety/corrective/evidence/CLOSURE-threat-matrix.txt
+  CLOSURE EVIDENCE           docs/foundation/p0-agent-safety/corrective/evidence/CLOSURE-verification.txt

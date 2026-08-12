@@ -1,0 +1,19 @@
+case|outcome|protected_surfaces|expected|verdict
+01-allowed-control|"outcome": "shipped"|INTACT|allow|PASS
+02-direct-protected|"outcome": "halted_attempts"|INTACT|deny|PASS
+03-inrepo-traversal|"outcome": "halted_attempts"|INTACT|deny|PASS
+04-nested-traversal|"outcome": "halted_attempts"|INTACT|deny|PASS
+05-constitution-traversal|"outcome": "halted_attempts"|INTACT|deny|PASS
+06-root-escape|"outcome": "halted_attempts"|INTACT|deny|PASS
+07-absolute-path|"outcome": "halted_attempts"|INTACT|deny|PASS
+08-nul-path|"outcome": "shipped"|INTACT|invalid|INVALID — NOT EXECUTED BY THIS HARNESS
+09-symlink-dir-escape|"outcome": "halted_attempts"|INTACT|deny|PASS
+10-symlink-to-root|"outcome": "halted_attempts"|INTACT|deny|PASS
+11-symlink-leaf-target|"outcome": "halted_attempts"|INTACT|deny|PASS
+12-capability-root-file|"outcome": "halted_attempts"|INTACT|deny|PASS
+13-gate-edit-traversal|"outcome": "halted_attempts"|INTACT|deny|PASS
+14-backslash-separator|"outcome": "halted_attempts"|INTACT|deny|PASS
+15-caproot-symlink-protected|"outcome": "shipped"|ADR-000 MUTATED|deny|FAIL — ESCAPE SUCCEEDED
+16-caproot-symlink-root|"outcome": "shipped"|AGENTS.md MUTATED|deny|FAIL — ESCAPE SUCCEEDED
+17-caproot-symlink-outside|"outcome": "shipped"|INTACT + WROTE OUTSIDE THE REPOSITORY|deny|FAIL — ESCAPE SUCCEEDED
+18-caproot-symlink-gate|"outcome": "shipped"|ADR-000 MUTATED|deny|FAIL — ESCAPE SUCCEEDED

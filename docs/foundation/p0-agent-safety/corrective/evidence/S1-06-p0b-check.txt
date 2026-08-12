@@ -1,0 +1,15 @@
+=== S1-06 P0-B sentinel files (must be unmodified) ===
+src/ledger.ts        UNMODIFIED
+src/company.ts       UNMODIFIED
+src/validate.ts      UNMODIFIED
+src/ship.ts          UNMODIFIED
+src/contracts.ts     UNMODIFIED
+src/cli.ts           UNMODIFIED
+
+=== P0-B keyword scan over the diff ===
+29: The first is satisfied by `product/../decisions/ADR-000.md`. The second blocks that
+66:+| Arrives via | a clone, a restore, any earlier local write | a concurrent local process |
+100:+> a symbolic link was untested — and, on execution, unblocked. Four further escape
+
+=== production files changed vs 60adb63 ===
+src/files.ts
