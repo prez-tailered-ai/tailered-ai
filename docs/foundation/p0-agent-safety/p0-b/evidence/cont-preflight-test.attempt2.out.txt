@@ -1,0 +1,64 @@
+
+> @tailered-ai/core@0.1.0 test
+> npm run build && node --test dist/test/*.test.js
+
+
+> @tailered-ai/core@0.1.0 build
+> tsc -p tsconfig.json
+
+✔ reserve enforces an exclusive five-dollar boundary before spending (1.250167ms)
+✔ settlement releases unused reservation and records actuals (1.673458ms)
+✔ an agent cannot settle above its hard reservation ceiling (15.899ms)
+✔ mint creates and validates the complete company repository (425.1055ms)
+✔ supersession appends a new ADR and derives old status at render time (165.443292ms)
+✔ charter interview refuses list fragments (4.978375ms)
+✔ company config preserves the v1 bounds and central model aliases (19.461875ms)
+✔ company config cannot widen a contracted v1 bound (0.388625ms)
+✔ containment: legitimate product write still succeeds (2222.902418ms)
+✔ containment: nested legitimate product subdirectory write still succeeds (966.391084ms)
+✔ containment: direct write to a protected path is denied (621.769334ms)
+✔ containment: in-repository traversal out of product/ is denied (775.899834ms)
+✔ containment: nested traversal out of product/ is denied (1299.860167ms)
+✔ containment: traversal onto the constitution is denied (289.744251ms)
+✔ containment: escape beyond the repository root is denied (480.876959ms)
+✔ containment: absolute path is denied (554.065208ms)
+✔ containment: NUL-containing path is denied (561.535292ms)
+✔ containment: symlinked directory inside product/ cannot redirect a write (187.89925ms)
+✔ containment: symlink to the repository root cannot expose the constitution (92.956251ms)
+✔ containment: writing through an existing symlink leaf is denied fail-closed (105.495458ms)
+✔ containment: the capability root itself cannot be overwritten as a file (158.402292ms)
+✔ containment: the founder gate edit path shares the same boundary (298.837167ms)
+✔ containment: a denied escape still writes exactly one terminal eval (170.379917ms)
+✔ lock: exactly one caller acquires; the second is refused while it is held (543.090458ms)
+✔ lock: the timeout error names the current holder rather than failing blankly (207.988542ms)
+✔ lock: a dead same-host owner is reclaimed (61.064959ms)
+✔ lock: a LIVE same-host owner is never stolen, even past its lease (245.327542ms)
+✔ lock: an expired FOREIGN-host lock is quarantined, not reclaimed (83.511708ms)
+✔ lock: unreadable owner metadata fails closed instead of being reclaimed (277.421709ms)
+✔ lock: withCompanyLock releases even when the work throws (48.144209ms)
+✔ lock: releasing a lock owned by another process is refused (28.856792ms)
+✔ lock: the lock lives outside product/ and cannot be reached by a product write (13.493083ms)
+✔ allocator: identifiers are unique and persisted before they are returned (48.073125ms)
+✔ allocator: 100 sequential allocations yield 100 unique identifiers per family (1169.189543ms)
+✔ allocator: rebuilds from canonical ledgers when its state file is absent (24.115334ms)
+✔ allocator: records a repair when canonical state is ahead of it (38.59ms)
+✔ allocator: never moves backward when canonical state is behind it (28.763083ms)
+✔ allocator: the state file lives outside product/ (0.534ms)
+✔ router is stateless and escalates only the third codegen attempt (3.657541ms)
+✔ router maps task kinds to the contract tiers (1.038334ms)
+✔ router model identity comes only from the supplied registry (60.602667ms)
+✔ gating demo ships with approve, zero edits, and complete accounting (3195.289168ms)
+✔ attempt exhaustion writes one high-value terminal eval without a gate label (1389.506917ms)
+✔ budget refusal happens before agent invocation and still writes a terminal eval (272.338584ms)
+✔ accounting violations preserve the measured call before halting (198.028041ms)
+✔ a repo registry string swap changes every runtime model request (1165.556167ms)
+✔ rejection captures both the preference label and terminal eval (565.708084ms)
+✔ edit is valid platform behavior but fails the gating DoD assertion (962.137084ms)
+ℹ tests 48
+ℹ suites 0
+ℹ pass 48
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13529.308715

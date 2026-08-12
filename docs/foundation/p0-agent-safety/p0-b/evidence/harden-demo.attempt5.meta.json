@@ -1,0 +1,32 @@
+{
+  "event_id": "FND-P0-B-P0B-HARDEN-A5-FINISH",
+  "scope": "P0-B",
+  "step_id": "P0B-HARDEN",
+  "attempt": 5,
+  "command": [
+    "docker",
+    "run",
+    "--rm",
+    "-v",
+    "/tmp/p0b-20260812/tailered-ai:/work",
+    "-w",
+    "/work",
+    "node:24",
+    "npm",
+    "run",
+    "demo"
+  ],
+  "cwd": ".",
+  "started_at": "2026-08-12T08:38:14.136Z",
+  "finished_at": "2026-08-12T08:38:18.699Z",
+  "duration_ms": 4549,
+  "exit_code": 0,
+  "signal": null,
+  "spawn_error": null,
+  "allow_failure": false,
+  "status": "PASS",
+  "stdout_bytes": 658,
+  "stderr_bytes": 209,
+  "stdout_sha256": "9da9eff0d2e656f74f5f5e14f2879e4a0ac3e44ab0699ddca03716d81294d7f4",
+  "stderr_sha256": "39ad07334ee0b3da51ab7f5232e274dfb5588dc1380a557f3f4d886a7173a9dd"
+}

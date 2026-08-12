@@ -3,7 +3,7 @@ import { randomUUID } from "node:crypto";
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { AccountingInvariantError, ValidationError } from "./errors.js";
-import { isNodeError } from "./files.js";
+import { appendJsonLine, isNodeError, readJsonLines } from "./files.js";
 
 /**
  * One repository mutation lock.
@@ -18,12 +18,20 @@ import { isNodeError } from "./files.js";
  * exactly one caller creates it and every other caller receives `EEXIST`. No dependency, no
  * database, and nothing inside `product/` — an agent authorized to write the product subtree
  * can neither observe nor corrupt it.
+ *
+ * Every failure path in this module fails closed. Release is not best-effort: a lock that
+ * cannot be proven released is an integrity incident, recorded durably and raised to the
+ * caller, because a silently swallowed release failure is the same false-success shape this
+ * scope exists to remove.
  */
 
 export const LOCK_SCHEMA_VERSION = 1;
 
 /** Repository-relative location. Deliberately outside `product/`. */
 export const LOCK_RELATIVE_PATH = ".tailered/locks/company-ledger.lock";
+
+/** Append-only integrity incidents. Read by `validate`; never rewritten. */
+export const INCIDENTS_RELATIVE_PATH = ".tailered/incidents.jsonl";
 
 export interface LockOwner {
   schema_version: number;
@@ -37,6 +45,8 @@ export interface LockOwner {
 }
 
 export interface LockHandle {
+  /** The repository this lock governs. Carried on the handle so a lock-scoped API needs no root. */
+  readonly root: string;
   readonly path: string;
   readonly owner: LockOwner;
 }
@@ -53,6 +63,20 @@ export class LockOwnershipError extends AccountingInvariantError {
     super(message);
     this.name = "LockOwnershipError";
   }
+}
+
+export interface IntegrityIncident {
+  schema_version: number;
+  kind: "lock_release_failed";
+  at: string;
+  pid: number;
+  host: string;
+  lock_token: string;
+  operation: string;
+  run_id: string | null;
+  /** True when the protected work also failed, so the two failures are never conflated. */
+  work_failed: boolean;
+  detail: string;
 }
 
 export interface AcquireOptions {
@@ -79,22 +103,54 @@ function ownerPath(lockPath: string): string {
   return resolve(lockPath, "owner.json");
 }
 
-async function readOwner(lockPath: string): Promise<LockOwner | null> {
+/**
+ * Reading owner metadata has three distinct outcomes and they are never collapsed.
+ *
+ * `absent` and `unreadable` mean opposite things to a release: a lock whose owner file has been
+ * deleted has lost its mutual-exclusion proof, and a lock whose owner file is corrupt has lost
+ * it differently. Both are failures, but a caller that cannot tell them apart cannot report
+ * honestly, and the acquire path needs the distinction to decide whether to keep waiting.
+ */
+type OwnerRead =
+  | { kind: "owner"; owner: LockOwner }
+  | { kind: "absent" }
+  | { kind: "unreadable"; reason: string };
+
+async function readOwner(lockPath: string): Promise<OwnerRead> {
+  let raw: string;
   try {
-    const raw = await readFile(ownerPath(lockPath), "utf8");
-    const parsed = JSON.parse(raw) as LockOwner;
-    if (
-      typeof parsed?.token !== "string" ||
-      typeof parsed?.pid !== "number" ||
-      typeof parsed?.host !== "string"
-    ) {
-      return null;
-    }
-    return parsed;
-  } catch {
-    // Missing or unparseable owner metadata. The caller decides; this function never guesses.
-    return null;
+    raw = await readFile(ownerPath(lockPath), "utf8");
+  } catch (error) {
+    if (isNodeError(error) && error.code === "ENOENT") return { kind: "absent" };
+    return {
+      kind: "unreadable",
+      reason: error instanceof Error ? error.message : String(error),
+    };
   }
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (error) {
+    return {
+      kind: "unreadable",
+      reason: `owner.json is not valid JSON: ${
+        error instanceof Error ? error.message : String(error)
+      }`,
+    };
+  }
+
+  const candidate = parsed as Partial<LockOwner> | null;
+  if (
+    candidate === null ||
+    typeof candidate !== "object" ||
+    typeof candidate.token !== "string" ||
+    typeof candidate.pid !== "number" ||
+    typeof candidate.host !== "string"
+  ) {
+    return { kind: "unreadable", reason: "owner.json is missing token, pid, or host" };
+  }
+  return { kind: "owner", owner: candidate as LockOwner };
 }
 
 /**
@@ -120,6 +176,10 @@ function isProvablyDeadSameHost(owner: LockOwner): boolean {
 
 export function lockPathFor(root: string): string {
   return resolve(root, LOCK_RELATIVE_PATH);
+}
+
+export function incidentsPathFor(root: string): string {
+  return resolve(root, INCIDENTS_RELATIVE_PATH);
 }
 
 /**
@@ -156,53 +216,61 @@ export async function acquireCompanyLock(
         encoding: "utf8",
         flag: "wx",
       });
-      return { path: lockPath, owner };
+      return { root, path: lockPath, owner };
     } catch (error) {
       if (!isNodeError(error) || error.code !== "EEXIST") throw error;
     }
 
     const holder = await readOwner(lockPath);
 
-    if (holder === null) {
-      // The directory exists but carries no readable owner. Fail closed rather than assume it
-      // is abandoned: a half-written owner file is also what an in-flight acquisition looks
-      // like. Only an expired lease plus an unreadable owner justifies reclamation, and that
-      // combination is surfaced rather than handled silently.
+    if (holder.kind !== "owner") {
+      // The directory exists but carries no usable owner. Fail closed rather than assume it is
+      // abandoned: a half-written owner file is also what an in-flight acquisition looks like.
+      // Waiting resolves the in-flight case; the timeout surfaces the genuinely broken one.
       if (Date.now() >= deadline) {
+        const detail =
+          holder.kind === "absent"
+            ? "the owner file is missing"
+            : `the owner file is unreadable (${holder.reason})`;
         throw new LockOwnershipError(
-          `The repository lock at ${LOCK_RELATIVE_PATH} exists with unreadable owner metadata. ` +
-            `Refusing to reclaim it. Inspect the directory and remove it only after confirming ` +
-            `no run is in progress.`,
+          `The repository lock at ${LOCK_RELATIVE_PATH} exists but ${detail}. Refusing to ` +
+            `reclaim it. Inspect the directory and remove it only after confirming no run is ` +
+            `in progress.`,
         );
       }
       await sleep(pollMs);
       continue;
     }
 
-    if (isProvablyDeadSameHost(holder)) {
+    if (isProvablyDeadSameHost(holder.owner)) {
       // Reclaim: same host, and the owning process no longer exists.
       await rm(lockPath, { recursive: true, force: true });
       continue;
     }
 
-    if (holder.host !== hostname() && Date.parse(holder.deadline_at) < Date.now()) {
+    if (
+      holder.owner.host !== hostname() &&
+      Date.parse(holder.owner.deadline_at) < Date.now()
+    ) {
       // Cross-host ownership cannot be probed. An expired foreign lease is quarantined for a
       // human rather than guessed at, because reclaiming a lock held by a live process on
       // another machine would corrupt exactly what the lock protects.
       throw new LockOwnershipError(
-        `The repository lock is held by pid ${holder.pid} on host "${holder.host}" and its ` +
-          `lease expired at ${holder.deadline_at}. Ownership cannot be verified across hosts, ` +
-          `so it is quarantined rather than reclaimed. Confirm that host is not running a ` +
-          `Tailered process, then remove ${LOCK_RELATIVE_PATH}.`,
+        `The repository lock is held by pid ${holder.owner.pid} on host ` +
+          `"${holder.owner.host}" and its lease expired at ${holder.owner.deadline_at}. ` +
+          `Ownership cannot be verified across hosts, so it is quarantined rather than ` +
+          `reclaimed. Confirm that host is not running a Tailered process, then remove ` +
+          `${LOCK_RELATIVE_PATH}.`,
       );
     }
 
     if (Date.now() >= deadline) {
       throw new LockTimeoutError(
         `Timed out after ${timeoutMs}ms waiting for the repository lock held by pid ` +
-          `${holder.pid} on host "${holder.host}" for operation "${holder.operation}"` +
-          `${holder.run_id ? ` (run ${holder.run_id})` : ""}.`,
-        holder,
+          `${holder.owner.pid} on host "${holder.owner.host}" for operation ` +
+          `"${holder.owner.operation}"` +
+          `${holder.owner.run_id ? ` (run ${holder.owner.run_id})` : ""}.`,
+        holder.owner,
       );
     }
 
@@ -210,21 +278,75 @@ export async function acquireCompanyLock(
   }
 }
 
-/** Release a lock this process owns. Releasing a lock owned by someone else is refused. */
-export async function releaseCompanyLock(handle: LockHandle): Promise<void> {
+/**
+ * Prove this process still holds the lock described by `handle`.
+ *
+ * Every canonical mutation calls this before touching state. A comment asserting that the
+ * caller holds the lock is not an enforcement mechanism: the check has to read the owner file
+ * and compare tokens, because that is the only evidence that mutual exclusion still holds.
+ */
+export async function assertLockHeld(handle: LockHandle): Promise<void> {
   const current = await readOwner(handle.path);
-  if (current !== null && current.token !== handle.owner.token) {
+  if (current.kind === "absent") {
     throw new LockOwnershipError(
-      `Refusing to release the repository lock: it is now held by pid ${current.pid} on ` +
-        `host "${current.host}", not by this process.`,
+      `The repository lock is no longer present, so mutual exclusion cannot be proven for ` +
+        `operation "${handle.owner.operation}". Refusing to mutate canonical state.`,
     );
   }
-  await rm(handle.path, { recursive: true, force: true });
+  if (current.kind === "unreadable") {
+    throw new LockOwnershipError(
+      `The repository lock owner metadata is unreadable (${current.reason}), so mutual ` +
+        `exclusion cannot be proven for operation "${handle.owner.operation}". Refusing to ` +
+        `mutate canonical state.`,
+    );
+  }
+  if (current.owner.token !== handle.owner.token) {
+    throw new LockOwnershipError(
+      `The repository lock is now held by pid ${current.owner.pid} on host ` +
+        `"${current.owner.host}", not by this process. Refusing to mutate canonical state.`,
+    );
+  }
 }
 
 /**
- * Run `work` inside the repository mutation lock. The lock is always released, including when
- * `work` throws, so a failing ledger write can never strand the repository.
+ * Release a lock this process owns.
+ *
+ * Requires readable owner metadata and an exact token match. Missing or malformed metadata is
+ * a `LockOwnershipError`, not a reason to delete the directory: if the owner file is gone, this
+ * process can no longer prove the directory is its own lock, and removing it could release
+ * somebody else's.
+ */
+export async function releaseCompanyLock(handle: LockHandle): Promise<void> {
+  await assertLockHeld(handle);
+  await rm(handle.path, { recursive: true, force: true });
+}
+
+/** Record an integrity incident durably. Append-only, fsynced, read by `validate`. */
+export async function recordIntegrityIncident(
+  root: string,
+  incident: IntegrityIncident,
+): Promise<void> {
+  await appendJsonLine(incidentsPathFor(root), incident);
+}
+
+/** Read recorded integrity incidents. Never mutates. */
+export async function readIntegrityIncidents(root: string): Promise<IntegrityIncident[]> {
+  return readJsonLines<IntegrityIncident>(incidentsPathFor(root));
+}
+
+/**
+ * Run `work` inside the repository mutation lock.
+ *
+ * Three outcomes, all reported honestly:
+ *
+ *   - work succeeds, release succeeds  -> the result
+ *   - work fails,    release succeeds  -> the work error
+ *   - release fails (either case)      -> an incident is recorded, and the caller is failed
+ *
+ * The last case used to be swallowed. It cannot be: if release fails after successful work,
+ * the repository is left locked or of ambiguous ownership, later operations block or fail, and
+ * returning success would report a state that does not exist. When both fail, both errors are
+ * carried on an `AggregateError` so neither is lost to the other.
  */
 export async function withCompanyLock<T>(
   root: string,
@@ -232,17 +354,67 @@ export async function withCompanyLock<T>(
   work: (handle: LockHandle) => Promise<T>,
 ): Promise<T> {
   const handle = await acquireCompanyLock(root, options);
+
+  let workFailure: { error: unknown } | null = null;
+  let result: T | undefined;
   try {
-    return await work(handle);
-  } finally {
-    await releaseCompanyLock(handle).catch(() => {
-      // A release failure must not mask the original error. The lease deadline and the
-      // dead-owner reclaim path both recover this case on the next acquisition.
-    });
+    result = await work(handle);
+  } catch (error) {
+    workFailure = { error };
   }
+
+  let releaseFailure: { error: unknown } | null = null;
+  try {
+    await releaseCompanyLock(handle);
+  } catch (error) {
+    releaseFailure = { error };
+    const detail = error instanceof Error ? error.message : String(error);
+    try {
+      await recordIntegrityIncident(root, {
+        schema_version: 1,
+        kind: "lock_release_failed",
+        at: new Date().toISOString(),
+        pid: process.pid,
+        host: hostname(),
+        lock_token: handle.owner.token,
+        operation: handle.owner.operation,
+        run_id: handle.owner.run_id,
+        work_failed: workFailure !== null,
+        detail,
+      });
+    } catch {
+      // The incident write is best effort by necessity — the same filesystem fault that broke
+      // release can break this. The error below is still raised, so the failure is never lost;
+      // only its durable trace is.
+    }
+  }
+
+  if (workFailure !== null && releaseFailure !== null) {
+    throw new AggregateError(
+      [workFailure.error, releaseFailure.error],
+      `The locked operation "${handle.owner.operation}" failed, and releasing the repository ` +
+        `lock afterwards also failed. Both errors are attached. The repository may still be ` +
+        `locked; see ${INCIDENTS_RELATIVE_PATH}.`,
+    );
+  }
+  if (workFailure !== null) throw workFailure.error;
+  if (releaseFailure !== null) throw releaseFailure.error;
+  return result as T;
 }
 
-/** Read the current holder, for diagnostics and validation. Never mutates. */
+/**
+ * Read the current holder, for diagnostics and validation. Never mutates.
+ *
+ * Returns `null` when no lock is held. A lock that exists but cannot be read is reported as a
+ * `LockOwnershipError` rather than as "no lock", because those are not the same state.
+ */
 export async function inspectCompanyLock(root: string): Promise<LockOwner | null> {
-  return readOwner(lockPathFor(root));
+  const lockPath = lockPathFor(root);
+  const current = await readOwner(lockPath);
+  if (current.kind === "owner") return current.owner;
+  if (current.kind === "absent") return null;
+  throw new LockOwnershipError(
+    `The repository lock at ${LOCK_RELATIVE_PATH} exists but its owner metadata is unreadable ` +
+      `(${current.reason}).`,
+  );
 }
