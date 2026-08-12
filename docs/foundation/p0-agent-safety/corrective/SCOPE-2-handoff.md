@@ -99,7 +99,7 @@ surfaces). Kept in separate files; the mapping is in
 | "14/14" / "all fourteen denied" | `p0-a/report.md`, `p0-a/test-matrix.md` | yes | "17/17 executable of 18 enumerated; case 08 INVALID" |
 | shell NUL row scored `PASS` | `p0-a/evidence/threat-matrix.sh`, both matrix docs | yes | `INVALID — NOT EXECUTED BY THIS HARNESS` |
 | "all symlink classes closed" | `p0-a/report.md` §4, `containment-contract.md` | yes | scoped to "below the capability root" for v1; the root itself is rule 6, closed only in v2 |
-| "P0-B may begin from the P0-A merge" | `handoffs/P0-A-to-P0-B.md` | yes | "`60adb63` is **not** a valid P0-B base; corrective merge SHA `PENDING PREZ MERGE`" |
+| "P0-B may begin from the P0-A merge" | `handoffs/P0-A-to-P0-B.md` | yes | "`60adb63` is **not** a valid P0-B base." The placeholder that read `PENDING PREZ MERGE` was replaced by the real merge SHA `978fbcc31577f6378b8dca4564ceafa6473f1c5e` in the closure receipt. |
 | root-symlink implied to be TOCTOU | `containment-contract.md` | yes | explicit table separating pre-existing condition from race |
 | "15 containment tests" | `p0-a/report.md` §9, `handoffs/P0-A-to-P0-B.md` | yes | **20** containment tests, **38** total |
 | "33/33" | `p0-a/report.md` §10, §11 | yes | **38/38** |

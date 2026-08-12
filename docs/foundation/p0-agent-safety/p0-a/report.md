@@ -1,19 +1,23 @@
 # P0-A report — agent write containment
 
-> ## ⚠ CORRECTION NOTICE
+> ## ✅ P0-A CLOSED at `978fbcc31577f6378b8dca4564ceafa6473f1c5e`
+>
+> Corrective PR **#4** merged **2026-08-12T08:12:42Z**; PREZ merge gate **PASS**. Closure
+> record: [`../corrective/CLOSURE-RECEIPT.md`](../corrective/CLOSURE-RECEIPT.md).
+>
+> ### Superseded, not deleted
 >
 > **P0-A implementation v1 merged incomplete at `60adb63`. The capability-root symlink
-> class remained vulnerable. P0-A is not complete until the corrective follow-up PR
-> merges.**
+> class remained vulnerable, so P0-A was not complete at that merge.**
 >
 > PR #3 was merged on the strength of this report's first revision, which claimed
 > completeness it had not earned. That claim is **superseded**, not deleted — see
-> `execution-ledger.jsonl` event `P0A-COR-EV-016`. The exact chronology is in
+> `execution-ledger.jsonl` event `P0A-COR-EV-021`. The exact chronology is in
 > [`../corrective/SCOPE-2-handoff.md`](../corrective/SCOPE-2-handoff.md); how the class was
 > missed is in section 16 of this report.
 
-**Status: v2 submitted for the corrective merge gate. P0-A is OPEN until it merges.**
-**P0-B is `NOT_STARTED` and may not use `60adb63` as its base.**
+**Status: CLOSED. The v2 implementation is merged and is the current `main`.**
+**`60adb63` is never a valid P0-B base; `978fbcc` is the minimum valid P0-B foundation.**
 
 ## 1. Baseline
 

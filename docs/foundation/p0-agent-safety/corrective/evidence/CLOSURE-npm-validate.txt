@@ -1,0 +1,23 @@
+
+> @tailered-ai/core@0.1.0 validate
+> npm run build && node dist/src/cli.js validate --repo .
+
+
+> @tailered-ai/core@0.1.0 build
+> tsc -p tsconfig.json
+
+{
+  "status": "VERIFIED",
+  "root": "<repo>",
+  "valid": true,
+  "decisions": 4,
+  "evals": 0,
+  "labels": 0,
+  "routes": 0,
+  "calls": 0,
+  "contexts": 0
+}
+
+# The isolated closure worktree's absolute path was replaced with the literal token
+# <repo>. That is the only alteration to this captured output; run identity is
+# established by the HEAD SHA and UTC timestamp recorded in CLOSURE-verification.txt.

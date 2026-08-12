@@ -6,7 +6,7 @@
   "v1_head_sha": "2f8fb9ae9e346a0313c27c6b6498483ad78c4754",
   "v1_merge_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c",
   "corrective_branch": "fix/p0-a-capability-root-symlink",
-  "corrective_merge_sha": "PENDING PREZ MERGE",
+  "corrective_merge_sha": "978fbcc31577f6378b8dca4564ceafa6473f1c5e",
   "determinism": "All proofs used a deterministic agent. Zero model calls, zero API spend.",
   "fixtures": "Disposable temporary companies only; the canonical repository was never an attack target.",
   "self_reference_exclusion": "This manifest deliberately does NOT list its own hash. A file cannot contain its own SHA-256 and remain valid, so p0-a/evidence-manifest.json is excluded by design. Verify it by recomputing every entry below, not by checking a stored self-hash.",
@@ -306,8 +306,8 @@
     },
     {
       "file": "p0-a/report.md",
-      "sha256": "097d7b313a5ca4a16e8044f6caf7fee4040855bc4dd3cbda2a0bbb00128cb7ba",
-      "bytes": 18662,
+      "sha256": "558b35c90243e007ce44957c5b94bfe51b97d82c2ecbbc74697c9bb34783a13f",
+      "bytes": 18901,
       "evidence_type": "document",
       "originating_step": "S2-04",
       "status": "CURRENT",
@@ -336,8 +336,8 @@
     },
     {
       "file": "README.md",
-      "sha256": "1818ebae1323de945ab322bc3357fad7fa795b2328f2d83758dd847c236f0f90",
-      "bytes": 4648,
+      "sha256": "1855c251d303214d6f50516f22d1d80c59232d04abd39909cd543f320d33670b",
+      "bytes": 5312,
       "evidence_type": "document",
       "originating_step": "S2-02",
       "status": "CURRENT",
@@ -346,13 +346,13 @@
     },
     {
       "file": "handoffs/P0-A-to-P0-B.md",
-      "sha256": "af0bb853195cb53d6bdd15ed8315085be4678f4651481886e5b17964c4b2407d",
-      "bytes": 5911,
+      "sha256": "08acdec85852525b97d90507acba4a9ddefd65da6de31f03399cbcdb5b2d46b1",
+      "bytes": 6495,
       "evidence_type": "document",
       "originating_step": "S2-10",
       "status": "CURRENT",
       "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c+uncommitted",
-      "note": "P0-B blocked; 60adb63 is not a valid base; corrective merge SHA PENDING PREZ MERGE."
+      "note": "P0-A CLOSED at 978fbcc; PR #4 merged 2026-08-12T08:12:42Z; 60adb63 recorded as an invalid P0-B base; 978fbcc recorded as the minimum valid P0-B foundation."
     },
     {
       "file": "corrective/SCOPE-1-handoff.md",
@@ -366,8 +366,8 @@
     },
     {
       "file": "corrective/SCOPE-2-handoff.md",
-      "sha256": "435f6972979b7fda0d2f5d9155bdc72272b02df2aa6d112d422e8abfb8ca64c2",
-      "bytes": 7917,
+      "sha256": "17fdd69b97a858998d2c8d04760dc938679159000043bba9df751f076c758cdc",
+      "bytes": 8024,
       "evidence_type": "document",
       "originating_step": "S2-12",
       "status": "CURRENT",
@@ -423,7 +423,82 @@
       "status": "CURRENT",
       "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c+corrective",
       "note": "Re-verification after the review changes: 38/38, VERIFIED, $0.068, 12/12 protected surfaces identical."
+    },
+    {
+      "file": "corrective/CLOSURE-RECEIPT.md",
+      "sha256": "99b50e257d6c8c2f0f6a4f1da649c0a21962929b05a7f7ba95667e7a998fa8a9",
+      "bytes": 4930,
+      "evidence_type": "document",
+      "originating_step": "CLOSURE",
+      "status": "CURRENT",
+      "tested_baseline_sha": "978fbcc31577f6378b8dca4564ceafa6473f1c5e",
+      "note": "The PREZ merge-gate PASS record: PR #4, merge SHA 978fbcc, timestamp, CI runs, and the foundation rule."
+    },
+    {
+      "file": "corrective/evidence/CLOSURE-verification.txt",
+      "sha256": "55d5d7786315a68ccf33bbca856f03736618320a488b4a13af508708f7e294fe",
+      "bytes": 1131,
+      "evidence_type": "verification",
+      "originating_step": "CLOSURE",
+      "status": "CURRENT",
+      "tested_baseline_sha": "978fbcc31577f6378b8dca4564ceafa6473f1c5e",
+      "note": "Inherited P0-A gate re-run on the merge commit: 38/38, VERIFIED, $0.068, 0 vulnerabilities, manifests unchanged."
+    },
+    {
+      "file": "corrective/evidence/CLOSURE-npm-test.txt",
+      "sha256": "eae5af207d2f096ec63e17b73362fdf9a6271bf8bfa09346cdbf1edea765d058",
+      "bytes": 3396,
+      "evidence_type": "verification",
+      "originating_step": "CLOSURE",
+      "status": "CURRENT",
+      "tested_baseline_sha": "978fbcc31577f6378b8dca4564ceafa6473f1c5e",
+      "note": "Raw npm test output on the merge commit, Node v24.11.1 spec reporter."
+    },
+    {
+      "file": "corrective/evidence/CLOSURE-npm-validate.txt",
+      "sha256": "7756e671732fed1e8ee533db265e03bc05b5bd3965fa5c0bbefd68876cc67514",
+      "bytes": 559,
+      "evidence_type": "verification",
+      "originating_step": "CLOSURE",
+      "status": "CURRENT",
+      "tested_baseline_sha": "978fbcc31577f6378b8dca4564ceafa6473f1c5e",
+      "note": "Raw npm run validate output on the merge commit."
+    },
+    {
+      "file": "corrective/evidence/CLOSURE-threat-matrix.txt",
+      "sha256": "60f72e2e77d3baa36f01fce4c840e55da81baadb124725e35e6653d9a3bc639c",
+      "bytes": 1704,
+      "evidence_type": "corrected-fixture",
+      "originating_step": "CLOSURE",
+      "status": "CURRENT",
+      "tested_baseline_sha": "978fbcc31577f6378b8dca4564ceafa6473f1c5e",
+      "note": "18-case containment matrix on the merge commit: 17/17 executable PASS, case 08 INVALID, outside dir empty."
+    },
+    {
+      "file": "corrective/evidence/CLOSURE-protected-hashes.txt",
+      "sha256": "79fa30bfec0ef2f579ab74027be8583e2f033e0cbbfa89c7db392b9e377a18cf",
+      "bytes": 1331,
+      "evidence_type": "canonical-repository",
+      "originating_step": "CLOSURE",
+      "status": "CURRENT",
+      "tested_baseline_sha": "978fbcc31577f6378b8dca4564ceafa6473f1c5e",
+      "note": "12/12 canonical protected surfaces byte-identical to the P0-A baseline on the merge commit."
+    },
+    {
+      "file": "corrective/evidence/CLOSURE-node22-note.txt",
+      "sha256": "c393a7e1ee5d90bbbbee33817c51ebff6bbc248ce129d6c3a55905597e608187",
+      "bytes": 469,
+      "evidence_type": "verification",
+      "originating_step": "CLOSURE",
+      "status": "CURRENT",
+      "tested_baseline_sha": "978fbcc31577f6378b8dca4564ceafa6473f1c5e",
+      "note": "Excluded run: an attempt on Node v22.22.0, below the declared engine floor. Passed 38/38 but is not the inherited baseline runtime and is counted in no result."
     }
   ],
-  "redaction": "The developer home path prefix is replaced with the literal token <home> in raw evidence. No other alteration was made to any captured output."
+  "redaction": "The developer home path prefix is replaced with the literal token <home> in raw evidence. No other alteration was made to any captured output.",
+  "corrective_pr": "#4 MERGED 2026-08-12T08:12:42Z",
+  "corrective_pr_head_sha": "b847abd98a3c2bb528f3810e81ef0cf33818d18e",
+  "p0a_status": "CLOSED",
+  "invalid_p0b_base": "60adb63ef6be09b93237d75758d3b2e817019f9c \u2014 P0-A v1, still permits four capability-root symlink escape classes. Never a valid P0-B foundation.",
+  "minimum_valid_p0b_base": "978fbcc31577f6378b8dca4564ceafa6473f1c5e, or any later main containing it."
 }

@@ -1,19 +1,24 @@
 # Handoff — P0-A to P0-B
 
-> ## ⛔ `60adb63` IS NOT AN ACCEPTABLE P0-B BASE
+> ## ✅ P0-A IS CLOSED — the valid P0-B foundation is `978fbcc`
+>
+> **P0-A corrective merge SHA: `978fbcc31577f6378b8dca4564ceafa6473f1c5e`**
+>
+> PR **#4** merged into `main` at **2026-08-12T08:12:42Z**. PREZ recorded the merge gate as
+> **PASS**. P0-A is **CLOSED**.
+>
+> ### ⛔ `60adb63` IS NOT AN ACCEPTABLE P0-B BASE — this remains true
 >
 > PR #3 merged P0-A implementation **v1** at `60adb63`, and v1 still permits four
 > capability-root symlink escape classes — including a write outside the repository, and
 > one through the founder gate. Starting P0-B there would build concurrency work on an
 > unsound write boundary, which is exactly the ordering P0-A exists to prevent.
 >
-> **P0-A corrective merge SHA: `PENDING PREZ MERGE`**
->
-> P0-B remains **BLOCKED** until the corrective follow-up merges and PREZ issues the
-> authorization message naming that new SHA.
+> **`978fbcc31577f6378b8dca4564ceafa6473f1c5e` is the MINIMUM valid P0-B foundation.**
+> Any later `main` that contains it is also valid. Nothing earlier is.
 
-P0-B may not begin until PREZ merges the P0-A **corrective** PR. This file records the
-exact merged-state assumptions P0-B is entitled to rely on.
+This file records the exact merged-state assumptions P0-B is entitled to rely on. Those
+assumptions now hold, because the corrective merge has landed.
 
 ## Prerequisite
 
@@ -21,10 +26,15 @@ exact merged-state assumptions P0-B is entitled to rely on.
 |---|---|
 | Original P0-A branch | `fix/p0-a-agent-write-containment` |
 | Original P0-A base | `main` @ `5eea7766bdc770c5a6e75ad2da5aded85b2356a3` |
-| v1 head / merge | `2f8fb9a` merged at **`60adb63`** — **incomplete, not a valid base** |
+| v1 head / merge | `2f8fb9a` merged at **`60adb63`** — **incomplete, INVALID as a base** |
 | Corrective branch | `fix/p0-a-capability-root-symlink`, based on `60adb63` |
-| Corrective merge SHA | **`PENDING PREZ MERGE`** — do not invent it |
-| P0-B starts from | the corrective merge SHA on `main`, nothing else |
+| Corrective PR | **#4 — MERGED** |
+| Corrective PR head | **`b847abd98a3c2bb528f3810e81ef0cf33818d18e`** |
+| **Corrective merge SHA** | **`978fbcc31577f6378b8dca4564ceafa6473f1c5e`** |
+| Merge timestamp | **2026-08-12T08:12:42Z** |
+| Merge parents | `60adb63…` + `b847abd…` |
+| CI on the PR head | runs **31575978644** and **31575981756**, both `success` |
+| P0-B starts from | **`978fbcc`**, or any later `main` containing it — nothing earlier |
 
 **P0-B Step 1 must verify** that `main` contains the **corrective** merge, that all
 containment tests pass (**20** containment tests, **38** total), and that baseline
