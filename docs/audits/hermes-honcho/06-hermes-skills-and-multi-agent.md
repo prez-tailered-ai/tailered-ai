@@ -122,23 +122,35 @@ to every skill loaded thereafter.
 "medium/low findings alone [as] informational, not blocking"
 (`tools/skills_guard.py:1139-1152`), so a skill with twenty medium supply-chain findings
 scores "safe". Matching is line-oriented and defeated by splitting a payload across lines.
-The scan is install-time only and never re-run at load.
+
+**Clarified on re-verification:** Hermes has **two** distinct skill scanners, and only one is
+advisory. The **install-time** scanner (`tools/skills_guard.py`) runs on hub- and
+registry-sourced skills and **can block installation** on a dangerous verdict. The
+**load-time** check in `skill_view` is the 9-substring advisory one that only logs. So
+third-party skills obtained through the hub do face a blocking gate; locally-authored and
+agent-authored skills do not, and neither does anything at load time.
 
 **Calibration.** These are consistent with upstream's declared model, not surprises.
 `SECURITY.md` §2.4 states Skills Guard "is a review aid; the boundary for third-party skills
 is operator review before install," and that "skills execute arbitrary Python at import
-time." They are reported here because they determine *how* Dime or Tailered could adopt the
+time." They are reported here because they determine *how* Tailered AI could adopt the
 mechanism, not as accusations.
 
 ### Adoption consequence
 
-Dime's 102 project skills already use the identical `SKILL.md` `name`/`description`
-frontmatter convention (`.claude/skills/intended-vs-implemented/SKILL.md:1-4`). **The format
-transfer is a no-op.** The only novel mechanism is the autonomous write/curate loop — and
-that loop is unmeasured, quota-driven, default-on, and destructive-by-default
-(`skill_manage(delete)` `rmtree`s an unpinned user skill with no archive and no approval,
-HA-316). Adopting it would import an unmeasured self-modifying writer into a repo governed
-by "no unaccounted spend" and "evidence before assertions."
+Tailered AI has **no skills system today**, so there is nothing to duplicate — the format is
+available for adoption at zero cost, because `SKILL.md` frontmatter is a conventional,
+widely-implemented shape rather than a Hermes invention.
+
+What Tailered must **not** import is the autonomous write/curate loop: it is unmeasured,
+quota-driven, default-on, and destructive-by-default (`skill_manage(delete)` `rmtree`s an
+unpinned skill with no archive and no approval, HA-316). Adopting it would place an
+unmeasured self-modifying writer inside a platform whose constitution requires that spend be
+accounted, that completion be proved, and that accepted decisions be immutable.
+
+The correct move for Tailered is to take the **format** and build the **measurement leg
+Hermes omits** — specified in
+[26-procedure-outcome-architecture.md](26-procedure-outcome-architecture.md).
 
 **Disposition: REFERENCE** (borrow the outcome-linked-measurement gap as a design lesson —
 build the measurement leg Hermes omits), **REJECT** for direct adoption of the autonomous
@@ -159,11 +171,33 @@ The parent constructs child `AIAgent` objects **in the same Python process**
 `task_id`. Children are explicitly seeded with the parent's cwd (`:2287`) and aliased into
 the parent's container (`:2292`). **No worktree, no chroot, no per-child branch.**
 
-**HA-402 (HIGH).** Nothing prevents two concurrent subagents from corrupting the same file.
-`tools/file_state.py` is a process-wide singleton with per-path `threading.Lock`
-(`:59-90,:262`) whose `check_stale()` returns an **advisory string** — the write executes
-unconditionally and the warning is attached as `_warning` in the JSON result
-(`file_tools.py:2154-2180`).
+**HA-402 (HIGH, corrected on re-verification).** The precise statement matters here, and the
+first version of this finding was too blunt. `tools/file_state.py` provides **two** distinct
+mechanisms, only one of which prevents anything:
+
+- `lock_path` is a **real** per-path `threading.Lock`, genuinely held across the write/patch
+  critical section
+  ([`tools/file_state.py:70-90`](https://github.com/NousResearch/hermes-agent/blob/ed5e17f4b86da0c4f09c0694757b6074ae6b9d16/tools/file_state.py#L70-L90),
+  [`tools/file_tools.py:2154`](https://github.com/NousResearch/hermes-agent/blob/ed5e17f4b86da0c4f09c0694757b6074ae6b9d16/tools/file_tools.py#L2154)).
+  It works because subagents are in-process threads, and it serialises concurrent writes.
+- `check_stale()` returns an **advisory string** and its own docstring says *"Does not raise —
+  callers decide whether to block or warn"*
+  ([`tools/file_state.py:142-153`](https://github.com/NousResearch/hermes-agent/blob/ed5e17f4b86da0c4f09c0694757b6074ae6b9d16/tools/file_state.py#L142-L153)).
+  Both call sites choose warn: the write executes unconditionally and the string is attached
+  as `_warning`
+  ([`tools/file_tools.py:2157-2167`](https://github.com/NousResearch/hermes-agent/blob/ed5e17f4b86da0c4f09c0694757b6074ae6b9d16/tools/file_tools.py#L2157-L2167)).
+
+So writes are **serialised but not conflict-checked**: a stale full-file overwrite still
+lands on disk. Hermes's own integration test encodes exactly that behaviour — agent A reads,
+agent B overwrites, agent A's stale write succeeds, and the test asserts only that a
+`_warning` is present, **not** that an error occurred
+([`tests/tools/test_file_state_registry.py:165-178`](https://github.com/NousResearch/hermes-agent/blob/ed5e17f4b86da0c4f09c0694757b6074ae6b9d16/tests/tools/test_file_state_registry.py#L165-L178)).
+That the adjacent cross-profile guard in the same function *does* hard-block
+([`tools/file_tools.py:2121-2123`](https://github.com/NousResearch/hermes-agent/blob/ed5e17f4b86da0c4f09c0694757b6074ae6b9d16/tools/file_tools.py#L2121-L2123))
+shows the choice was deliberate.
+
+**Corrected claim:** lost updates between concurrent subagents are *detected and reported*,
+not *prevented*.
 
 Related: duplicate work is not prevented and identical-goal fan-out is explicitly allowed
 (HA-405); an abandoned delegation is recorded `unknown` and never resumed (HA-406); the
@@ -191,8 +225,20 @@ Workspaces are per-task: a scratch dir by default, and **real linked git worktre
 project-linked tasks (`:3095`).
 
 **This is the one genuinely valuable multi-agent mechanism in Hermes** (HA-403, HA-404,
-HA-414), and it is the lane the README's "spawn isolated subagents for parallel workstreams"
-sentence does *not* describe — that sentence describes Lane 1, which is not isolated.
+HA-414).
+
+**Correction on re-verification.** An earlier draft of this artifact said the README's "spawn
+isolated subagents for parallel workstreams" sentence was misleading. That overstated it. An
+adversarial verifier established that Hermes uses "isolated" in the standard agent-framework
+sense of **context** isolation — fresh conversation with no parent history, own session and
+task id, own terminal-session cwd record, `skip_context_files`, `skip_memory`, a toolset
+intersected with the parent's, and a fresh iteration budget — all of which the code genuinely
+delivers, and which `AGENTS.md` scopes precisely as "an isolated context + terminal session".
+No Hermes document claims process, filesystem, or security sandboxing for subagents.
+
+The accurate rating is **"accurate but under-scoped"**, not "misleading": the caveat worth
+carrying is that concurrent siblings share a filesystem and can clobber each other's files
+with only an advisory warning, not that the documentation is false.
 
 ### Adoption consequence for Tailered OS
 

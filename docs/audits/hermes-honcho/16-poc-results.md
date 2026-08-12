@@ -14,9 +14,9 @@ No POC made a model call. No API credit was spent.
 
 This is the load-bearing experiment for Architecture D (Hermes behind Tailered's
 vendor-neutral process boundary). A deterministic mode-switched agent
-(`scratchpad/poc/poc-agent.mjs`) implemented `docs/agent-protocol.md` and was driven
-through five behaviors by the real CLI on Node v24.11.1 against
-`tailered-ai @ 6172653e`.
+implemented [`docs/agent-protocol.md`](https://github.com/prez-tailered-ai/tailered-ai/blob/6172653e0aca0981d0abaf4ad8e9d587667737e9/docs/agent-protocol.md)
+and was driven through five behaviours by the real CLI on Node v24.11.1 against
+`tailered-ai @ 6172653e`. Reproduction: [23-reproduction-instructions.md](23-reproduction-instructions.md).
 
 | Case | Agent behavior | Outcome | Blocker reported | Verdict |
 |---|---|---|---|---|
@@ -99,14 +99,15 @@ run started, spent tokens, wrote two route logs, and left no terminal record.
 
 This is **not** a v1 contract violation. v1 contracts one ship loop, never claims
 concurrent runs, and its single-run demo and CI are green. It **is** a hard prerequisite
-blocker for the Tailered OS "safe parallel agent work" objective.
+blocker for safe parallel agent execution in Tailered AI. Full specification:
+[25-concurrency-remediation-contract.md](25-concurrency-remediation-contract.md).
 
 The adoption consequence is the most important structural result in this audit:
 **the parallelism blocker is internal to Tailered's ledger, not to any agent runtime.**
 Adopting Hermes's subagent or worker isolation would not deliver safe parallel execution,
 because the corruption happens after the agent returns, in Tailered's own append path.
 Ledger concurrency-safety is a prerequisite for — not a beneficiary of — any upstream
-execution adoption. See `19-implementation-roadmap.md` Gate 0.
+execution adoption. See [19-implementation-roadmap.md](19-implementation-roadmap.md) Gate 0.
 
 ---
 
@@ -116,13 +117,12 @@ execution adoption. See `19-implementation-roadmap.md` Gate 0.
 
 Requires installing Hermes's Python dependency tree and supplying a provider API key, then
 spending real inference on the `todo-auth` benchmark. Governing rule 11 of this audit
-forbids installing either project into a Tailered or Dime dependency graph during the
-audit, and the operating model policy restricts API credit to Dime Chat work and
-pi-share-hf reviews. Cost and correctness of a Hermes worker on a Tailered benchmark are
+forbids installing either upstream project into the Tailered AI dependency graph during the
+audit, and the operating model policy restricts API credit. Cost and correctness of a Hermes worker on a Tailered benchmark are
 therefore **UNMEASURED**, and no claim about them appears anywhere in this audit.
 
 To unblock: an isolated disposable VM, a scoped provider key with a hard spend cap, and
-explicit owner authorization for the spend. Specified as Gate 3 of the roadmap.
+explicit owner authorization for the spend. Specified as Gate 5 of the roadmap.
 
 ---
 
@@ -133,15 +133,12 @@ explicit owner authorization for the spend. Specified as Gate 3 of the roadmap.
 Format compatibility was checked statically and is confirmed: Hermes skills are YAML
 frontmatter (`name`, `description`, `version`, `author`, `license`, `platforms`,
 `metadata.hermes.*`) over a markdown body
-(`hermes-agent/skills/media/*/SKILL.md:1-11`). Dime's 102 project skills already use the
-identical `name`/`description` SKILL.md convention
-(`.claude/skills/intended-vs-implemented/SKILL.md:1-4`), and both track the
-agentskills.io / Anthropic convention.
+([`skills/media/*/SKILL.md`](https://github.com/NousResearch/hermes-agent/tree/ed5e17f4b86da0c4f09c0694757b6074ae6b9d16/skills)). The shape is the conventional agentskills.io / Anthropic `SKILL.md` convention rather than a Hermes invention.
 
-The finding this produces is a **duplication** finding, not an adoption one: converting a
-Tailered or Dime workflow into a Hermes-style skill is a no-op transformation, because the
-format is already shared. The only candidate contribution is the closed learning loop, and
-its measurement is the part that is blocked.
+The finding this produces is that the format is **cheap to adopt and carries no dependency** —
+Tailered AI has no skills system today, so there is nothing to duplicate and nothing to
+migrate. The only substantive candidate contribution is the closed learning loop, and its
+measurement is exactly the part that is blocked.
 
 The measurable claim — "measurably reduces repeated reasoning" — requires paired runs
 (first-run vs learned-skill second-run) with token, tool-call, and correction counts. That
@@ -162,7 +159,7 @@ Critically, this POC is the empirical test of the audit's hard boundary — that
 never become sports-model evidence. Because it is unexecuted, the boundary is argued
 **architecturally** in `12-dime-ai-opportunity-matrix.md` and `18-reference-architecture.md`
 and is **not** claimed to be empirically demonstrated. The roadmap makes this POC a
-blocking gate before any Dime memory pilot touches a real user.
+blocking gate before any Tailered memory pilot stores anything about a real person.
 
 ---
 
@@ -203,6 +200,6 @@ established end-to-end in Lane C and is the highest-severity integration finding
   which closes a persistent instruction channel.
 
 Severity HIGH rests on static reachability, not on an executed proof of concept, and is
-labelled that way in the risk register. For Dime — a multi-user product — this chain is
-the single most consequential reason the reference architecture refuses a shared-workspace
-memory deployment.
+labelled that way in the risk register. For any Tailered deployment holding more than one
+isolation unit, this chain is the single most consequential reason the reference architecture
+refuses a shared-workspace memory deployment.

@@ -133,7 +133,7 @@ because §13 is conditioned on modification. **What the text does not support:**
 that modifying the server, or linking its source into another program, is free of
 obligation.
 
-**What this audit will not do** is state a conclusion about whether a particular Dime
+**What this audit will not do** is state a conclusion about whether a particular Tailered
 deployment triggers disclosure. That is a legal determination on specific facts.
 **Flagged for counsel.** The audit's *engineering* recommendation follows regardless: keep a
 clean service/API boundary, run the server unmodified, and never vendor AGPL server source —

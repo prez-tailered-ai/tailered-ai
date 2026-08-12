@@ -102,8 +102,9 @@ message content, conclusions, and peer cards go to **OpenAI by default** (the RE
 documents a different default).
 
 A product with erasure obligations cannot meet them with this system as-is. That is a
-design constraint on any Dime pilot, and it is why `19` Gate D2 requires either
-deletion-cascading or non-derived memory.
+design constraint on any Tailered memory pilot, and it is why the memory gate in
+[19-implementation-roadmap.md](19-implementation-roadmap.md) requires either
+deletion-cascading proven by test, or non-derived memory only.
 
 ## Other security findings
 
@@ -117,8 +118,9 @@ deletion-cascading or non-derived memory.
 - **SEC-O-08 (MEDIUM)** — `/metrics` is unauthenticated and its counters are labelled with
   `workspace_name`, leaking tenant identifiers when metrics are enabled.
 - **SEC-O-15 (HARDENING)** — the "read-only" database session is `AUTOCOMMIT`, not a
-  read-only role. (Dime's DA-204 is the same class of issue; the fix in both cases is a real
-  least-privilege grant.)
+  read-only role. The general lesson for Tailered: a "read-only" handle that is only
+  read-only by convention is not a boundary — the fix is always a real least-privilege grant
+  at the engine.
 - **SEC-O-12 (INFORMATIONAL, positive)** — **nothing is phoned home by default.** Telemetry,
   Sentry, Langfuse and Prometheus are all default-off, verified.
 

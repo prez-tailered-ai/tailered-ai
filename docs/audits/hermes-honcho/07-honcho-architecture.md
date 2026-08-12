@@ -112,7 +112,9 @@ and the durability layer beneath it is weaker than the design implies: no refere
 actions, provenance without foreign keys, three key artifacts living in unversioned JSONB,
 and CI that cannot see migration drift.
 
-For Dime that combination argues for one thing specifically: if Honcho is ever used, it must
-be **one workspace per user**, so that the boundary Dime relies on is the one Honcho enforces
+For Tailered AI that combination argues for one thing specifically: if Honcho is ever used,
+it must be **one workspace per isolation unit** — per company, per agent, or per operator as
+the deployment requires — so that the boundary Tailered relies on is the one Honcho enforces
 best (the workspace root) rather than the one it enforces worst (peer/session separation
-inside a shared workspace).
+inside a shared workspace). See [09](09-honcho-security-and-consistency.md) for the tenancy
+evidence and [17](17-adoption-decision-matrix.md) for the gate that encodes this.

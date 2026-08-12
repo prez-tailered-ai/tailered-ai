@@ -5,7 +5,7 @@ item states what would resolve it. Nothing here is presented as a finding.
 
 ## Blocked by design: no upstream execution
 
-The audit's governing rules forbade installing either project into a Tailered or Dime
+The audit's governing rules forbade installing either upstream project into the Tailered AI
 dependency graph, and the operating model policy restricts API credit. Consequently:
 
 | # | Question | Why blocked | What would resolve it |
@@ -73,13 +73,17 @@ These are decisions, not facts, and the audit deliberately does not make them:
 1. **Is institutional memory wanted in Tailered at all?** `docs/blueprint-execution.md:34-42`
    refuses subsystems whose data dependency is unmet, and the eval/label exclusion from
    context (TA-014a) is deliberate and documented. Gate 2 exists only if the answer is yes.
-2. **Should Dime Chat leave owner-only?** It is owner-only in production today (DA-110), so
-   a personalization pilot currently serves one user. The value of Gate D2 depends entirely
-   on this.
-3. **Is the AGPL service boundary acceptable** for a commercial product, given counsel
-   review? See `15`.
-4. **Should ADR-004 (drafted in `17`) be accepted?** Under `AGENTS.md:17` that is intent, and
-   intent is the founder's.
+2. **What is the intended isolation unit for a Tailered memory deployment** — per company,
+   per agent, or per operator? The tenancy evidence in `09` makes this the decisive
+   configuration choice, because Honcho defends the workspace root well and the boundaries
+   inside a workspace poorly.
+3. **Is the AGPL service boundary acceptable**, given counsel review? See `15`.
+4. **Should ADR-004 (drafted in `17`) be accepted?** Under the constitution's rule that
+   humans own intent, that is the founder's decision, which is why this audit drafted it
+   rather than appending it.
+5. **How many concurrent agents does the platform actually need?** The remediation contract
+   in `25` specifies correctness for N ∈ {2, 3, 10}; a target of hundreds would change the
+   ledger design, not just fix the race.
 
 ## What would most change this audit's conclusions
 

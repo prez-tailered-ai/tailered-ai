@@ -1,183 +1,207 @@
 # 01 — Baseline and methodology
 
-Audit of **NousResearch/hermes-agent** and **plastic-labs/honcho** as candidate
-contributors to Tailered AI, Tailered OS, and Dime AI.
+Audit of **NousResearch/hermes-agent** and **plastic-labs/honcho** as candidate contributors
+to **`prez-tailered-ai/tailered-ai`**, the repository in which agents are built, evaluated,
+and deployed.
 
-Conducted 2026-08-11. Read-first, evidence-first. No upstream code was installed into
-any Tailered or Dime dependency graph, and neither upstream repository was modified.
+Read-first, evidence-first. No upstream code was installed into the Tailered dependency
+graph, and neither upstream repository was modified, pushed to, or forked.
+
+## Scope lock
+
+| Repository | Role | Permitted operations |
+|---|---|---|
+| [`prez-tailered-ai/tailered-ai`](https://github.com/prez-tailered-ai/tailered-ai) | **Target · sole writable · deployment control plane** | read, execute, branch, commit, publish this audit |
+| [`NousResearch/hermes-agent`](https://github.com/NousResearch/hermes-agent) | Upstream reference | clone, freeze, inspect, compare — **read-only** |
+| [`plastic-labs/honcho`](https://github.com/plastic-labs/honcho) | Upstream reference | clone, freeze, inspect, compare — **read-only** |
+
+Every upstream finding terminates in a Tailered AI disposition. Findings produced during
+earlier, wider-scoped execution that concern a different application repository are excluded
+from the canonical corpus and retained solely as audit provenance in
+[22-raw-evidence.md](22-raw-evidence.md), clearly marked **OUT OF CURRENT SCOPE**. They carry
+no weight in any disposition. Where an underlying engineering principle applies to Tailered
+AI, it was **re-derived and independently proved against Tailered's own code** before being
+carried into this corpus — never inherited.
 
 ## Frozen baseline
 
-Every conclusion in this audit is anchored to these three immutable commits. No finding
-cites a moving branch.
+Every conclusion is anchored to these three immutable commits. No finding cites a moving
+branch.
 
-| Role | Repository | Branch | Commit (frozen) | License | Commits | Working-tree size |
-|---|---|---|---|---|---|---|
-| Target / source of truth | `prez-tailered-ai/tailered-ai` | `main` | `6172653e0aca0981d0abaf4ad8e9d587667737e9` | Apache-2.0 | 3 | ~200 KB |
-| Upstream A | `NousResearch/hermes-agent` | detached | `ed5e17f4b86da0c4f09c0694757b6074ae6b9d16` | MIT | 21,728 | 803 MB |
-| Upstream B | `plastic-labs/honcho` | detached | `a92fb1e0789fd29e9674aec133328513ed0dcda3` | AGPL-3.0 | 613 | 46 MB |
+| Role | Repository | Commit | License | Commits | Size |
+|---|---|---|---|---|---|
+| Target | `prez-tailered-ai/tailered-ai` | [`6172653e0aca0981d0abaf4ad8e9d587667737e9`](https://github.com/prez-tailered-ai/tailered-ai/tree/6172653e0aca0981d0abaf4ad8e9d587667737e9) | Apache-2.0 | 3 | ~200 KB |
+| Upstream A | `NousResearch/hermes-agent` | [`ed5e17f4b86da0c4f09c0694757b6074ae6b9d16`](https://github.com/NousResearch/hermes-agent/tree/ed5e17f4b86da0c4f09c0694757b6074ae6b9d16) | MIT | 21,728 | 803 MB |
+| Upstream B | `plastic-labs/honcho` | [`a92fb1e0789fd29e9674aec133328513ed0dcda3`](https://github.com/plastic-labs/honcho/tree/a92fb1e0789fd29e9674aec133328513ed0dcda3) | AGPL-3.0 | 613 | 46 MB |
 
-Tailered AI HEAD is `Execute v1 blueprint foundations` (2026-07-30). Hermes HEAD is
-2026-08-11 16:00 EDT; Honcho HEAD is 2026-08-11 17:50 EDT — both repositories moved on
-the day of the audit, which is precisely why they were pinned to detached HEADs before
-any conclusion was drawn.
+Both upstreams moved on the day of the audit, which is precisely why they were pinned to
+detached HEADs before any conclusion was drawn. Neither was built or executed; Honcho in
+particular was never run, so all Honcho findings are static-analysis findings and are
+labelled accordingly.
 
-Both upstreams were cloned into an isolated scratch location outside every tracked
-source tree and checked out at the pinned SHA. Neither was built, installed, nor
-executed; Honcho in particular was never run, so all Honcho findings are static-analysis
-findings and are labelled accordingly.
+### Target runtime baseline (VERIFIED by execution)
 
-### Target-system runtime baseline (VERIFIED)
+Established before any upstream comparison, on Node v24.11.1:
 
-Established by execution before any upstream comparison, on Node v24.11.1:
-
-- `npm ci` — 4 packages, 0 vulnerabilities. The platform has **zero runtime
-  dependencies**; `typescript` and `@types/node` are the only devDependencies
-  (`package.json:26-29`).
-- `npm test` — 18/18 pass.
-- `npm run validate` — VERIFIED; ledgers empty at HEAD (0 evals, 0 labels, 0 routes).
+- `npm ci` — **4 packages, 0 vulnerabilities**. Zero runtime dependencies.
+- `npm test` — **18/18 pass**.
+- `npm run validate` — VERIFIED.
 - `npm run demo` — `status: VERIFIED`, outcome `shipped`, `costUsd 0.068`,
-  `wallTimeMs 277`, one terminal eval, one gate label, ADR-002 written.
+  `wallTimeMs 277`, one terminal eval, one gate label, ADR written.
 
-This baseline matters: comparisons of maturity and complexity below are between a
-3,615-line, zero-dependency, fully-green platform and two large multi-language systems.
+This baseline matters: the comparison is between a 3,615-line zero-dependency platform with a
+green executable definition of done, and two large multi-language systems.
 
 ## Governing constraints applied
 
-1. Tailered's constitution (`AGENTS.md`), `docs/v1-contract.md`,
-   `docs/agent-protocol.md`, `docs/platform-brief.md`, and
-   `docs/full-system-blueprint.md` are authoritative. No recommendation in this audit
-   weakens an existing invariant to make integration easier.
-2. Evidence states are never collapsed. Completion is labelled `VERIFIED`, `INFERRED`,
-   `UNKNOWN`, or `BLOCKED`. Upstream capability is labelled `IMPLEMENTED`, `TESTED`,
-   `DOCUMENTED`, `OBSERVED`, `INFERRED`, or `UNVERIFIED`.
-3. No AGPL-covered Honcho server source was copied into any Tailered or Dime tree.
-4. Documentation claims are not accepted as implementation evidence. Where a README
-   claim and the code disagree, the disagreement is itself recorded as a finding.
-5. Dime internals are cited from the Dime repository directly, which was read but never
-   written to. Anything not evidenced there is marked `REQUIRES DIME VERIFICATION`.
+1. The target's constitution, v1 contract, agent protocol, platform brief, and blueprint are
+   authoritative. No recommendation weakens an existing invariant to make integration easier.
+2. Evidence states are never collapsed. Completion is `VERIFIED` / `INFERRED` / `UNKNOWN` /
+   `BLOCKED`; upstream capability is `IMPLEMENTED` / `TESTED` / `DOCUMENTED` / `OBSERVED` /
+   `INFERRED` / `UNVERIFIED`.
+3. No AGPL-covered Honcho server source was copied anywhere.
+4. Documentation claims are never accepted as implementation evidence. Where a README and the
+   code disagree, the disagreement is itself the finding.
+5. Every citation is an immutable GitHub permalink at the frozen commit. **Repository
+   attribution is resolved by verifying the cited path exists in that checkout** — never by
+   inferring from a finding-id prefix.
 
 ## Lane architecture and write ownership
 
-Four lanes ran in parallel with strict single-writer ownership. Lane workers returned
-structured findings to one coordinator; no worker wrote an audit artifact, so no two
+Four lanes ran in parallel under strict single-writer ownership. Lane workers returned
+structured findings to one coordinator; **no worker wrote an audit artifact**, so no two
 writers ever touched the same file.
 
-| Lane | Scope | Workers | Ownership rule |
-|---|---|---|---|
-| A | Hermes: runtime, tools/MCP, skills, multi-agent, security, memory/cost, CI/licensing | 7 | May not write Honcho conclusions |
-| B | Honcho: data model, epistemology, retrieval, queue, security/tenancy, benchmarks/licensing | 6 | May not write Hermes conclusions |
-| C | The real Hermes↔Honcho integration + a 13-case failure matrix | 2 | Must cite both upstreams |
-| D | Dime AI and Tailered OS capability inventory | 3 | Must inspect the target, not assume upstream superiority |
-| — | Tailered AI source read end-to-end; POC-A executed; synthesis | coordinator | Sole writer of all artifacts |
+| Lane | Scope | Workers |
+|---|---|---|
+| A | Hermes: runtime, tools/MCP/providers, skills, multi-agent/cron, security, state/memory/cost, CI/licensing | 7 |
+| B | Honcho: data model, epistemology, retrieval, queue/consistency, security/tenancy, benchmarks/licensing | 6 |
+| C | The real Hermes↔Honcho integration + a 13-scenario failure matrix | 2 |
+| D | Target-system inventory | 3 |
+| — | Target source read end-to-end; POC-A and POC-C executed; all synthesis and writing | coordinator |
 
-Lane A and B findings rated CRITICAL or HIGH, plus every claim-matrix verdict of
-`MISLEADING` / `DOCUMENTATION_ONLY` / `STALE`, were passed to independent adversarial
-verifiers instructed to **refute** them and to default to refuted when they could not
-personally confirm the finding in the code.
+Total execution: **72 subagents, ~8.0M tokens, ~2,500 tool calls, zero agent errors**, across
+18 lane reports and 59 adversarial verifications.
 
-Total execution: **53 subagents, 6.43M tokens, 1,993 tool calls, zero agent errors**,
-across the 18 lane reports and 40 adversarial verifications.
+## Verification, and the harness defect — disclosed
 
-### Verification results, reported honestly
+Findings rated CRITICAL or HIGH, plus every adverse claim-matrix verdict, were passed to
+independent adversarial verifiers instructed to **refute** them and to default to refuted
+when they could not personally confirm the finding in code.
 
-| Outcome | Count |
+### The defect
+
+The first verification pass routed each finding to a repository using a **heuristic on its id
+prefix**. Synthesised claim-matrix ids (`CLAIM-…`) matched neither branch and were pointed at
+the **Honcho** checkout while describing **Hermes**. Those verifiers correctly reported that
+the cited files did not exist — output indistinguishable from a genuine refutation unless the
+reasoning is read.
+
+**19 verdicts were affected.** No finding was ever recorded as refuted on that basis.
+
+### The correction
+
+All 19 were **rerun with explicit structured repository binding** (`repo = tailered-ai |
+hermes-agent | honcho`) plus a mandatory identity assertion — `git remote -v` and
+`git rev-parse HEAD` checked against the expected values before any file was read.
+
+| Corrected pass | Result |
 |---|---|
-| Verifier runs | 40 |
-| **Invalidated by a bug in this audit's own harness** | **13** |
-| Genuine adjudications | 27 |
-| — CONFIRMED | 16 |
-| — PARTIALLY_CONFIRMED (scope corrections, substance held) | 9 |
-| — REFUTED | 2 |
+| Repository identity matched | **19 / 19** |
+| CONFIRMED | 7 |
+| PARTIALLY_CONFIRMED (scope corrections, substance held) | 9 |
+| REFUTED | 3 |
 
-**The harness bug, disclosed.** The verification step routed each finding to a repository
-path using a heuristic on its id prefix. Synthesised claim-matrix ids (`CLAIM-…`) did not
-match that heuristic and were pointed at the **Honcho** checkout even though they concerned
-**Hermes**. Those verifiers correctly reported that the cited files did not exist in the
-repository they were given. **No finding is recorded as refuted on the basis of a misrouted
-verdict.** Notably, most of those verifiers detected the mismatch themselves, located the
-sibling checkout, and verified against the correct code anyway — those re-scoped verdicts
-are counted as genuine above.
+**Verdicts that changed a conclusion, recorded in place:**
 
-**Both genuine refutations concern claim-matrix entries, not substantive findings**, and one
-of them *vindicated upstream*: the assertion that Hermes's documented "always-on hardline
-floor" was misleading did not survive, because `detect_hardline_command` is in fact invoked
-at `tools/approval.py:3757-3760` **before** the YOLO bypass at `:3785`. The narrower defect —
-that `_CMDPOS` does not absorb a path-qualified command word, so `/bin/rm -rf /` never
-matches `HARDLINE_PATTERNS` — was confirmed separately as SEC-H-01.
+- **Subagent isolation downgraded.** "Isolated subagents" is accurate in the standard
+  agent-framework sense of *context* isolation, which the code delivers. The correct rating is
+  "accurate but under-scoped", not "misleading" ([06](06-hermes-skills-and-multi-agent.md)).
+- **Cross-agent file safety corrected.** `lock_path` is a **real** per-path lock held across
+  the write critical section; only the staleness check is advisory. Lost updates are
+  *detected and reported*, not *prevented* ([06](06-hermes-skills-and-multi-agent.md)).
+- **A claim against upstream did not survive.** The documented "always-on hardline floor" is
+  genuinely invoked before the bypass; the narrower command-position defect was confirmed
+  separately as SEC-H-01 ([05](05-hermes-security.md)).
+- **Synthetic-message count raised** from seven sites to eleven
+  ([03](03-hermes-architecture.md)).
+- **Doc-drift severity lowered**: `max_iterations` drift affects only direct library
+  instantiation, since every shipped entry path passes the documented value
+  ([03](03-hermes-architecture.md)).
 
-Every CRITICAL and HIGH finding that received a genuine adjudication was CONFIRMED or
-PARTIALLY_CONFIRMED. Confirmed outright: HA-202, HA-203, HA-204, HA-306, HA-311, HA-402,
-SEC-H-01 through SEC-H-05, SEC-H-07, SEC-H-08, SEC-H-09.
+### The regression test
 
-Two independent spot-checks by the coordinator also passed: Hermes skill counts
-(79 bundled / 15 categories, 114 optional / 21, 193 total) matched exactly, and disputed
-file sizes were re-measured directly (see the correction recorded in `05`).
+`tooling/resolve-citation.mjs` implements the invariant, and
+`tooling/resolve-citation.test.mjs` locks it — **8/8 passing**:
 
-## Artifact location rationale
+```bash
+node --test docs/audits/hermes-honcho/tooling/resolve-citation.test.mjs
+```
 
-Artifacts live in `docs/audits/hermes-honcho/`. This is consistent with the repository's
-existing convention: `docs/` already holds prose governance documents
-(`platform-brief.md`, `v1-contract.md`, `agent-protocol.md`, `full-system-blueprint.md`,
-`blueprint-execution.md`) that are not part of the company format proper. The company
-format enumerated in `AGENTS.md` and enforced by `src/validate.ts:17-30` is unaffected:
-`validateCompany` checks a fixed list of required paths and ledger integrity, so adding
-documents under `docs/` cannot invalidate the repository. This was confirmed by running
-`npm run validate` after the directory was created.
+Three tests target the defect directly: an absolute path must never be attributed to any
+repository (a naive path join discards the root and would resolve it against the first repo
+tried); attribution must be by path existence rather than identifier prefix; and any fan-out
+work item must carry an **explicit** repo key or be rejected.
 
-**No ADR was written by this audit.** Under the constitution, humans own intent and
-machines own implementation (`AGENTS.md:17`), and accepted decisions are immutable
-(`AGENTS.md:27`). An adoption decision of this size is intent. Artifact
-`17-adoption-decision-matrix.md` therefore contains a *draft* ADR body for the founder to
-accept or reject at a gate; this audit does not append it to `decisions/`.
+### A second harness lesson, also disclosed
 
-## Method: claim → code → runtime
+In the first pass the prompt framed the "claim under test" ambiguously, so verdict *labels*
+carried mixed polarity — for some items REFUTED meant "the upstream documentation is wrong"
+(finding upheld) and for others "the auditor's assertion is wrong". The corrected pass
+therefore treats each verifier's **corrected statement** as authoritative rather than its
+label alone, and the corrections above are quoted from those statements.
 
-For each material capability the chain was: locate the documented claim → find the
-implementation entrypoint → identify the state mutation → find the tests → obtain runtime
-evidence where feasible → trace the failure path → identify the security boundary → cost →
-Tailered/Dime relevance. Where a link in that chain was missing, the gap is the finding.
+## Citation portability
 
-Runtime evidence was obtained for Tailered AI (full suite, validate, demo, and the
-adversarial POC-A matrix in `16-poc-results.md`). Runtime evidence for Hermes and Honcho
-was **not** obtained: executing either would have required installing dependency trees and
-provider credentials, and Honcho additionally requires PostgreSQL with pgvector plus an
-LLM provider key. Those constraints are recorded as explicit `BLOCKED` items rather than
-bridged by inference, per governing rule 2.
+A reviewer needs only GitHub. The canonical evidence ledger resolves **1,579 citations** to
+immutable permalinks (957 Hermes, 622 Honcho); 82 remained unresolved and were left as plain
+text rather than guessed; and **51 absolute local paths were rejected outright**. The
+canonical corpus contains **zero** local filesystem paths, `file://` URIs, or editor-only
+references.
+
+## Artifact location
+
+Artifacts live in `docs/audits/hermes-honcho/`, consistent with the repository's existing
+convention of holding prose governance documents under `docs/`. The company format enumerated
+in the constitution and enforced by the validator is unaffected: `validateCompany` checks a
+fixed list of required paths and ledger integrity, so adding documents cannot invalidate the
+repository. Confirmed by running `validate` after every change, reading the exit code
+directly.
+
+**No ADR was written by this audit.** Under the constitution humans own intent and accepted
+decisions are immutable; an adoption decision is intent.
+[17](17-adoption-decision-matrix.md) contains a *draft* ADR-004 for the founder to accept or
+reject at a gate.
+
+**No remediation was implemented.** The concurrency defect this audit found by execution is
+specified in [25](25-concurrency-remediation-contract.md) and deliberately left unfixed;
+publication of an audit is not authorization to change the system it audits.
 
 ## Completion gates
 
-Each gate is either VERIFIED or explicitly BLOCKED with its reason. None is asserted
-without evidence.
-
 | Gate | Status | Evidence |
 |---|---|---|
-| **Coverage** — every material production subsystem classified | **VERIFIED**, with limits stated | 13 subsystem lanes: Hermes runtime, tools/MCP/providers, skills, multi-agent/cron, security, state/memory/cost, CI/packaging/licensing; Honcho data model/API, deriver/epistemology, retrieval/dialectic, queue/consistency, security/tenancy/deletion, benchmarks/SDK/deploy/licensing. Unread modules enumerated in `21` |
-| **Code** — critical features traced to implementation, not README | **VERIFIED** | 343 findings, each carrying file:line citations; claim-to-code verdicts recorded per lane |
-| **Runtime** — runtime evidence where feasible | **VERIFIED where feasible; BLOCKED elsewhere** | Tailered: 18/18 tests, `validate` exit 0, demo, POC-A (5 cases), POC-C. Hermes: approval detector executed in an isolated harness (`05`). Honcho: **never executed** — requires Postgres+pgvector and paid inference |
-| **Security** — every privileged boundary threat-analysed | **VERIFIED** | `05` (12 code-execution tools, 7 independent gates, 21 findings), `09` (tenancy, deletion, auth defaults, 17 findings) |
-| **Memory** — observation, inference, provenance, authority analysed | **VERIFIED** | `08` — four epistemic levels, the exact commit line where inference becomes durable state, and a memory-authority model |
-| **Concurrency** — multi-agent and worker behaviour under contention/failure | **VERIFIED** | `06` Part 2 (two Hermes lanes), `09` (delivery semantics), POC-C (executed against Tailered) |
-| **Tailered** — every recommendation maps to an exact capability or gap | **VERIFIED** | `11` invariant register TA-001…TA-016 + gap matrix; `17` names the affected component per decision |
-| **Dime** — recommendations distinguish personalisation / operational / prediction | **VERIFIED** | `12` classifies all 12 candidates; prediction-affecting memory is REJECTED absolutely |
-| **Duplication** — nothing recommended that already exists | **VERIFIED** | `11` Parts 2-3; skill format, subagents, worktrees, browser, MCP, approval gating all shown already present |
-| **Economics** — high-impact recommendations quantified or bounded | **VERIFIED, deliberately bounded** | `14` measures Tailered exactly; upstream costs are given as **structure and constants** with assumptions stated. Dollar projections at 100/1k/10k/100k users were **refused** rather than fabricated — `AGENTS.md:33` reserves money for deterministic computation |
-| **License** — integration compatible with verified licenses | **VERIFIED, with counsel-review flags** | `15` per-component tables for both repos; AGPL §13 quoted verbatim; three Honcho components declare licenses with no text in the tree |
-| **POC** — empirical proof or explicitly marked unproven | **VERIFIED** | 2 executed (A, C), 1 partial (D, format only), **5 BLOCKED** with unblock conditions. No efficiency or benchmark claim is made from a blocked POC |
-| **Decision** — every material capability ends in a disposition | **VERIFIED** | `17`: 18 decisions, all terminal |
-| **Evidence** — no major conclusion unsupported | **VERIFIED** | Every recommendation cites finding ids; 40 adversarial verifications; harness bug and a false-pass both disclosed |
+| **Coverage** | **VERIFIED**, with limits stated | 13 upstream subsystem lanes; unread modules enumerated in [21](21-open-questions.md) |
+| **Code** | **VERIFIED** | 294 canonical findings, each with permalinked citations |
+| **Runtime** | **VERIFIED where feasible; BLOCKED elsewhere** | Target: 18/18 tests, `validate`, demo, POC-A (5 cases), POC-C. Hermes: approval detector executed in an isolated harness. Honcho: **never executed** |
+| **Security** | **VERIFIED** | [05](05-hermes-security.md), [09](09-honcho-security-and-consistency.md) |
+| **Memory** | **VERIFIED** | [08](08-honcho-memory-and-epistemology.md) — the exact line where inference becomes durable state, and a memory-authority model |
+| **Concurrency** | **VERIFIED** | [06](06-hermes-skills-and-multi-agent.md), [09](09-honcho-security-and-consistency.md), POC-C, [25](25-concurrency-remediation-contract.md) |
+| **Tailered** | **VERIFIED** | [11](11-tailered-gap-matrix.md) invariant register; every disposition names its affected component |
+| **Duplication** | **VERIFIED** | [12](12-tailered-agent-platform-opportunity.md) — capability-by-capability, target-first |
+| **Economics** | **VERIFIED, deliberately bounded** | [14](14-performance-and-cost.md) measures the target exactly; upstream costs given as structure and constants. Dollar projections were **refused** rather than fabricated |
+| **License** | **VERIFIED, counsel items flagged** | [15](15-license-and-maintenance-risk.md); AGPL §13 quoted verbatim |
+| **POC** | **VERIFIED** | 2 executed, 1 partial, **5 BLOCKED** with unblock conditions |
+| **Decision** | **VERIFIED** | [17](17-adoption-decision-matrix.md) — 20 terminal dispositions |
+| **Evidence** | **VERIFIED** | Every recommendation cites finding ids; 59 verifications; harness defect, verdict-polarity ambiguity, and a false pass all disclosed |
 
-## Known limitations of this audit
+## Known limitations
 
-- Hermes at 803 MB / ~4,000 Python files and ~1,400 TypeScript files cannot be read
-  exhaustively by any process. Coverage is scoped: each lane read its core modules in
-  full and grepped the remainder. Modules outside all seven Hermes lane scopes are
-  unaudited and are not claimed otherwise.
-- No upstream code was executed, so every upstream performance and cost number in
-  `14-performance-and-cost.md` is derived from code structure, not measurement, and is
-  labelled `INFERRED` with its assumptions stated.
-- Benchmark claims were assessed by reading harness code, not by re-running benchmarks;
-  reproduction would require datasets, judge models, and paid inference.
-- License analysis reports what the license text and file layout support. It is not
-  legal advice, and items needing counsel are flagged as such in
-  `15-license-and-maintenance-risk.md`.
+- Hermes at 803 MB cannot be read exhaustively. Each lane read its core modules in full and
+  grepped the remainder; modules outside all seven lane scopes are unaudited and not claimed
+  otherwise.
+- No upstream code was executed, so every upstream performance and cost figure is derived
+  from code structure and labelled `INFERRED` with assumptions stated.
+- Benchmark claims were assessed by reading harness code, not by re-running benchmarks.
+- License analysis reports what the license text supports. It is not legal advice; counsel
+  items are flagged as such.

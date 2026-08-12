@@ -71,7 +71,9 @@ peer ID from this workspace" (`__init__.py:153-154`).
 `USE_AUTH=False` (`honcho/src/config.py:727`) and Hermes holds a single deployment-wide key
 that must be workspace-broad because it creates arbitrary peers.
 
-In any multi-user gateway — Telegram, Discord, Slack, or **a consumer product like Dime** —
+In any deployment where one workspace holds more than one isolation unit — a multi-user
+gateway, or a Tailered instance serving several companies or operators from a shared
+workspace —
 isolation is per-*peer* inside one shared workspace, so this is a cross-user exfiltration
 *and* belief-planting surface reachable by prompt injection. Severity rests on static
 reachability; no exploit was constructed (see `16-poc-results.md`, POC-G).

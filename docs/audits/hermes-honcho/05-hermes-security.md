@@ -220,14 +220,14 @@ An audit that reports only weaknesses is not honest. These were read end-to-end 
 Nothing here disqualifies Hermes for the use its authors describe: a **single-tenant
 personal agent run by a trusting operator**, ideally under whole-process isolation.
 
-It does mean that any Tailered or Dime adoption must supply OS-level isolation, because
+It does mean that any Tailered AI adoption must supply OS-level isolation, because
 Hermes explicitly declines to provide it. That requirement is identical to what POC-A
 established from the other direction: Tailered's process boundary bounds mutation and
 accounting but not execution. **Both systems agree containment lives in the OS**, which is
 why Architecture D is coherent in principle and why it is gated on a disposable worker with
 no ambient credentials in `19-implementation-roadmap.md`.
 
-The findings that would matter most in a Dime context — default-allow `computer_use`,
+The findings that would matter most to a Tailered agent platform — default-allow `computer_use`,
 no dispatch chokepoint, non-interactive auto-approve, and the self-reachable `hermes -z`
 escalation — are all reasons to run any Hermes-derived process as an untrusted subprocess
 rather than as a library inside a service.

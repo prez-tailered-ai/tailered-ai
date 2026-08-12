@@ -91,8 +91,13 @@ most transferable idea in the runtime.
 is sent on every API call, so the bar for a new *core* tool is high." Capability arrives as
 CLI command + skill, a service-gated tool, or a plugin.
 
-Both properties are worth borrowing as *principles* by Dime, which pays per-call for every
-tool schema it would ever add to its chat surface (Dime currently sends none — DA-105).
+Both properties are worth borrowing as *principles* by Tailered AI. The narrow-waist rule
+applies the moment Tailered agents gain a model-facing tool surface: every tool schema is
+paid for on every call, so the bar for a core tool is permanently high. The prompt-cache
+rule applies the moment Tailered agents hold multi-turn conversations — Tailered's context
+cache is currently per-run and keyed by repo-state hash
+([`src/context.ts:32-78`](https://github.com/prez-tailered-ai/tailered-ai/blob/6172653e0aca0981d0abaf4ad8e9d587667737e9/src/context.ts#L32-L78)),
+which is the right primitive for a repository but not yet for a conversation.
 
 ## Provider layer: genuinely provider-agnostic for inference
 
@@ -120,7 +125,7 @@ than its own documentation, and the docs lag.
 | `max_iterations` default 500 (`AGENTS.md:367`) | constructor defaults are **90** (`run_agent.py:446`, `agent/agent_init.py:470`) | `STALE`, **downgraded to LOW on verification** — every shipped entry path passes 500 explicitly, so the drift affects only direct library instantiation (HA-103) |
 | "one-turn grace call" | `_budget_grace_call` is never set true anywhere | `DOCUMENTATION_ONLY` — dead code (HA-102) |
 | `AGENTS.md` agent-loop pseudocode | contradicts the implementation in three material ways | `MISLEADING` (HA-104) |
-| "never a synthetic user message injected mid-loop" | violated by at least **seven** distinct paths; two recovery nudges are written to the durable transcript | `MISLEADING` (HA-105, HA-106) |
+| "never a synthetic user message injected mid-loop" | violated by at least **eleven** distinct sites (count raised on re-verification); the durable-persistence invariant is scoped to seven `_EPHEMERAL_SCAFFOLDING_FLAGS` and two Codex recovery nudges escape it | `MISLEADING` (HA-105, HA-106) |
 | skill trigger = "a reminder to the model" (example config) | spawns an unattended background writer; defaults disagree (10 vs 15) | `MISLEADING` (HA-315) |
 | `trajectory_compressor.py` (name implies runtime) | offline training-data tooling, not on the request path | naming hazard (HA-116, HA-507) |
 

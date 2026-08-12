@@ -115,7 +115,7 @@ The lane's own verdict: *"Honcho is a contextual-memory / personalization layer 
 cache for prompt assembly. It is not a canonical database, not a truth-maintenance or
 reasoning substrate."*
 
-**This is the single most important sentence in the audit for Dime**, because it settles the
+**This is the single most important sentence in the audit for Tailered AI**, because it settles the
 hard boundary on evidence rather than on caution. Memory must never become sports-model
 evidence not merely because that would be risky, but because **Honcho does not maintain the
 epistemic properties that evidence requires** — no supersession, no validated provenance, no

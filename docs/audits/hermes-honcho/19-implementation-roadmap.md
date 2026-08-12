@@ -1,196 +1,185 @@
-# 19 — Gated implementation roadmap
+# 19 — Gated implementation roadmap (Tailered AI)
 
-Gates, not phases. Each gate states its objective, the exact components affected, its
-acceptance criteria, its tests, its security and cost gates, its rollback, and the evidence
-required before the next gate opens. Narrow and reversible first. **No big-bang migration
-is proposed, and no gate depends on adopting upstream code.**
+Gates, not phases. Every gate targets
+[`prez-tailered-ai/tailered-ai`](https://github.com/prez-tailered-ai/tailered-ai) and nothing
+else. Narrow and reversible first.
 
-Gates 0-2 are Tailered; gates D0-D2 are Dime and run independently. Gate 3 is the only one
-that touches an upstream runtime, it is last, and it is currently blocked.
+**Nothing in this roadmap is implemented by the audit.** Publication of the audit is not
+authorization to build. Each gate begins only on explicit approval after review.
+
+Work, when authorized, is done in this repository using feature branches, isolated
+worktrees, deterministic evals, explicit acceptance tests, scoped credentials, disposable
+execution workers, bounded network access, hard model-spend ceilings, traceable context,
+causal evidence, and a rollback path.
 
 ---
 
-## Gate 0 — Ledger concurrency-safety (Tailered) — **PREREQUISITE**
+## Gate 0 — Ledger concurrency-safety — **PREREQUISITE**
 
 **Why first.** POC-C proved three concurrent ship runs corrupt the ledger: 4 duplicate route
-ids, 10 validator errors, and one started run with no terminal eval, violating
-`AGENTS.md:18`. Every parallelism claim in the Tailered OS objectives is false until this is
-fixed, and **no agent runtime can fix it** because the corruption happens after the agent
-returns.
+ids, 10 validator errors, and one started run with **no terminal `EvalRow`**, violating the
+constitution's unconditional law. Every multi-agent objective is blocked behind it, and **no
+external agent runtime can fix it** — the corruption happens after the agent returns.
 
-**Components:** `src/ledger.ts` (id allocation and append), `src/files.ts` (`appendJsonLine`),
-`src/ship.ts:414-467` (the `finally` ordering).
+**Components:**
+[`src/ledger.ts`](https://github.com/prez-tailered-ai/tailered-ai/blob/6172653e0aca0981d0abaf4ad8e9d587667737e9/src/ledger.ts),
+[`src/files.ts`](https://github.com/prez-tailered-ai/tailered-ai/blob/6172653e0aca0981d0abaf4ad8e9d587667737e9/src/files.ts),
+[`src/ship.ts:414-467`](https://github.com/prez-tailered-ai/tailered-ai/blob/6172653e0aca0981d0abaf4ad8e9d587667737e9/src/ship.ts#L414-L467).
 
-**Changes, smallest first:**
-1. Reorder the `finally` so `appendTerminalEval` cannot be skipped by a failing `appendAdr`
-   — wrap the ADR write so its failure is recorded *in* the terminal eval's `blocker`
-   rather than thrown past it. This alone restores `AGENTS.md:18` under contention.
-2. Replace read-then-write id allocation with a collision-tolerant append: retry on
-   `EEXIST`/duplicate with a re-read, or allocate from a lock file. The CAS-claim shape from
-   Hermes's Kanban (`kanban_db.py:claim_task:4353`, HA-404) is the reference pattern —
-   reimplemented in TypeScript, not imported.
+**Full specification:** [25-concurrency-remediation-contract.md](25-concurrency-remediation-contract.md)
+(requirements R1-R8, acceptance criteria A1-A7).
 
-**Acceptance criteria (all must hold):**
-- N concurrent runs against one company produce exactly N terminal `EvalRow`s.
-- Zero duplicate `ROUTE-*`, `CALL-*`, `EVAL-*`, `LABEL-*` ids.
-- `validate --repo` exits **0**, verified directly and not through a pipe (a `cmd | tail`
-  reading of `$?` produced a false pass during this audit).
-- Every ADR id is unique and no accepted ADR is modified.
+**Order of work, smallest first:**
 
-**Tests:** extend `test/ship.test.ts` with a concurrency case at N=3 and N=10.
+1. **Reorder finalisation** so a failing ADR write cannot skip `appendTerminalEval` — its
+   failure is recorded *into* the terminal row's `blocker` instead of thrown past it. This
+   alone restores the constitutional law under contention.
+2. **Replace read-then-write id allocation** with a collision-tolerant claim
+   (`HERMES-INSPIRED`: CAS + TTL; `HONCHO-INSPIRED`: `ON CONFLICT DO NOTHING`), reimplemented
+   in zero-dependency TypeScript.
+
 **Security gate:** none — no new surface. **Cost gate:** none — no model calls.
 **Rollback:** `git revert`; the ledger format is unchanged and append-only.
-**Evidence to open the next gate:** the POC-C harness rerun, green, with output attached.
+**Evidence to open the next gate:** the POC-C harness rerun green, with the true `validate`
+exit code read directly (not through a pipe), plus a deterministic contention test that
+**fails** against `6172653e` (criterion A6).
 
 ---
 
-## Gate 1 — Procedure-outcome join (Tailered) — **the differentiating move**
+## Gate 1 — Procedure-outcome join
 
-**Why.** The only capability gap shared by all three systems: nobody measures whether a
-stored procedure helps. Hermes writes and prunes skills but never measures them (HA-306,
-HA-307); its curator decides by wall clock and its consolidation prompt explicitly forbids
-using the one usage signal it has (`agent/curator.py:452-459`). Dime has zero skill-usage
-instrumentation anywhere (TA-103). Tailered already stores the outcome data.
+**Why now.** The one capability gap shared by every system examined. Cheap, additive, and it
+uses ledgers that already exist.
 
-**Components:** `src/contracts.ts` (add an optional `procedure_id` to `RouteLog` and
-`EvalRow`), `src/router.ts` (`createRouteLog`), `src/validate.ts` (validate when present).
+**Specification:** [26-procedure-outcome-architecture.md](26-procedure-outcome-architecture.md).
+
+**Components:** an optional `procedure_id` on `RouteLog` and `EvalRow`
+([`src/contracts.ts`](https://github.com/prez-tailered-ai/tailered-ai/blob/6172653e0aca0981d0abaf4ad8e9d587667737e9/src/contracts.ts)),
+recorded in `createRouteLog`
+([`src/router.ts`](https://github.com/prez-tailered-ai/tailered-ai/blob/6172653e0aca0981d0abaf4ad8e9d587667737e9/src/router.ts)),
+validated when present
+([`src/validate.ts`](https://github.com/prez-tailered-ai/tailered-ai/blob/6172653e0aca0981d0abaf4ad8e9d587667737e9/src/validate.ts)).
 
 **Acceptance criteria:**
-- `procedure_id` is optional, so every existing ledger row stays valid — verified by
-  `npm run validate` on an untouched repo.
-- Tokens-per-outcome can be computed for runs that used a procedure versus those that did
-  not, from the ledgers alone, with no new store.
-- No change to routing behavior: `route()` remains pure and stateless (TA-006).
+- The field is **optional**, so every existing ledger row stays valid — `npm run validate`
+  passes on an untouched repository.
+- Tokens-per-outcome is computable for runs that used a procedure versus those that did not,
+  **from the ledgers alone**, with no new store.
+- `route()` remains pure and stateless: attribution is *recorded*, never *decided*, at
+  routing time.
 
-**Tests:** `test/router.test.ts` for the field; a ledger-query test computing the split.
-**Cost gate:** none. **Rollback:** the field is additive and optional; drop it.
-**Evidence:** a computed tokens-per-outcome comparison over ≥2 runs.
+**Hard dependency:** Gate 0. Measurement over an incomplete ledger computes confident, wrong
+numbers, and the missing rows are exactly the crashed runs — a bias that makes procedures
+look better than they are.
 
----
-
-## Gate 2 — Memory as an optional adapter (Tailered) — only if institutional memory is wanted
-
-**Why gated.** `docs/blueprint-execution.md:34-42` refuses subsystems whose data dependency
-is unmet, and the Context Engine hierarchy is a v3 item. This gate does **not** open until a
-real need exists; it is specified here so that if it opens, it opens correctly.
-
-**Design constraints, taken from the audit:**
-- Reimplement the `MemoryProvider` contract shape (HH-103) in TypeScript — 4 required
-  members, optional lifecycle hooks. Memory must be **optional**: absence degrades context
-  quality only (HH-201 is the proof this is achievable).
-- Fail-open with bounded waits and stale-result discard (HH-105 pattern).
-- **Implement the hooks Honcho leaves empty**: session switch and pre-compress (HH-107,
-  HH-108). Their absence is a known defect class, not a design choice.
-- Memory is **never** authoritative and never enters a trusted prompt region (HH-104).
-- No model-authored durable belief without a human checkpoint (HH-114).
-
-**Acceptance criteria:** with the provider forcibly failing, every existing test still
-passes and `validate` still exits 0. **Rollback:** remove the provider; the contract is
-additive.
+**Rollback:** the field is additive and optional; drop it.
 
 ---
 
-## Gate 3 — Hermes behind the process boundary (Tailered) — **DEFERRED, BLOCKED**
+## Gate 2 — Procedure format and registry
 
-**Status: cannot open today.** POC-B is BLOCKED (see `16`): it requires installing Hermes's
-dependency tree in isolated infrastructure and spending real inference, neither of which
-this audit was authorized to do.
+**Why after Gate 1.** Build procedures *with* measurement rather than before it. This is the
+single lesson the upstream learning loop teaches by omission.
 
-**What POC-A already established.** The boundary holds for **mutation** and **accounting**
-(overspend → `halted_budget`; writes outside `product/` → halt; traversal → halt) but **not
-for execution** — an agent-chosen binary in a `testgen` payload executes.
+**Scope:** adopt the `SKILL.md`-shaped format (decision #6, `ADAPT`). Content-hash each
+procedure version; reuse the ADR supersession pattern for lineage.
 
-**Preconditions before this gate may open:**
-1. Gate 0 complete.
-2. A disposable worker with no ambient credentials and scoped egress — required because
-   Hermes states the OS is the only boundary (`SECURITY.md` §2.2) and Tailered states
-   `--allow-local-execution` "is not a sandbox" (`agent-protocol.md:5`). Both agree; neither
-   provides it.
-3. A wrapper that makes Hermes honour `docs/agent-protocol.md:22` (actual cost and tokens
-   must not exceed the tier ceiling). **Hermes has no such mechanism** (HA-502), so the
-   wrapper must impose it externally. Without this, TA-001 cannot hold.
-4. Owner-authorized spend with a hard cap.
-5. Acceptance of HA-601: no wheel, no sdist, no PyPI artifact — the integration is a pinned
-   git SHA plus a container, forever.
+**Explicitly excluded:** inline-shell expansion in procedure bodies (HA-312), autonomous
+unattended authoring (HA-304), and clock-based archival (HA-307). Retention decisions come
+from the Gate 1 scorecard, not from a timer.
 
-**Acceptance criteria if it proceeds:** the `todo-auth` benchmark completes with a terminal
-`EvalRow`, cost strictly below the cap, and zero writes outside `product/`.
-**Rollback:** delete the agent config; the deterministic demo agent is unaffected.
+**Acceptance:** a procedure's retention decision is derivable from outcome data; a promotion
+is a human gate whose verdict is captured as a label.
 
 ---
 
-## Gate D0 — Dime hardening (do this regardless of any adoption decision)
+## Gate 3 — Memory as an optional adapter — **only if institutional memory is wanted**
 
-Both items are live weaknesses today and are worth fixing even if no memory layer is ever
-built.
-
-**D0.1 — Numeric-grounding provenance (DA-205, HIGH).**
-`server/dime-chat.route.ts:823-826` seeds `supportedNumericValues` from
-client-supplied `role:"user"` message text, and `sanitizeDimeChatHistory`
-(`server/_core/dimeChatModel.ts:509-528`) carries no provenance marker.
-*Change:* derive `supportedNumericValues` **only** from server-side retrieval, and tag
-history entries with provenance so injected content can never widen the allowlist.
-*Acceptance:* a test proving a number appearing only in a user-role message is **rejected**
-as `unsupported_numeric_claim`. Prove the check can fail before trusting it.
-
-**D0.2 — SELECT-only chat credential (DA-204, MEDIUM).**
-`readDatabaseUrl()` falls back to the read-write `DATABASE_URL`
-(`server/_core/dimeChatContext.ts:149-154`).
-*Change:* provision `DIME_CHAT_DATABASE_URL` as a MySQL user with SELECT-only grants on
-`games`/`mlb_*`/`odds_history` and no privileges on the write path.
-*Acceptance:* an integration test asserting an attempted write on that pool fails at the
-engine. This converts the prediction boundary from convention (DA-202: "true but
-UNGUARDED") into an engine-enforced impossibility.
-
-**Rollback:** both are configuration and validation changes; revert cleanly.
-
----
-
-## Gate D1 — Wire Dime's own agent runtimes before importing anyone else's
-
-`dimeAgent.ts` (Claude Code subprocess, strict env allowlist, read-only default tools) and
-`piAgent.ts` (in-process, app-defined tools, model allowlist) are **fully implemented,
-tested, and have zero product call sites** (DA-106, DA-107). That is the cheapest available
-operational capability in the entire audit and it adds no upstream dependency.
-
-**Acceptance:** one real operational workflow (data-quality investigation or release
-verification) runs through an existing runtime with bounded tools and a recorded cost.
-
----
-
-## Gate D2 — Dime memory pilot — only after D0
-
-**Preconditions:** D0.1 and D0.2 complete; the surface serves real users (Dime Chat is
-owner-only today, DA-110, so the pilot's value is currently limited to one operator).
+**Why gated.** The blueprint refuses subsystems whose data dependency is unmet, and the
+exclusion of ledgers from agent context (TA-015) is deliberate and documented. This gate does
+not open until a real need exists; it is specified here so that if it opens, it opens
+correctly.
 
 **Design constraints, each traceable to a finding:**
 
 | Constraint | Because |
 |---|---|
-| Memory injected in a **system-role, explicitly non-authoritative** block — never `role:"user"` | HH-104 (trust elevation) + DA-205 (user-role text widens the numeric allowlist) |
-| **Per-user workspace**, never a shared workspace with per-peer separation | HH-106 (unvalidated `peer` → cross-peer read *and* write) |
-| `USE_AUTH=True`; no deployment-wide broad key | Honcho defaults `USE_AUTH=False` (`honcho/src/config.py:727`) |
-| **No model-write memory tool** | HH-114 (recursive model-authored belief, no checkpoint) |
-| Explicit precedence: current instruction and current retrieval **beat** memory | HH-207 (no precedence rule exists upstream) |
-| Deletion must retract derived beliefs, or memory must be non-derived | HH-212 (deleting a source does not retract the conclusion) |
-| Never a projection input | The audit's hard boundary |
+| Reimplement the provider contract in TypeScript; memory is **optional** | HH-103; HH-201 proves optionality is achievable |
+| Fail-open with bounded waits and stale-result discard | HH-105 |
+| **Implement** session-switch and pre-compress hooks | Honcho leaves both empty (HH-107, HH-108) |
+| Memory injected in a **non-authoritative** region, never as "authoritative" | HH-104, SEC-HH-01 |
+| **No model-write memory tool** | HH-114, HO-212 |
+| Explicit precedence: canonical state and current instruction beat memory, **and it is tested** | HH-207 — no such rule exists upstream |
+| Deletion retracts derived belief, or memory is non-derived | SEC-O-04, HO-101, HO-113 |
+| Memory spend inside reserve/settle | HH-109, HO-319, R-03 |
 
-**Acceptance gate — structural non-contamination (DA-208 test 1):**
-`hashEngineSource()` and `mlb_calibration_constants` are **byte-identical** across the
-rollout. Binary, cheap, and unfalsifiable by narrative. Distributional (ECE/Brier/log-loss)
-and sequential (walk-forward) checks follow as confirmation.
+**If an external service is used** (decision #3, `INTEROPERATE`), all eight gates in
+[17](17-adoption-decision-matrix.md) are mandatory and cumulative — chiefly `USE_AUTH=True`
+and one workspace per isolation unit.
 
-**Rollback:** disable the provider; because memory is an optional adapter, the chat surface
-returns to its current behavior with no data migration.
+**Acceptance:** with the provider forcibly failing, every existing test still passes and
+`validate` still exits 0. **Rollback:** remove the provider; the contract is additive.
 
 ---
 
-## Sequencing summary
+## Gate 4 — Isolated worker layer
 
-```
-Tailered:  Gate 0 ──> Gate 1 ──> [Gate 2 if needed] ──> [Gate 3, blocked]
-Dime:      Gate D0 ──> Gate D1 ──> [Gate D2 if D0 green and users exist]
+**Why.** Both systems agree containment lives in the OS: Hermes states it outright, and
+Tailered's own documentation says `--allow-local-execution` "is not a sandbox". POC-A
+confirmed the process boundary bounds mutation and accounting but **not execution**.
+
+**Scope:** a disposable worker with no ambient credentials and scoped egress; worktree-per-
+task (`HERMES-INSPIRED`) for parallel work.
+
+**Hard dependency:** Gate 0 — parallel workers against a racy ledger multiply the defect.
+
+---
+
+## Gate 5 — External agent runtime behind the process boundary — **DEFERRED, BLOCKED**
+
+**Status: cannot open today.** POC-B is BLOCKED: it requires installing Hermes's dependency
+tree in isolated infrastructure and spending real inference, neither of which this audit was
+authorized to do.
+
+**Preconditions, all required:**
+
+1. Gates 0 and 4 complete.
+2. A wrapper that makes the external runtime honour the protocol's hard per-tier ceiling.
+   **Hermes has no such mechanism** (HA-502), so the wrapper must impose it externally;
+   without this, the reserve/settle invariant cannot hold.
+3. Owner-authorized spend with a hard cap.
+4. Acceptance that there is **no installable artifact** (HA-601) — the integration is a
+   pinned git SHA plus a container, permanently.
+5. Never track upstream `main` (HA-602/604/609).
+
+**Acceptance if it proceeds:** the `todo-auth` benchmark completes with a terminal `EvalRow`,
+cost strictly below the cap, and zero writes outside `product/`.
+**Rollback:** delete the agent config; the deterministic demo agent is unaffected.
+
+---
+
+## Sequencing
+
+```text
+Gate 0 (ledger)  ──►  Gate 1 (measurement)  ──►  Gate 2 (procedures)
+      │
+      └──►  Gate 4 (isolated workers)  ──►  Gate 5 (external runtime, blocked)
+
+              Gate 3 (memory) — independent, only if wanted
 ```
 
-Gate 0 and Gate D0 are the only two that should start now. Both are small, both are pure
-risk reduction, and neither requires any decision about Hermes or Honcho.
+**Gate 0 is the only one that should start now.** It is small, purely corrective, requires no
+decision about either upstream system, and unblocks everything else.
+
+## What must be fixed before multi-agent deployment begins
+
+Stated as a single checklist, because this is the question the roadmap exists to answer:
+
+1. Concurrency-safe identifiers and crash-safe finalisation (Gate 0, criteria A1-A7).
+2. A deterministic contention test that provably fails on the current code (A6).
+3. An isolated worker with no ambient credentials (Gate 4).
+4. Reserve/settle extended to every new spend channel (R-03).
+5. Ownership state sufficient to distinguish "in progress" from "abandoned" (R8).
+
+Until all five hold, additional concurrent agents increase the rate of silent ledger
+corruption rather than the rate of useful work.

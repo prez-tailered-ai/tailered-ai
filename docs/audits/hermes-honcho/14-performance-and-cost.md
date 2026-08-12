@@ -103,8 +103,8 @@ at all.
 
 An operator reading Honcho's own instrumentation would conclude the system is far cheaper
 than the code implies. That is the single most important economic caution in this artifact,
-and it is why the roadmap requires Dime to meter any pilot itself rather than trusting
-upstream reporting.
+and it is why the roadmap requires Tailered to meter any memory pilot **on the Tailered
+side** rather than trusting upstream reporting.
 
 ## Latency (INFERRED)
 
@@ -137,15 +137,29 @@ decision:
   either system.
 
 The actionable consequence: at defaults, Honcho's per-turn cost is **plausibly of the same
-order as the primary model call itself**, and it is unbounded and unmetered. Any pilot must
-(a) set `dialectic_cadence` above 1 or `recall_mode` away from `hybrid`, (b) meter spend on
-the Dime side rather than trusting HO-319/HO-508, and (c) apply Tailered's reserve/settle
-discipline — which is exactly the capability TA-111 identified as missing from Dime and
-TA-112 noted already exists in the sibling repository.
+order as the primary model call itself**, and it is unbounded and unmetered. Any Tailered
+memory pilot must (a) set `dialectic_cadence` above 1 or move `recall_mode` away from
+`hybrid`, (b) meter spend on the **Tailered** side rather than trusting HO-319/HO-508, and
+(c) place the call inside Tailered's existing reserve/settle discipline so that an external
+memory service cannot spend outside a reservation.
+
+Requirement (c) is the one that matters architecturally: today Tailered's ceiling bounds
+**the process agent's** spend
+([`src/budget.ts:48-54`](https://github.com/prez-tailered-ai/tailered-ai/blob/6172653e0aca0981d0abaf4ad8e9d587667737e9/src/budget.ts#L48-L54)).
+A memory service called out-of-band would be a **second, unmetered spend channel** in a
+platform whose fourth operating law forbids unaccounted spend. Any `INTEROPERATE` decision
+must therefore route memory spend through the same reserve/settle path, or bound it
+separately and record it in the same ledger.
 
 ## The economic conclusion
 
 Tailered's reserve-before-spend is the strongest cost property found in any of the three
-systems, it is proven by execution (POC-A), and it is the property both upstreams lack.
-Adopting either upstream's economic model would be a regression; porting **Tailered's** model
-into Dime (TA-111 / TA-112) is the highest-value economic move the audit identifies.
+systems, it is proven by execution (POC-A), and it is the property **both upstreams lack**.
+Hermes measures after the fact and loses deltas; Honcho does not measure at all and reports
+$0.00.
+
+Adopting either upstream's economic model would be a regression. The correct move is the
+opposite: **extend Tailered's existing model to cover any new spend channel** an agent
+platform introduces — subagents, tool calls, and external memory services alike. That is the
+economic design constraint the reference architecture in
+[18-reference-architecture.md](18-reference-architecture.md) is built around.
