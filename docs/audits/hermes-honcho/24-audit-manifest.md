@@ -53,7 +53,15 @@ mutation of any kind.
 | 24 | audit-manifest | This file |
 | 25 | [concurrency-remediation-contract](25-concurrency-remediation-contract.md) | The blocking prerequisite, specified not applied |
 | 26 | [procedure-outcome-architecture](26-procedure-outcome-architecture.md) | The strategic finding |
+| 27 | [erratum](27-erratum.md) | **Append-only corrections** to TA-003, TA-004, and the POC-A scope statement |
+| 28 | [closure-receipt](28-closure-receipt.md) | Founder acceptance, and what closes versus what stays open |
 | — | [`tooling/`](tooling/) | Citation resolver + regression tests |
+
+**Closure note.** Artifacts `27` and `28` were added at closure, after the audit's own
+completion gates were met. They correct evidence and record the founder decision. They change
+no verdict, no disposition, and no finding about either upstream system. Artifacts 00-26 are
+unedited except for two inserted erratum notices, which add pointers and leave every original
+statement in place.
 
 **Numbering note.** `13` is intentionally absent: an earlier artifact at that number covered
 a wider programme scope and was superseded by `12`, which is Tailered-only. Numbers are
@@ -64,7 +72,7 @@ it.
 
 | Measure | Value |
 |---|---|
-| Artifacts | 25 markdown + 2 tooling files |
+| Artifacts | 25 markdown + 2 tooling files, **+2 closure artifacts (27, 28)** |
 | Total lines / words | 8,173 / ~127,700 |
 | Canonical findings (upstream) | **294** |
 | Severity split | 6 CRITICAL · 58 HIGH · 117 MEDIUM · 65 LOW · 3 HARDENING · 94 INFORMATIONAL |
@@ -92,6 +100,14 @@ it.
 - **Secret scan**: no credential-shaped literal appears in the corpus.
 - **Target repository health after publication**: `validate` exits 0, `npm test` 18/18,
   audit tooling tests 8/8.
+- **Target repository health at closure** (`38e08bf`, after P0-A corrective closure):
+  `validate` exits 0 VERIFIED, `npm test` **38/38**, `npm audit` 0 vulnerabilities, demo
+  `shipped` at $0.068, dependency manifests unchanged. The rise from 18 to 38 tests is the
+  P0-A containment suite, not a change to this corpus.
+- **Two invariant rows were later refuted.** TA-003 and TA-004 were published VERIFIED on
+  evidence that did not support them. The corrections are appended in
+  [`27-erratum.md`](27-erratum.md); the original rows are unedited. No verdict, disposition,
+  or upstream finding changes.
 
 ## What this corpus does not do
 
