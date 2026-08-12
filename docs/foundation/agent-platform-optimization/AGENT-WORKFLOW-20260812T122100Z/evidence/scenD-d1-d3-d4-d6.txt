@@ -1,0 +1,11 @@
+SCENARIO D — repair-loop injections (disposable scratchpad: wfb-scenD)
+## D1 word-splitting fault
+attempt1 FAIL(detected): unquoted $C -> rc=127 out='(eval):8: command not found: echo injected-args' (single-word argv)
+attempt2 repair(${=C}): rc=0 out='injected-args' -> VERIFIED
+## D3 false-green wrapper
+attempt1: wrapper exit=0 over a FAILED inner command -> exit code alone = FALSE GREEN; independent check marks INVALID
+attempt2 repair(pipefail): exit=1 -> failure visible -> VERIFIED
+## D4 invalid mutation anchor
+anchor matched N=0 (grep rc=1, expected exactly 1) -> verdict INVALID, never CAUGHT -> VERIFIED
+## D6 contradictory lane claims
+laneA claims 5 ADRs; laneB claims 6. Coordinator direct read: 5 -> laneA VERIFIED, laneB REFUTED with evidence. No unverified acceptance.
