@@ -1,0 +1,2 @@
+attempt1: base 81bdfd7a is behind origin/main by 2 commit(s) -> STALE BASE detected before any work
+repair: normal merge; old base still ancestor; no rebase -> VERIFIED

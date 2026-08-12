@@ -1,0 +1,6 @@
+## D2 seeded failing test (disposable clone at merged head)
+attempt1: npm test exit=127 (expected nonzero) — failing test: 
+root cause: the seeded file itself; smallest in-scope fix: remove the seed
+attempt2 narrow rerun (one suite): exit=127 
+attempt3 dependent rerun (full suite): exit=127 
+failed attempt log retained at scenD/stale/d2-attempt1.log (     163 bytes)

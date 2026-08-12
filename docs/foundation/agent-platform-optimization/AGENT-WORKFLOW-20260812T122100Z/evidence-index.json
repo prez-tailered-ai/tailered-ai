@@ -1,0 +1,114 @@
+{
+  "run_id": "AGENT-WORKFLOW-20260812T122100Z",
+  "generated_at": "2026-08-12T12:34:26.790Z",
+  "base": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+  "note": "Hashes at retention; the index lists itself by path with sha256 SELF.",
+  "artifact_count": 21,
+  "artifacts": [
+    {
+      "path": "docs/foundation/agent-platform-optimization/AGENT-WORKFLOW-20260812T122100Z/00-master-report.md",
+      "bytes": 8054,
+      "sha256": "366aa3086793f59c3a9bdb65148d54d6ee5fb81b203984e2641e65d4fd107547"
+    },
+    {
+      "path": "docs/foundation/agent-platform-optimization/AGENT-WORKFLOW-20260812T122100Z/01-scope-and-method.md",
+      "bytes": 2295,
+      "sha256": "998928ab808a05c105d12b4bb926af8445e7867843fd47879830dee7b5f46d4e"
+    },
+    {
+      "path": "docs/foundation/agent-platform-optimization/AGENT-WORKFLOW-20260812T122100Z/02-benchmark-plan.md",
+      "bytes": 5136,
+      "sha256": "8a5473ba550e185b64595e901b206a35692d6c865da1b63c29a0f847f4744a51"
+    },
+    {
+      "path": "docs/foundation/agent-platform-optimization/AGENT-WORKFLOW-20260812T122100Z/03-benchmark-results.md",
+      "bytes": 5341,
+      "sha256": "e10225e941f5de950026a6d8ef23fbd2d6e6d9b5512e601585e45443a270bbe5"
+    },
+    {
+      "path": "docs/foundation/agent-platform-optimization/AGENT-WORKFLOW-20260812T122100Z/04-subagent-topology.md",
+      "bytes": 2507,
+      "sha256": "52f955374d8d51b0bab488f4c2502a03bd30edc0601f1a5b63b9dca521e753cd"
+    },
+    {
+      "path": "docs/foundation/agent-platform-optimization/AGENT-WORKFLOW-20260812T122100Z/05-concurrency-report.md",
+      "bytes": 2363,
+      "sha256": "0ab24f126f148c13b00e584ec259a114c1156969377e54400699838aa433131b"
+    },
+    {
+      "path": "docs/foundation/agent-platform-optimization/AGENT-WORKFLOW-20260812T122100Z/06-token-context-report.md",
+      "bytes": 2731,
+      "sha256": "e578ec6ce29602cb7f9d2b5948269598d452a1384369092b7d846a95f689fdc5"
+    },
+    {
+      "path": "docs/foundation/agent-platform-optimization/AGENT-WORKFLOW-20260812T122100Z/07-loop-engineering-report.md",
+      "bytes": 2586,
+      "sha256": "9c8486e2a6609848a778eb00d1e4ba3b9fc683e01558689c65b9918f8a9d448b"
+    },
+    {
+      "path": "docs/foundation/agent-platform-optimization/AGENT-WORKFLOW-20260812T122100Z/08-github-lifecycle-report.md",
+      "bytes": 1988,
+      "sha256": "bfb9df4a5c371e53dcbf62775be406084e139efef0ba069b478df32f3eb396da"
+    },
+    {
+      "path": "docs/foundation/agent-platform-optimization/AGENT-WORKFLOW-20260812T122100Z/09-automation-readiness.md",
+      "bytes": 4795,
+      "sha256": "05efebce371f36d24eafbde1b5a99b9c7677e43793fa965e59b50f00eb8f9f7e"
+    },
+    {
+      "path": "docs/foundation/agent-platform-optimization/AGENT-WORKFLOW-20260812T122100Z/10-risk-register.md",
+      "bytes": 1916,
+      "sha256": "70b75c64b9302754c4bfe740e59ea7400d06c89cff836b196665736a048d172e"
+    },
+    {
+      "path": "docs/foundation/agent-platform-optimization/AGENT-WORKFLOW-20260812T122100Z/11-terminal-ledger.md",
+      "bytes": 815,
+      "sha256": "c1f8a0e5d03d2ec9b4dd5e1a073e7fa5af5c0a2c524a9cbf6e0bb827b5cafb5f"
+    },
+    {
+      "path": "docs/foundation/agent-platform-optimization/AGENT-WORKFLOW-20260812T122100Z/evidence/scenD-d1-d3-d4-d6.txt",
+      "bytes": 787,
+      "sha256": "cb8260482208f116ec998ca17ded6a0afd7fd743da450706b2b7c725d3cbcb03"
+    },
+    {
+      "path": "docs/foundation/agent-platform-optimization/AGENT-WORKFLOW-20260812T122100Z/evidence/scenD-d2-corrected.txt",
+      "bytes": 1252,
+      "sha256": "efc5b224104f90b654c50a3d3e93f8bffbbc7f7032f7cb51daceadfc9830f468"
+    },
+    {
+      "path": "docs/foundation/agent-platform-optimization/AGENT-WORKFLOW-20260812T122100Z/evidence/scenD-d2-seeded-test.txt",
+      "bytes": 371,
+      "sha256": "e8a68202c5d23531681d850c9454f97e7c3d94f1aeb8d160ff083558d0f18702"
+    },
+    {
+      "path": "docs/foundation/agent-platform-optimization/AGENT-WORKFLOW-20260812T122100Z/evidence/scenD-d5-stale-main.txt",
+      "bytes": 169,
+      "sha256": "aeafe902f2cad6dbed027c9b3d24cee9cc06d93ec5fad5c42f891aac0e5cf6d8"
+    },
+    {
+      "path": "docs/foundation/agent-platform-optimization/AGENT-WORKFLOW-20260812T122100Z/evidence/scenE-concurrent-sessions.txt",
+      "bytes": 1507,
+      "sha256": "7c631c4a066d7ff61a68c8eaef2f3180035a7c229d8181e3204568551e59f364"
+    },
+    {
+      "path": "docs/foundation/agent-platform-optimization/AGENT-WORKFLOW-20260812T122100Z/execution-ledger.jsonl",
+      "bytes": 20712,
+      "sha256": "d8017f044521f4bdebd1368e0d9f53c3a30b19073b78bbf019d7f6cb4834e895"
+    },
+    {
+      "path": "docs/foundation/agent-platform-optimization/AGENT-WORKFLOW-20260812T122100Z/metrics.json",
+      "bytes": 15537,
+      "sha256": "cba9ca44e8bb55c612ad8431cdffe0d225c595c5fa351b85cc82ca7c06635998"
+    },
+    {
+      "path": "decisions/ADR-005.md",
+      "bytes": 4223,
+      "sha256": "d889e43a5f15c0a3ed92d98cb2b8af840fb723271ed768ef2ae2cc402f8dc703"
+    },
+    {
+      "path": "docs/audits/ruflo/AUD-RUFLO-20260811-221322/17-post-p0b-workflow-readiness.md",
+      "bytes": 1975,
+      "sha256": "d580f7d8ff20e9bc4b54d21bfc35c9164789e5017fddded0767a2be44e3aa9ed"
+    }
+  ]
+}

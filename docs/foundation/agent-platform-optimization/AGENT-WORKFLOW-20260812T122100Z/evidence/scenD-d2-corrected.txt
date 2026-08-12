@@ -1,0 +1,16 @@
+## D2 CORRECTION: attempt1 exit 127 was 'tsc: not found' (fresh clone, no node_modules).
+That is an ENVIRONMENT fault, not the seeded defect. Verdict for attempt1: INVALID -
+a nonzero exit for the wrong reason must never count as fault detection. Logs retained.
+repair0: npm ci in the disposable clone
+npm ci exit=0
+attempt2 (valid): npm test exit=1; runner names the seed: ✖ SEEDED DEFECT: deliberately false assertion (0.757542ms)
+ℹ tests 143 ℹ pass 142 ℹ fail 1 
+attempt3 narrow rerun exit=0 ℹ tests 7 ℹ pass 7 ℹ fail 0 
+attempt4 full dependent rerun exit=1 ℹ tests 143 ℹ pass 142 ℹ fail 1 
+note: stale dist/ still contains the compiled seed until rebuild; the narrow rerun rebuilt first, so the removal is effective. All four attempt logs retained.
+## D2 second repair: the DEPENDENT rerun exposed stale build residue
+cause: tsc does not delete outputs; dist/test/zz-seeded-defect.test.js survived source removal.
+The narrow rerun (one suite) reported green and was INSUFFICIENT alone - the dependent full
+rerun is what caught it. Smallest fix: remove the stale artifact.
+attempt5 full rerun exit=0 ℹ tests 142 ℹ pass 142 ℹ fail 0 
+class attempts used: 2 of 3 (env repair excluded as a distinct class). All logs retained.
