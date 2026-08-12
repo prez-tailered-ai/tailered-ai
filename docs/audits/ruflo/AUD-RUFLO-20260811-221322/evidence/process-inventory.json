@@ -1,0 +1,114 @@
+{
+  "audit_id": "AUD-RUFLO-20260811-221322",
+  "purpose": "Prove that the audit left no orphan processes, no listening sockets, no daemons, and no host mutation, per master specification section 29.",
+  "captured_utc": "2026-08-12T01:45:00Z",
+  "isolation_model": {
+    "statement": "Every execution of Ruflo code during this audit ran inside a `docker run --rm` container.",
+    "host_home_mounted": false,
+    "credential_paths_mounted": "none",
+    "mounts_restricted_to": "/tmp/aud-ruflo-20260811/**",
+    "consequence": "Ruflo had no write path to host global configuration, credentials, or the user's repositories at any time."
+  },
+  "final_census": {
+    "running_containers": [],
+    "running_container_count": 0,
+    "host_ruflo_processes": [],
+    "host_claude_flow_daemons": [],
+    "listening_sockets_opened_by_audit": [],
+    "note": "An initial `ps | grep -c` returned 4, which was grep matching audit PATHS in unrelated command lines (e.g. /tmp/aud-ruflo-20260811/...). The itemised `ps -eo pid,command | grep -E 'ruflo|claude-flow' | grep -v grep` returned zero rows. Zero is the verified answer."
+  },
+  "in_container_observations": {
+    "ruflo_init": {
+      "processes_after_completion": "only the invoking shell and `ps` itself",
+      "listening_sockets": "none (read of /proc/net/tcp and tcp6 showed no state 0A)",
+      "label": "VERIFIED"
+    },
+    "ruflo_cleanup": {
+      "observed": "cleanup \u2014 including the documented DRY RUN \u2014 starts a background daemon and never stops it; after `cleanup --force` the daemon was still running (cli.js daemon start --foreground --quiet --workspace /repo, PPID 1)",
+      "audit_containment": "the daemon died with its disposable container; on a real machine it would persist",
+      "finding": "RUF-202",
+      "label": "VERIFIED"
+    },
+    "daemon_autostart": {
+      "observed": "a daemon autostarts on ordinary non-daemon commands, including `memory` subcommands, with a 12-hour TTL",
+      "findings": [
+        "RUF-411",
+        "RUF-453"
+      ],
+      "label": "VERIFIED"
+    }
+  },
+  "host_mutation_audit": {
+    "~/.claude/settings.json": {
+      "before": "73920b1d5e5c4f3ba427d40f78333684cce272258ce5f90fde5049ef71088adf",
+      "after": "73920b1d5e5c4f3ba427d40f78333684cce272258ce5f90fde5049ef71088adf",
+      "verdict": "UNCHANGED"
+    },
+    "~/.claude/skills": {
+      "verdict": "UNCHANGED"
+    },
+    "~/.claude/CLAUDE.md": {
+      "verdict": "ABSENT before and after \u2014 the global CLAUDE.md write this audit demonstrated occurred only inside containers"
+    },
+    "~/.config/ruflo": {
+      "verdict": "ABSENT on host"
+    },
+    "~/.claude-flow": {
+      "present": true,
+      "contents": [
+        "update-state.json"
+      ],
+      "mtime_local": "2026-08-11 03:41:37",
+      "verdict": "PRE-EXISTING \u2014 NOT created by this audit",
+      "attribution_evidence": [
+        "mtime is 2026-08-11 03:41 local, approximately 11.5 hours BEFORE this audit began at 15:13 local (22:13Z)",
+        "no container in this audit mounted the host home directory, so no write path existed",
+        "attributable to the separate Ruflo 3.36.0 investigation checkpointed earlier the same day at ~/Documents/tailered-os-research/ruflo-adoption-2026-08-11/"
+      ]
+    },
+    "~/.claude.json": {
+      "changed": true,
+      "verdict": "CHANGED \u2014 NOT attributable to Ruflo or to Ruflo execution",
+      "attribution_evidence": [
+        "contains zero occurrences of 'ruflo' or 'claude-flow' across 74475 bytes",
+        "keys are Claude Code session and cache state (projects, cachedGrowthBookFeatures, announcementImpressions)",
+        "no container mounted the host home directory"
+      ],
+      "attributed_to": "the interactive Claude Code session conducting this audit"
+    }
+  },
+  "disposable_state_created_and_its_disposition": {
+    "root": "/tmp/aud-ruflo-20260811/",
+    "retained_deliberately": [
+      "tailered-ai-audit/ (the audit git worktree carrying the committed artifacts)",
+      "work/logs/, work/verify-npm.txt and lane evidence directories (referenced by findings)",
+      "upstream/ (pinned clones, published tarballs, hashes, release notes)"
+    ],
+    "large_disposable_trees_left_in_place": [
+      "work/install-default (1.5 GB, 50,012 files)",
+      "work/install-noscripts (1.5 GB, 48,674 files, includes the 97 MB downloaded model cache)",
+      "work/install-nooptional (124 MB)",
+      "work/init-trial-*, work/global-overwrite, work/lane-*"
+    ],
+    "disposition_note": "All of the above are under /tmp and outside every git repository. They are listed rather than deleted so the findings remain reproducible from the exact trees that produced them; /tmp is reclaimed by the OS. Nothing was written outside /tmp except the audit worktree's own docs/audits/ruflo/ tree.",
+    "temporary_git_worktree": {
+      "path": "/tmp/aud-ruflo-20260811/tailered-ai-audit",
+      "branch": "audit/ruflo-qualification-20260811",
+      "status": "RETAINED and explicitly listed \u2014 it holds the audit commit and must not be removed before the branch is pushed"
+    }
+  },
+  "concurrent_session_observed": {
+    "what": "A separate Claude Code session was writing and then committed docs/audits/hermes-honcho/** into ~/src/tailered-ai during this audit.",
+    "effect_on_this_audit": "none \u2014 paths are disjoint (docs/audits/ruflo/** vs docs/audits/hermes-honcho/**), verified with an explicit path-overlap check that returned empty",
+    "action_taken": "none; their files were never read, modified, staged, or cleaned",
+    "head_movement": {
+      "shared_worktree_head_at_audit_start": "6172653e0aca0981d0abaf4ad8e9d587667737e9 (branch main)",
+      "shared_worktree_head_at_audit_end": "44c2c6ee239e83080068c751241b869fd452db50 (branch audit/hermes-honcho)",
+      "main_at_audit_start": "6172653e0aca0981d0abaf4ad8e9d587667737e9",
+      "main_at_audit_end": "6172653e0aca0981d0abaf4ad8e9d587667737e9",
+      "origin_main_at_audit_end": "6172653e0aca0981d0abaf4ad8e9d587667737e9",
+      "clarification": "main did NOT advance. The concurrent session created its own sibling branch audit/hermes-honcho off the same base and checked it out in the shared working directory, which is why that directory's HEAD moved. An earlier reading of `git rev-parse HEAD` alone suggested the baseline had advanced; reading `main` and `origin/main` directly showed it had not. Both audit branches are siblings off 6172653e with disjoint paths.",
+      "handling": "The audit baseline stayed frozen at 6172653e by design. The audit branch is based on 6172653e, which still equals main and origin/main, so no rebase is required."
+    }
+  }
+}

@@ -1,0 +1,19 @@
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+
+[INFO] Initializing swarm...
+  Creating coordination topology...
+  Initializing memory namespace...
+  Setting up communication channels...
+
++------------+----------------------------+
+| Property   | Value                      |
++------------+----------------------------+
+| Swarm ID   | swarm-1786491606699-pevwqt |
+| Topology   | mesh                       |
+| Max Agents | 4                          |
+| Auto Scale | Enabled                    |
+| Protocol   | message-bus                |
+| V3 Mode    | Disabled                   |
++------------+----------------------------+
+
+[OK] Swarm initialized successfully

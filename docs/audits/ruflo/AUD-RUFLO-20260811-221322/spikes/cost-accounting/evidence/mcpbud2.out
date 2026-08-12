@@ -1,0 +1,9 @@
+mode: enforce budgets: [{"id":"tailered-cap","action":"model.call","maxCostUsd":5,"periodMs":3600000}]
+--- evaluate model.call at increasing costUsd against a $5 cap, mode=enforce ---
+costUsd 1 -> {"outcome":"denied","enforced":"denied","reason":"default-deny","obligations":[]}
+costUsd 4 -> {"outcome":"denied","enforced":"denied","reason":"default-deny","obligations":[]}
+costUsd 9.99 -> {"outcome":"denied","enforced":"denied","reason":"default-deny","obligations":[]}
+costUsd 1000 -> {"outcome":"denied","enforced":"denied","reason":"default-deny","obligations":[]}
+usage rows after: []
+receipts: 32
+ledger: {"valid":true,"length":32}

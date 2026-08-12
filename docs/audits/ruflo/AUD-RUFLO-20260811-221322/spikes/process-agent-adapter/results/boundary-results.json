@@ -1,0 +1,347 @@
+[
+  {
+    "id": "A1-happy-path",
+    "summary": "adapter returns a contract-valid AgentResponse",
+    "expected_behaviour_observed": true,
+    "detail": {
+      "ok": true,
+      "usage": {
+        "input": 261,
+        "output": 236,
+        "costUsd": 0.000433
+      },
+      "error": null,
+      "files_proposed": [
+        "product/app.mjs",
+        "product/index.html"
+      ]
+    }
+  },
+  {
+    "id": "A2-determinism",
+    "summary": "two identical requests produce a byte-identical response (no hidden state)",
+    "expected_behaviour_observed": true,
+    "detail": {
+      "identical": true
+    }
+  },
+  {
+    "id": "A3-repo-unmutated-by-adapter",
+    "summary": "repository hash unchanged across two adapter invocations",
+    "expected_behaviour_observed": true,
+    "detail": {
+      "hash_before": "2b3fb864bec1f0cffef592680d611ea797e8056f6fb3ea837adafea461cc051f",
+      "hash_after": "2b3fb864bec1f0cffef592680d611ea797e8056f6fb3ea837adafea461cc051f"
+    }
+  },
+  {
+    "id": "A4-provenance-exposed",
+    "summary": "adapter reports actual provider and actual model, not the requested alias",
+    "expected_behaviour_observed": true,
+    "detail": {
+      "adapter": "tailered-process-agent-adapter",
+      "adapter_version": "0.1.0-spike",
+      "engine": "mock-deterministic",
+      "provider_actual": "local.mock",
+      "model_requested": "mid-available",
+      "model_actual": "mock-mid-1.0",
+      "context_repo_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "context_snapshot_sha256": "6603e31520b4f68a64d36d9ac93f5040aefe70b4da54bf586f0b2e27f76a1049",
+      "context_files": 2,
+      "engine_wall_ms": 0,
+      "measured": {
+        "input_tokens": 261,
+        "output_tokens": 236
+      }
+    }
+  },
+  {
+    "id": "B1-not-json",
+    "summary": "adapter refuses malformed input with a non-zero exit and empty stdout",
+    "expected_behaviour_observed": true,
+    "detail": {
+      "exit_code": 65,
+      "stdout": "",
+      "stderr": "[adapter] FATAL stdin is not valid JSON: SyntaxError: Unexpected token 'h', \"this is not json\n\" is not valid JSON"
+    }
+  },
+  {
+    "id": "B2-empty-stdin",
+    "summary": "adapter refuses malformed input with a non-zero exit and empty stdout",
+    "expected_behaviour_observed": true,
+    "detail": {
+      "exit_code": 65,
+      "stdout": "",
+      "stderr": "[adapter] FATAL stdin closed with no request."
+    }
+  },
+  {
+    "id": "B3-json-but-not-object",
+    "summary": "adapter refuses malformed input with a non-zero exit and empty stdout",
+    "expected_behaviour_observed": true,
+    "detail": {
+      "exit_code": 65,
+      "stdout": "",
+      "stderr": "[adapter] FATAL Request must be a JSON object."
+    }
+  },
+  {
+    "id": "B4-missing-fields",
+    "summary": "adapter refuses malformed input with a non-zero exit and empty stdout",
+    "expected_behaviour_observed": true,
+    "detail": {
+      "exit_code": 65,
+      "stdout": "",
+      "stderr": "[adapter] FATAL Request fields invalid: taskKind, model, tier, signals.attempts, spec, contextSnapshot."
+    }
+  },
+  {
+    "id": "B5-bad-tier",
+    "summary": "adapter refuses malformed input with a non-zero exit and empty stdout",
+    "expected_behaviour_observed": true,
+    "detail": {
+      "exit_code": 65,
+      "stdout": "",
+      "stderr": "[adapter] FATAL Request fields invalid: tier."
+    }
+  },
+  {
+    "id": "B6-context-not-json",
+    "summary": "adapter refuses malformed input with a non-zero exit and empty stdout",
+    "expected_behaviour_observed": true,
+    "detail": {
+      "exit_code": 65,
+      "stdout": "",
+      "stderr": "[adapter] FATAL contextSnapshot is not valid JSON: SyntaxError: Unexpected token '<', \"<<<\" is not valid JSON"
+    }
+  },
+  {
+    "id": "B7-context-path-escape",
+    "summary": "adapter refuses malformed input with a non-zero exit and empty stdout",
+    "expected_behaviour_observed": true,
+    "detail": {
+      "exit_code": 65,
+      "stdout": "",
+      "stderr": "[adapter] FATAL contextSnapshot path escapes the sandbox: ../../etc/evil"
+    }
+  },
+  {
+    "id": "C1-prose-before-json",
+    "summary": "ProcessAgent rejects: malformed-output.mjs",
+    "expected_behaviour_observed": true,
+    "detail": {
+      "ok": false,
+      "error_name": "ValidationError",
+      "error_message": "Agent returned invalid JSON: SyntaxError: Unexpected token 'I', \"Initializi\"... is not valid JSON",
+      "elapsed_ms": 15
+    }
+  },
+  {
+    "id": "C2-missing-usage",
+    "summary": "ProcessAgent rejects: missing-usage.mjs",
+    "expected_behaviour_observed": true,
+    "detail": {
+      "ok": false,
+      "error_name": "ValidationError",
+      "error_message": "Agent response must include payload and usage.",
+      "elapsed_ms": 40
+    }
+  },
+  {
+    "id": "C3-no-payload-key",
+    "summary": "ProcessAgent rejects: no-payload-key.mjs",
+    "expected_behaviour_observed": true,
+    "detail": {
+      "ok": false,
+      "error_name": "ValidationError",
+      "error_message": "Agent response payload is missing.",
+      "elapsed_ms": 16
+    }
+  },
+  {
+    "id": "C4-fractional-negative-usage",
+    "summary": "ProcessAgent rejects: bad-usage.mjs",
+    "expected_behaviour_observed": true,
+    "detail": {
+      "ok": false,
+      "error_name": "ValidationError",
+      "error_message": "Agent usage is invalid.",
+      "elapsed_ms": 23
+    }
+  },
+  {
+    "id": "C5-nonzero-exit",
+    "summary": "ProcessAgent rejects: nonzero-exit.mjs",
+    "expected_behaviour_observed": true,
+    "detail": {
+      "ok": false,
+      "error_name": "ValidationError",
+      "error_message": "Agent process failed (exit 7): worker pool shut down uncleanly",
+      "elapsed_ms": 20
+    }
+  },
+  {
+    "id": "D1-oversize-rejected",
+    "summary": "ProcessAgent rejects stdout over 5 MB",
+    "expected_behaviour_observed": true,
+    "detail": {
+      "ok": false,
+      "error_name": "ValidationError",
+      "error_message": "Agent stdout exceeded 5 MB.",
+      "elapsed_ms": 25
+    }
+  },
+  {
+    "id": "D2-oversize-child-killed",
+    "summary": "the oversize child is actually dead afterwards",
+    "expected_behaviour_observed": true,
+    "detail": {
+      "child_survived_the_sigterm": false,
+      "probes": []
+    }
+  },
+  {
+    "id": "E1-timeout",
+    "summary": "a non-answering agent is aborted at timeoutMs",
+    "expected_behaviour_observed": true,
+    "detail": {
+      "ok": false,
+      "error_name": "AbortError",
+      "error_message": "The operation was aborted",
+      "elapsed_ms": 2094
+    }
+  },
+  {
+    "id": "E2-sigterm-immune-child-survives",
+    "summary": "a child that traps SIGTERM outlives the Tailered abort (no SIGKILL escalation)",
+    "expected_behaviour_observed": true,
+    "divergence_from_intent": true,
+    "detail": {
+      "invoke_outcome": {
+        "ok": false,
+        "error_name": "AbortError",
+        "error_message": "The operation was aborted",
+        "elapsed_ms": 2011
+      },
+      "child_ignored_sigterm": true,
+      "still_in_process_table_after_abort": true,
+      "probes": [
+        "sigterm-immune-started pid=131",
+        "sigterm-immune-IGNORED-SIGTERM pid=131"
+      ]
+    }
+  },
+  {
+    "id": "F1-over-budget-passes-processagent",
+    "summary": "$812.50 in one response is contract-valid to ProcessAgent",
+    "expected_behaviour_observed": true,
+    "detail": {
+      "accepted_by_process_agent": true,
+      "usage": {
+        "input": 4000000,
+        "output": 900000,
+        "costUsd": 812.5
+      }
+    }
+  },
+  {
+    "id": "F2-over-budget-caught-by-budget",
+    "summary": "ReserveSettleBudget.settle raises AccountingInvariantError",
+    "expected_behaviour_observed": true,
+    "detail": {
+      "name": "AccountingInvariantError",
+      "message": "Settlement $812.500000 exceeds reservation $0.100000. Agent projections must be hard ceilings."
+    }
+  },
+  {
+    "id": "G1-product-prefix-is-textual-only",
+    "summary": "product/../decisions/ADR-000.md passes the guard and overwrites an accepted ADR",
+    "expected_behaviour_observed": true,
+    "divergence_from_intent": true,
+    "detail": {
+      "applied": [
+        {
+          "proposed": "product/../decisions/ADR-000.md",
+          "written_to": "/out/path-escape-repo/decisions/ADR-000.md"
+        },
+        {
+          "proposed": "product/..//AGENTS.md",
+          "written_to": "/out/path-escape-repo/AGENTS.md"
+        }
+      ],
+      "refused": [],
+      "adr_000_overwritten": true,
+      "adr_000_now": "<!-- tailered: {\"id\":\"ADR-000\",\"status\":\"accepted\",\"caused_by\":[]} -->\n# ADR-000: OVERWRITTEN BY THE AGENT",
+      "constitution_overwritten": true,
+      "constitution_now": "# constitution replaced by the agent"
+    }
+  },
+  {
+    "id": "G2-adapter-guard-refuses-the-same-payload",
+    "summary": "the spike adapter's normalising guard rejects what Tailered accepts",
+    "expected_behaviour_observed": true,
+    "detail": {
+      "adapter_refusal": "File proposal escapes product/ after normalisation: product/../decisions/ADR-000.md -> decisions/ADR-000.md"
+    }
+  },
+  {
+    "id": "H1-agent-inherits-orchestrator-cwd-and-mutates-repo",
+    "summary": "the spawned agent wrote a file into the company repository",
+    "expected_behaviour_observed": true,
+    "divergence_from_intent": true,
+    "detail": {
+      "invoke_ok": true,
+      "hash_before": "2b3fb864bec1f0cffef592680d611ea797e8056f6fb3ea837adafea461cc051f",
+      "hash_after": "65cc67ed221ae0b4392b245ba7733b7610e2f74d7c8e88ed47f6aa1d63f59900",
+      "repo_mutated": true,
+      "wrote_file_exists": true,
+      "child_report": {
+        "cwd": "/repo",
+        "wrote": "/repo/AGENT_WAS_HERE.txt",
+        "visible_secret_env_names": [
+          "SPIKE_FAKE_API_KEY"
+        ]
+      }
+    }
+  },
+  {
+    "id": "J1-empty-codegen-accepted-by-tailered",
+    "summary": "an empty files array is a valid, billable codegen success",
+    "expected_behaviour_observed": true,
+    "divergence_from_intent": true,
+    "detail": {
+      "accepted_by_process_agent": true,
+      "parsed_by_tailered": {
+        "accepted": true,
+        "file_count": 0
+      },
+      "usage_billed": {
+        "input": 900,
+        "output": 4,
+        "costUsd": 0.02
+      },
+      "adapter_refusal": "codegen produced zero files; refusing to report success."
+    }
+  },
+  {
+    "id": "I1-projection-not-in-request",
+    "summary": "the ceiling the agent is measured against is never sent to the agent",
+    "expected_behaviour_observed": true,
+    "divergence_from_intent": true,
+    "detail": {
+      "request_keys": [
+        "runId",
+        "taskKind",
+        "model",
+        "tier",
+        "signals",
+        "spec",
+        "contextSnapshot"
+      ],
+      "projection_computed_orchestrator_side": {
+        "maxCostUsd": 0.1,
+        "maxTokens": 20000
+      }
+    }
+  }
+]

@@ -1,0 +1,51 @@
+=== TTY? yes ===
+=== policy budget set ===
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+[ERROR] policy administration requires an interactive local terminal
+EXIT=1
+=== policy status ===
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+{
+  "version": 1,
+  "mode": "legacy",
+  "migratedFrom": "pre-ADR-324; capabilities=.swarm/memory.db",
+  "rules": 0,
+  "budgets": 0,
+  "approvals": 0,
+  "receipts": 27,
+  "ledger": {
+    "valid": true,
+    "length": 27
+  }
+}
+=== policy evaluate (costUsd 9.99) ===
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+{
+  "requestId": "98561689-21ad-4f6f-b9fc-5f89551e838d",
+  "outcome": "allowed",
+  "enforcedOutcome": "allowed",
+  "mode": "legacy",
+  "reason": "legacy-default-allow",
+  "matchedRules": [],
+  "obligations": [],
+  "receiptId": "sha256:b72c085a935a2772e32cd997845cdc884bdfd6a340e1f36a8a9aa4e4ba18df83"
+}
+EXIT=0
+=== policy mode enforce ===
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+[ERROR] policy administration requires an interactive local terminal
+=== policy status after ===
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+{
+  "version": 1,
+  "mode": "legacy",
+  "migratedFrom": "pre-ADR-324; capabilities=.swarm/memory.db",
+  "rules": 0,
+  "budgets": 0,
+  "approvals": 0,
+  "receipts": 28,
+  "ledger": {
+    "valid": true,
+    "length": 28
+  }
+}

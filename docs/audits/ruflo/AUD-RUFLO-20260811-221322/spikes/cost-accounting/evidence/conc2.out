@@ -1,0 +1,20 @@
+BEFORE tasks: 5
+--- job 1 ---
+[ERROR] Failed to create task: Failed to execute MCP tool 'task_create': policy-state-authentication-failed
+job1 exit=1
+--- job 2 ---
+[ERROR] Failed to create task: Failed to execute MCP tool 'task_create': policy-state-authentication-failed
+job2 exit=1
+--- job 3 ---
+[ERROR] Failed to create task: Failed to execute MCP tool 'task_create': policy-state-authentication-failed
+job3 exit=1
+--- job 4 ---
+[ERROR] Failed to create task: Failed to execute MCP tool 'task_create': policy-state-authentication-failed
+job4 exit=1
+--- job 5 ---
+[ERROR] Failed to create task: Failed to execute MCP tool 'task_create': policy-state-authentication-failed
+job5 exit=1
+--- job 6 ---
+[ERROR] Failed to create task: Failed to execute MCP tool 'task_create': policy-state-authentication-failed
+job6 exit=1
+AFTER total: 5 conc kept: 0 

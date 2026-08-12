@@ -1,0 +1,58 @@
+[
+  {
+    "id": "ORPHAN-1-naive-worker",
+    "question": "does a detached worker survive the Tailered timeout abort?",
+    "invoke_outcome": {
+      "ok": false,
+      "error": "The operation was aborted",
+      "error_name": "AbortError"
+    },
+    "invoke_elapsed_ms": 2513,
+    "grandchild_pid": 21,
+    "heartbeats_total": 19,
+    "heartbeats_after_rejection": 11,
+    "last_heartbeat_ms_after_rejection": 4803,
+    "got_sigterm": false,
+    "survived": true,
+    "ps_after": [
+      "   21     1    21 Ssl        00:07 /usr/local/bin/node /spike/experiments/orphan/grandchild.mjs"
+    ]
+  },
+  {
+    "id": "ORPHAN-2-worker-holds-stdout",
+    "question": "if a surviving worker holds the stdout pipe, does a CORRECT response still reach Tailered?",
+    "invoke_outcome": {
+      "ok": true,
+      "response": {
+        "payload": {
+          "violations": [],
+          "flags": []
+        },
+        "usage": {
+          "input": 11,
+          "output": 7,
+          "costUsd": 0.0009
+        }
+      }
+    },
+    "invoke_elapsed_ms": 45338,
+    "note": "the agent wrote a valid response and exited 0 within milliseconds; any elapsed time near timeoutMs means the response was lost to the pipe still being open",
+    "grandchild_pid": 36,
+    "heartbeats_total": 114
+  },
+  {
+    "id": "ORPHAN-3-adapter-reaps-its-group",
+    "question": "does the adapter's process-group reaper kill the worker where Tailered cannot?",
+    "invoke_outcome": {
+      "ok": false,
+      "error": "Agent process failed (exit 75): [adapter] run=RUN-20260811T230500000Z-orphan01 task=critique tier=mid model=mid-available snapshot=0 files sha256=baf4946a61936080 sandbox=/tmp/tpa-dSlSam\n[adapter] adapter deadline of 2500 ms reached; aborting\n[adapter] reaped process group 50 with SIGKILL",
+      "error_name": "ValidationError"
+    },
+    "invoke_elapsed_ms": 2601,
+    "grandchild_pid": 50,
+    "heartbeats_total": 7,
+    "heartbeats_after_adapter_deadline": 0,
+    "survived": false,
+    "ps_after": []
+  }
+]

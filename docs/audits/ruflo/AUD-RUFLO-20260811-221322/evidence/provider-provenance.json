@@ -1,0 +1,216 @@
+{
+  "_header": {
+    "audit_id": "AUD-RUFLO-20260811-221322",
+    "tailered_sha": "6172653e0aca0981d0abaf4ad8e9d587667737e9",
+    "ruflo_release": "v3.37.0",
+    "ruflo_sha": "6ce18b5a7fcd4939a2f72c2e3b8fdbdec660e5a9",
+    "lane": "AUD-L3b",
+    "generated": "2026-08-11T23:00:00Z",
+    "evidence_class": "MIXED",
+    "caused_by": [
+      "AUD-RUFLO-20260811-221322/01-audit-charter.md"
+    ],
+    "constraint": "No API credentials exist in any audit container and none were created. No paid model call was made. Every statement about live provider behaviour is therefore INFERRED from source plus offline/sinkholed execution; only statements about code, packaging, config artifacts and offline command behaviour are VERIFIED."
+  },
+  "providers_supported": {
+    "label": "VERIFIED",
+    "evidence": "dist/src/mcp-tools/agent-execute-core.js; dist/src/commands/providers.js; ruflo providers list executed offline (logs/net-none/providers.out)",
+    "llm": [
+      {
+        "name": "Anthropic",
+        "endpoint": "https://api.anthropic.com/v1/messages",
+        "selector_env": "ANTHROPIC_API_KEY",
+        "notes": "endpoint is a hardcoded string literal on this path"
+      },
+      {
+        "name": "OpenRouter",
+        "endpoint": "https://openrouter.ai/api",
+        "selector_env": "OPENROUTER_API_KEY",
+        "base_url_override": "OPENROUTER_BASE_URL"
+      },
+      {
+        "name": "Ollama Cloud",
+        "endpoint": "https://ollama.com/v1/chat/completions",
+        "selector_env": "OLLAMA_API_KEY",
+        "notes": "vendor-hosted cloud, NOT a local Ollama daemon"
+      },
+      {
+        "name": "Google",
+        "endpoint": "generativelanguage.googleapis.com",
+        "notes": "referenced in dist and in the shipped mcp-bridge; not on the agent_execute path"
+      },
+      {
+        "name": "OpenAI",
+        "endpoint": "https://api.openai.com",
+        "notes": "referenced in the shipped src/mcp-bridge; not on the agent_execute path"
+      },
+      {
+        "name": "Cognitum (meta-proxy cloud plane)",
+        "endpoint": "api.cognitum.one",
+        "notes": "reached only when the Rust meta-proxy is installed AND cloud-routing consent is granted"
+      }
+    ],
+    "embedding": [
+      {
+        "name": "Transformers.js",
+        "model": "Xenova/all-MiniLM-L6-v2",
+        "locality": "local inference, but weights fetched from huggingface.co at first use"
+      },
+      {
+        "name": "Agentic Flow",
+        "model": "ONNX optimized",
+        "locality": "local"
+      },
+      {
+        "name": "OpenAI",
+        "model": "text-embedding-3-small",
+        "locality": "remote"
+      }
+    ],
+    "mock_provider_advertised": {
+      "present": true,
+      "row": "| Mock | All | mock-* | Dev only |",
+      "note": "`ruflo providers list` advertises a Mock provider covering ALL types. No evidence was found that agent_execute silently routes to it \u2014 with zero keys configured it returns success:false with an explicit 'No LLM provider configured' error, which is the correct fail-closed behaviour on that path.",
+      "label": "VERIFIED"
+    }
+  },
+  "selection_mechanism": {
+    "label": "VERIFIED",
+    "source": "dist/src/mcp-tools/agent-execute-core.js:71-106",
+    "algorithm": [
+      "explicitProvider = (process.env.RUFLO_PROVIDER || '').toLowerCase()",
+      "useOpenRouter = explicitProvider === 'openrouter' || (!ANTHROPIC_API_KEY && !!OPENROUTER_API_KEY)",
+      "useOllama     = explicitProvider === 'ollama'     || (!ANTHROPIC_API_KEY && !!OLLAMA_API_KEY && !OPENROUTER_API_KEY)",
+      "else if !ANTHROPIC_API_KEY -> return {success:false, error:'No LLM provider configured...'}",
+      "else -> POST https://api.anthropic.com/v1/messages"
+    ],
+    "finding": "Provider is chosen by AMBIENT ENVIRONMENT (which API-key variables happen to be set), not by the caller. A caller that asks for a Claude model on a machine where ANTHROPIC_API_KEY is absent but OPENROUTER_API_KEY is present is served by OpenRouter instead, with no error, no warning, and no field in the result identifying the substitution.",
+    "caller_can_pin_provider": {
+      "value": "PARTIAL",
+      "detail": "RUFLO_PROVIDER=anthropic|openrouter|ollama forces the branch, but it is a PROCESS-WIDE ENVIRONMENT VARIABLE, not a per-call argument. AgentExecuteInput has no provider field. There is no per-request provider pin."
+    }
+  },
+  "model_selection": {
+    "label": "VERIFIED",
+    "default_anthropic_model": "claude-sonnet-5",
+    "model_map": {
+      "haiku": "claude-haiku-4-5-20251001",
+      "sonnet": "claude-sonnet-5",
+      "sonnet-4.6": "claude-sonnet-4-6",
+      "opus": "claude-opus-4-8",
+      "opus-4.7": "claude-opus-4-7",
+      "inherit": "claude-sonnet-5"
+    },
+    "caller_can_pin_model": {
+      "anthropic_path": "YES \u2014 input.model is passed through verbatim",
+      "openrouter_path": "PARTIAL \u2014 resolveOpenAICompatModel(input.model, input.defaultModel); when the caller passes a bare Anthropic id the effective slug becomes an OpenRouter slug (default 'anthropic/claude-sonnet-4-6', overridable by OPENROUTER_DEFAULT_MODEL). The caller's requested identity is remapped, not honoured verbatim.",
+      "ollama_path": "PARTIAL \u2014 resolveOllamaModel(input.model) maps logical names onto Ollama Cloud defaults."
+    },
+    "harness_model_pinned_without_consent": {
+      "label": "VERIFIED",
+      "detail": "`ruflo init` writes \"model\": \"claude-sonnet-5\" into the project's .claude/settings.json, plus claudeFlow.modelPreferences = {default: claude-sonnet-5, routing: claude-haiku-4-5-20251001}. This silently sets the model for the entire host project.",
+      "evidence": "/tmp/aud-ruflo-20260811/work/lane-L3b/ctl/ns-none/repo/.claude/settings.json"
+    }
+  },
+  "independent_execution_trace": {
+    "label": "VERIFIED",
+    "verdict": "ABSENT",
+    "detail": "The success shape AnthropicCallResult is {success, model?, messageId?, stopReason?, output?, usage?, durationMs?, error?}. It has NO provider field, NO endpoint field, and NO base-URL field. `providerLabel` exists only as an INPUT to callOpenAICompat and is interpolated solely into ERROR strings, never into a success result. The module's own doc comment states the intent explicitly: 'Response shape is normalized to the Anthropic-flavored AnthropicCallResult so existing callers don't need to know which provider answered.'",
+    "consequence": "Given only a successful result, a caller cannot determine which vendor endpoint served the request. `model` echoes the provider's self-reported string, which is provider-attested, not independently attested. There is no signed receipt, no endpoint hash, and no per-call trace record binding a response to an endpoint.",
+    "evidence": "dist/src/mcp-tools/agent-execute-core.d.ts:46-59, dist/src/mcp-tools/agent-execute-core.js:60-70,282-295"
+  },
+  "gateway_bypass": {
+    "label": "VERIFIED",
+    "detail": "dist/src/mcp-tools/agent-execute-core.js:111 issues fetch('https://api.anthropic.com/v1/messages') against a HARDCODED literal. dist/src/mcp-tools/managed-agent-tools.js:20 uses process.env.ANTHROPIC_BASE_URL when set. The two Anthropic call sites in the same package disagree.",
+    "consequence_for_dime": "the agent platform routes ALL Claude traffic (anthropicClient.ts, dimeAgent.ts, piAgent.ts, Claude Code CLI) through an Anthropic-compatible gateway via ANTHROPIC_BASE_URL + ANTHROPIC_AUTH_TOKEN. Ruflo's agent_execute path would egress directly to api.anthropic.com, outside that gateway, and would additionally require a raw ANTHROPIC_API_KEY (it sends x-api-key, not the gateway's auth token)."
+  },
+  "cloud_routing_by_default": {
+    "label": "VERIFIED",
+    "verdict": "NO cloud routing to the vendor is on by default, but a vendor-content FETCH is on by default.",
+    "evidence": [
+      "consent.js: getConsent() returns {granted:false} for every unrecorded domain; hasConsent() additionally requires the receipt to match the current CONSENT_POLICY_VERSION.",
+      "proxy.js: default_data_plane defaults to 'passthrough' ('requests go to your own Claude subscription. Prompts do not go to Cognitum.'); 'cloud' requires an explicit `ruflo proxy config --cloud --yes` which calls recordConsent('cloud-routing', true, ...).",
+      "proxy status offline: 'Installation: not installed' \u2014 the meta-proxy is NOT installed by `npm i` or by `ruflo init`.",
+      "COUNTERWEIGHT: refreshRemoteMessages() has NO consent gate at all. `ruflo doctor` reported: 'Funnel (ADR-305): enabled (decided by: package-default; disclosure: never_seen)'."
+    ]
+  },
+  "consent_domains": {
+    "label": "VERIFIED",
+    "source": "dist/src/funnel/consent.js:12-26, dist/src/funnel/types.d.ts:35",
+    "default": "false for every domain",
+    "domains": [
+      "account",
+      "proxy-install",
+      "telemetry",
+      "cloud-routing",
+      "hosted-memory",
+      "sponsored-downtime",
+      "power-saver",
+      "training-data-sharing",
+      "advisor-tips",
+      "rev-share-payout",
+      "spinner-verbs",
+      "company-announcements"
+    ],
+    "note": "'training-data-sharing' and 'hosted-memory' are consent domains the CLI is built to ask for. Both default to false and neither was granted in any audit run, so no behaviour behind them was observed."
+  },
+  "cloud_routing_disclosure_in_v3_37_0": {
+    "label": "MIXED",
+    "release_title": "proxy install hardening, cloud routing disclosure, tier pinning",
+    "changelog_status": {
+      "label": "VERIFIED",
+      "finding": "The shipped CHANGELOG.md has NO entry for 3.35.0, 3.36.0 or 3.37.0. Its most recent entry is [3.34.0] - 2026-07-31, under an empty [Unreleased] heading. The three most recent releases \u2014 including the one whose title advertises a security/privacy change \u2014 are undocumented in the changelog the package ships.",
+      "evidence": "/tmp/aud-ruflo-20260811/upstream/ruflo-v3.37.0/CHANGELOG.md"
+    },
+    "what_the_disclosure_actually_is": {
+      "label": "VERIFIED",
+      "detail": "`ruflo proxy config` with no flags prints a plain-language statement of which data plane is active and who serves the request, via describePlane(): cloud -> 'Cloud routing is ON \u2014 cloud-tier requests go to api.cognitum.one.'; passthrough -> 'requests go to your own Claude subscription. Prompts do not go to Cognitum.'; local -> 'requests go to your own backend (Ollama/vLLM/SGLang) and never leave this machine.'; sponsored -> \"requests go to Cognitum's sponsored capacity\". Enabling cloud routing requires --cloud --yes and records a consent receipt; disabling revokes it. A separate ADR-311 'disclosure' message row exists in the statusline funnel, whose state doctor reports as disclosure: never_seen.",
+      "scope_limit": "The disclosure covers ONLY the meta-proxy data plane. It says nothing about the agent_execute provider-fallback ladder (Anthropic -> OpenRouter -> Ollama Cloud), which is the path an integrator would actually hit, and which has no disclosure surface at all."
+    },
+    "tier_pinning": {
+      "label": "VERIFIED",
+      "detail": "routing_mode \u2208 {auto, low, mid, high} written to ~/.ruflo/proxy-config.toml; absent means 'auto'. Applies only while the cloud plane is active. 'auto' means the vendor picks the tier \u2014 i.e. the model class \u2014 on the user's behalf."
+    }
+  },
+  "credential_handling": {
+    "label": "VERIFIED",
+    "observations": [
+      "Anthropic path sends the raw ANTHROPIC_API_KEY as the x-api-key header.",
+      "Cognitum refresh tokens are persisted to the OS keychain via @napi-rs/keyring, which is an OPTIONAL dependency \u2014 absent from the --omit=optional install variant, so the keychain-backed storage path is not guaranteed present.",
+      "`ruflo auth login --token-stdin` accepts a JSON credential object on stdin.",
+      "Empirical: with ANTHROPIC_API_KEY='sk-ant-LEAKCANARY0001' and a DB URL containing a canary set in the environment, neither canary appeared in .swarm/, .claude-flow/, ~/.ruflo/, ~/.claude-flow/ or .claude/ after doctor + status + memory store. No environment-secret leakage into artifacts was observed."
+    ]
+  },
+  "tailered_section_16_verdict": {
+    "label": "VERIFIED",
+    "verdict": "HARD BLOCKER",
+    "reasons": [
+      "Model identity must come only from tailered.config.json; Ruflo takes provider identity from ambient environment variables and writes its own model pin into .claude/settings.json.",
+      "There is no independent trace proving which endpoint and model executed \u2014 the success result deliberately erases the provider.",
+      "The stateless-router invariant is violated by a process-wide RUFLO_PROVIDER selector with no per-call provider argument.",
+      "A silent cross-vendor substitution (Anthropic -> OpenRouter -> Ollama Cloud) is reachable by nothing more than an unset environment variable."
+    ]
+  },
+  "not_determined": [
+    {
+      "item": "Live provider behaviour under real credentials (actual endpoint hit, actual model served, real fallback ordering under 429/5xx)",
+      "reason": "no API credentials exist in the audit containers and none may be created",
+      "label": "UNKNOWN"
+    },
+    {
+      "item": "meta-proxy binary internals (routing, logging, retention, what api.cognitum.one receives)",
+      "reason": "the Rust source repo cognitum-one/meta-proxy is private; only the signed dist archive is public, and it was never downloaded or executed in this audit",
+      "label": "UNKNOWN"
+    },
+    {
+      "item": "Whether Cognitum retains, logs, or trains on routed prompts",
+      "reason": "requires the vendor's live service and its terms; out of scope for local analysis",
+      "label": "UNKNOWN"
+    },
+    {
+      "item": "Behaviour of the 'training-data-sharing' and 'hosted-memory' consent domains once granted",
+      "reason": "not granted in any run; granting would enable real egress to vendor infrastructure",
+      "label": "UNKNOWN"
+    }
+  ]
+}

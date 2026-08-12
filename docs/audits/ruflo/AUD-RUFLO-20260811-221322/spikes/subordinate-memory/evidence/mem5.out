@@ -1,0 +1,60 @@
+=== memory export --output /repo/mem-export.json -n tailered-cache ===
+[INFO] Exporting memory to /repo/mem-export.json...
+
+  #  node[9]: void node::RemoveEnvironmentCleanupHook(v8::Isolate*, CleanupHook, void*) at ../src/api/hooks.cc:142
+  #  Assertion failed: (env) != nullptr
+
+----- Native stack trace -----
+
+ 1: 0x8f2290 node::Assert(node::AssertionInfo const&) [node]
+ 2: 0x7f1f74 node::RemoveEnvironmentCleanupHook(v8::Isolate*, void (*)(void*), void*) [node]
+ 3: 0xffffa496f89c Statement::~Statement() [/rf/node_modules/agentdb/node_modules/better-sqlite3/build/Release/better_sqlite3.node]
+ 4: 0xffffa496f988 Statement::~Statement() [/rf/node_modules/agentdb/node_modules/better-sqlite3/build/Release/better_sqlite3.node]
+ 5: 0xdc40a4  [node]
+ 6: 0xe6ba7c  [node]
+ 7: 0xe6c814  [node]
+ 8: 0xe70534  [node]
+ 9: 0x1858a14  [node]
+RUFLO_EXIT=134
+--- export file ---
+cat: /repo/mem-export.json: No such file or directory
+=== memory delete -k tailered/cache/002 -n tailered-cache ===
+[OK] Deleted "tailered/cache/002" from namespace "tailered-cache"
+[INFO] Remaining entries: 5
+RUFLO_EXIT=0
+=== memory retrieve -k tailered/cache/002 -n tailered-cache --format json ===
+[WARN] Key not found: tailered/cache/002
+RUFLO_EXIT=1
+=== memory purge -n gate-test --force ===
+[OK] Purged 3 entries from namespace "gate-test"
+[INFO] Remaining entries (all namespaces): 2
+RUFLO_EXIT=0
+=== memory list -n gate-test --format json ===
+
+  #  node[162]: void node::RemoveEnvironmentCleanupHook(v8::Isolate*, CleanupHook, void*) at ../src/api/hooks.cc:142
+  #  Assertion failed: (env) != nullptr
+
+----- Native stack trace -----
+
+ 1: 0x8f2290 node::Assert(node::AssertionInfo const&) [node]
+ 2: 0x7f1f74 node::RemoveEnvironmentCleanupHook(v8::Isolate*, void (*)(void*), void*) [node]
+ 3: 0xffff73dbf89c Statement::~Statement() [/rf/node_modules/agentdb/node_modules/better-sqlite3/build/Release/better_sqlite3.node]
+ 4: 0xffff73dbf988 Statement::~Statement() [/rf/node_modules/agentdb/node_modules/better-sqlite3/build/Release/better_sqlite3.node]
+ 5: 0xdc40a4  [node]
+ 6: 0xe6ba7c  [node]
+ 7: 0xe6c814  [node]
+ 8: 0xe70534  [node]
+ 9: 0x1858a14  [node]
+RUFLO_EXIT=134
+### CRASH RATE: 12 identical retrieves ###
+/script.sh: line 11:   380 Aborted                 $RF memory retrieve -k tailered/cache/001 -n tailered-cache --format json > /dev/null 2>&1
+iter 6 exit=134
+/script.sh: line 11:   416 Aborted                 $RF memory retrieve -k tailered/cache/001 -n tailered-cache --format json > /dev/null 2>&1
+iter 7 exit=134
+/script.sh: line 11:   452 Aborted                 $RF memory retrieve -k tailered/cache/001 -n tailered-cache --format json > /dev/null 2>&1
+iter 8 exit=134
+/script.sh: line 11:   524 Aborted                 $RF memory retrieve -k tailered/cache/001 -n tailered-cache --format json > /dev/null 2>&1
+iter 10 exit=134
+/script.sh: line 11:   596 Aborted                 $RF memory retrieve -k tailered/cache/001 -n tailered-cache --format json > /dev/null 2>&1
+iter 12 exit=134
+RETRIEVE OK=7 NONZERO=5

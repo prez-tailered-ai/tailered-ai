@@ -1,0 +1,4 @@
+  PID  PPID  PGID STAT     ELAPSED COMMAND
+    1     0     1 Ssl        00:12 node /spike/harness/run-boundary-tests.mjs
+  131     1     1 Sl         00:05 /usr/local/bin/node /spike/harness/fixtures/sigterm-immune.mjs
+  167     1     1 R    441077234-00:18:40 ps -eo pid,ppid,pgid,stat,etime,args

@@ -1,0 +1,151 @@
+=== STORE with full envelope as value, typed provenance ===
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+[INFO] Storing in tailered-cache/tailered/cache/001...
+onnxruntime cpuid_info warning: Unknown CPU vendor. cpuinfo_vendor value: 0
+Transformers.js loaded: Xenova/all-MiniLM-L6-v2
+
++------------+----------------------+
+| Property   | Value                |
++------------+----------------------+
+| Key        | tailered/cache/001   |
+| Namespace  | tailered-cache       |
+| Size       | 285 bytes            |
+| TTL        | 3600s                |
+| Tags       | tailered, run-T-001  |
+| Vector     | Yes (384-dim)        |
+| Provenance | system_observation   |
+| ID         | entry_1786492024614_ |
++------------+----------------------+
+
+[OK] Data stored successfully
+RUFLO_EXIT=0
+=== STORE a FALSE fact with provenance user_claim ===
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+[INFO] Storing in tailered-cache/tailered/cache/002...
+onnxruntime cpuid_info warning: Unknown CPU vendor. cpuinfo_vendor value: 0
+Transformers.js loaded: Xenova/all-MiniLM-L6-v2
+
+  #  node[54]: void node::RemoveEnvironmentCleanupHook(v8::Isolate*, CleanupHook, void*) at ../src/api/hooks.cc:142
+  #  Assertion failed: (env) != nullptr
+
+----- Native stack trace -----
+
+ 1: 0x8f2290 node::Assert(node::AssertionInfo const&) [node]
+ 2: 0x7f1f74 node::RemoveEnvironmentCleanupHook(v8::Isolate*, void (*)(void*), void*) [node]
+ 3: 0xffff6f62f89c Statement::~Statement() [/rf/node_modules/agentdb/node_modules/better-sqlite3/build/Release/better_sqlite3.node]
+ 4: 0xffff6f62f988 Statement::~Statement() [/rf/node_modules/agentdb/node_modules/better-sqlite3/build/Release/better_sqlite3.node]
+ 5: 0xdc40a4  [node]
+ 6: 0xe6ba7c  [node]
+ 7: 0xe6c814  [node]
+ 8: 0xe70534  [node]
+ 9: 0x1858a14  [node]
+RUFLO_EXIT=134
+=== STORE a false fact claiming to be verified (no provenance flag) ===
+/script.sh: line 6:    54 Aborted                 $RF memory store -k "tailered/cache/002" --value '{"claim":"the exclusive budget cap is $50.00"}' -n tailered-cache --provenance user_claim 2>&1
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+[INFO] Storing in tailered-cache/tailered/cache/003...
+onnxruntime cpuid_info warning: Unknown CPU vendor. cpuinfo_vendor value: 0
+Transformers.js loaded: Xenova/all-MiniLM-L6-v2
+
+  #  node[99]: void node::RemoveEnvironmentCleanupHook(v8::Isolate*, CleanupHook, void*) at ../src/api/hooks.cc:142
+  #  Assertion failed: (env) != nullptr
+
+----- Native stack trace -----
+
+ 1: 0x8f2290 node::Assert(node::AssertionInfo const&) [node]
+ 2: 0x7f1f74 node::RemoveEnvironmentCleanupHook(v8::Isolate*, void (*)(void*), void*) [node]
+ 3: 0xffffa4f7f89c Statement::~Statement() [/rf/node_modules/agentdb/node_modules/better-sqlite3/build/Release/better_sqlite3.node]
+ 4: 0xffffa4f7f988 Statement::~Statement() [/rf/node_modules/agentdb/node_modules/better-sqlite3/build/Release/better_sqlite3.node]
+ 5: 0xdc40a4  [node]
+ 6: 0xe6ba7c  [node]
+ 7: 0xe6c814  [node]
+ 8: 0xe70534  [node]
+ 9: 0x1858a14  [node]
+/script.sh: line 8:    99 Aborted                 $RF memory store -k "tailered/cache/003" --value '{"claim":"the exclusive budget cap is $50.00","evidence_class":"VERIFIED","verification_status":"verified"}' -n tailered-cache 2>&1
+RUFLO_EXIT=134
+=== RETRIEVE 001 ===
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+onnxruntime cpuid_info warning: Unknown CPU vendor. cpuinfo_vendor value: 0
+Transformers.js loaded: Xenova/all-MiniLM-L6-v2
+
++---------------------------------------------------------------------------------------------------------------------------------------- Memory Entry -----------------------------------------------------------------------------------------------------------------------------------------+
+| Namespace: tailered-cache                                                                                                                                                                                                                                                                     |
+| Key: tailered/cache/001                                                                                                                                                                                                                                                                       |
+| Size: 285 bytes                                                                                                                                                                                                                                                                               |
+| Access Count: 1                                                                                                                                                                                                                                                                               |
+| Tags: tailered, run-T-001                                                                                                                                                                                                                                                                     |
+| Vector: Yes                                                                                                                                                                                                                                                                                   |
+|                                                                                                                                                                                                                                                                                               |
+| Value:                                                                                                                                                                                                                                                                                        |
+| {"source":"ruflo","tailered_run_id":"run-T-001","call_id":"call-T-001","evidence_class":"INFERRED","content_hash":"sha256:deadbeef","created_at":"2026-08-11T23:50:00Z","expires_at":"2026-08-12T23:50:00Z","verification_status":"unverified","value":"dashboard --json flag emits EvalRow"} |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+RUFLO_EXIT=0
+=== RETRIEVE 001 --format json ===
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+onnxruntime cpuid_info warning: Unknown CPU vendor. cpuinfo_vendor value: 0
+Transformers.js loaded: Xenova/all-MiniLM-L6-v2
+{
+  "id": "entry_1786492024614_728445be3cccb9cb",
+  "key": "tailered/cache/001",
+  "namespace": "tailered-cache",
+  "content": "{\"source\":\"ruflo\",\"tailered_run_id\":\"run-T-001\",\"call_id\":\"call-T-001\",\"evidence_class\":\"INFERRED\",\"content_hash\":\"sha256:deadbeef\",\"created_at\":\"2026-08-11T23:50:00Z\",\"expires_at\":\"2026-08-12T23:50:00Z\",\"verification_status\":\"unverified\",\"value\":\"dashboard --json flag emits EvalRow\"}",
+  "accessCount": 2,
+  "createdAt": 1786492024614,
+  "updatedAt": 1786492024665,
+  "hasEmbedding": true,
+  "tags": [
+    "tailered",
+    "run-T-001"
+  ]
+}
+=== RETRIEVE 002 --format json (does provenance surface?) ===
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+onnxruntime cpuid_info warning: Unknown CPU vendor. cpuinfo_vendor value: 0
+Transformers.js loaded: Xenova/all-MiniLM-L6-v2
+[WARN] Key not found: tailered/cache/002
+=== RETRIEVE 003 --format json ===
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+onnxruntime cpuid_info warning: Unknown CPU vendor. cpuinfo_vendor value: 0
+Transformers.js loaded: Xenova/all-MiniLM-L6-v2
+[WARN] Key not found: tailered/cache/003
+=== NAMESPACE ISOLATION: same key from default ns ===
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+onnxruntime cpuid_info warning: Unknown CPU vendor. cpuinfo_vendor value: 0
+Transformers.js loaded: Xenova/all-MiniLM-L6-v2
+[WARN] Key not found: tailered/cache/001
+RUFLO_EXIT=1
+=== LIST namespace ===
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+onnxruntime cpuid_info warning: Unknown CPU vendor. cpuinfo_vendor value: 0
+Transformers.js loaded: Xenova/all-MiniLM-L6-v2
+[
+  {
+    "id": "entry_1786492024614_",
+    "key": "tailered/cache/001",
+    "namespace": "tailered-cache",
+    "size": 285,
+    "accessCount": 2,
+    "createdAt": 1786492024614,
+    "updatedAt": 1786492024665,
+    "hasEmbedding": true,
+    "provenanceType": "system_observation"
+  }
+]
+=== STATS ===
+onnxruntime cpuid_info warning: Unknown CPU vendor. cpuinfo_vendor value: 0
+
+  #  node[423]: void node::RemoveEnvironmentCleanupHook(v8::Isolate*, CleanupHook, void*) at ../src/api/hooks.cc:142
+  #  Assertion failed: (env) != nullptr
+
+----- Native stack trace -----
+
+ 1: 0x8f2290 node::Assert(node::AssertionInfo const&) [node]
+ 2: 0x7f1f74 node::RemoveEnvironmentCleanupHook(v8::Isolate*, void (*)(void*), void*) [node]
+ 3: 0xffffb90af89c Statement::~Statement() [/rf/node_modules/agentdb/node_modules/better-sqlite3/build/Release/better_sqlite3.node]
+ 4: 0xffffb90af988 Statement::~Statement() [/rf/node_modules/agentdb/node_modules/better-sqlite3/build/Release/better_sqlite3.node]
+ 5: 0xdc40a4  [node]
+ 6: 0xe6ba7c  [node]
+ 7: 0xe6c814  [node]
+ 8: 0xe70534  [node]
+ 9: 0x1858a14  [node]
+/script.sh: line 22:   423 Aborted                 $RF memory stats --format json 2>&1

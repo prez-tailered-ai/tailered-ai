@@ -1,0 +1,68 @@
+{
+  "id": "CWD-4-ruflo-init-as-tailered-agent",
+  "elapsed_ms": 1089,
+  "outcome": {
+    "ok": false,
+    "error_name": "ValidationError",
+    "error_message": "Agent process failed (SIGABRT): onnxruntime cpuid_info warning: Unknown CPU vendor. cpuinfo_vendor value: 0\n\n  #  /usr/local/bin/node[18]: void node::RemoveEnvironmentCleanupHook(v8::Isolate*, CleanupHook, void*) at ../src/api/hooks.cc:142\n  #  Assertion failed: (env) != nullptr\n\n----- Native stack trace -----\n\n 1: 0x8f2290 node::Assert(node::AssertionInfo const&) [/usr/local/bin/node]\n 2: 0x7f1f74 node::RemoveEnvironmentCleanupHook(v8::Isolate*, void (*)(void*), void*) [/usr/local/bin/node]\n 3: 0xffff9c1bf89c Statement::~Statement() [/rf/node_modules/agentdb/node_modules/better-sqlite3/build/Release/better_sqlite3.node]\n 4: 0xffff9c1bf988 Statement::~Statement() [/rf/node_modules/agentdb/node_modules/better-sqlite3/build/Release/better_sqlite3.node]\n 5: 0xdc40a4  [/usr/local/bin/node]\n 6: 0xe6ba7c  [/usr/local/bin/node]\n 7: 0xe6c814  [/usr/local/bin/node]\n 8: 0xe70534  [/usr/local/bin/node]\n 9: 0x1858a14  [/usr/local/bin/node]"
+  },
+  "repo_hash_before": "2b3fb864bec1f0cffef592680d611ea797e8056f6fb3ea837adafea461cc051f",
+  "repo_hash_after": "0f055ab05e75b548f9a40939b3c58c7dd2f6f19fbd5b24475aecb2db4c370cda",
+  "repo_mutated": true,
+  "paths_added_count": 309,
+  "paths_added_top_level": [
+    ".claude",
+    ".claude-flow",
+    ".mcp.json",
+    ".swarm"
+  ],
+  "paths_added_sample": [
+    ".claude-flow/",
+    ".claude-flow/agents/",
+    ".claude-flow/data/",
+    ".claude-flow/hooks/",
+    ".claude-flow/logs/",
+    ".claude-flow/memory-package.json",
+    ".claude-flow/sessions/",
+    ".claude-flow/workflows/",
+    ".claude/",
+    ".claude/agents/",
+    ".claude/agents/browser/",
+    ".claude/agents/browser/browser-agent.yaml",
+    ".claude/agents/consensus/",
+    ".claude/agents/consensus/byzantine-coordinator.md",
+    ".claude/agents/consensus/crdt-synchronizer.md",
+    ".claude/agents/consensus/gossip-coordinator.md",
+    ".claude/agents/consensus/performance-benchmarker.md",
+    ".claude/agents/consensus/quorum-manager.md",
+    ".claude/agents/consensus/raft-manager.md",
+    ".claude/agents/consensus/security-manager.md",
+    ".claude/agents/core/",
+    ".claude/agents/core/planner.md",
+    ".claude/agents/sparc/",
+    ".claude/agents/sparc/architecture.md",
+    ".claude/agents/sparc/pseudocode.md",
+    ".claude/agents/sparc/refinement.md",
+    ".claude/agents/sparc/specification.md",
+    ".claude/agents/swarm/",
+    ".claude/agents/swarm/adaptive-coordinator.md",
+    ".claude/agents/swarm/hierarchical-coordinator.md",
+    ".claude/agents/swarm/mesh-coordinator.md",
+    ".claude/agents/testing/",
+    ".claude/agents/testing/production-validator.md",
+    ".claude/agents/testing/tdd-london-swarm.md",
+    ".claude/commands/",
+    ".claude/commands/agents/",
+    ".claude/commands/agents/README.md",
+    ".claude/commands/agents/agent-capabilities.md",
+    ".claude/commands/agents/agent-coordination.md",
+    ".claude/commands/agents/agent-spawning.md"
+  ],
+  "binary_artifacts": [
+    {
+      "path": ".swarm/memory.db",
+      "bytes": 172032
+    }
+  ],
+  "residual_processes": []
+}

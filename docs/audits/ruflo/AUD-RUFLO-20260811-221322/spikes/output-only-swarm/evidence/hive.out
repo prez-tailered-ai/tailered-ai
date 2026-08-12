@@ -1,0 +1,26 @@
+===HIVE-MIND SPAWN (no --claude)===
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+[INFO] Spawning 1 worker agent(s)...
+[ERROR] Hive-mind not initialized. Run hive-mind/init first.
+EXIT1=0
+===HIVE-MIND SPAWN --claude (no credentials, claude binary absent)===
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+[INFO] Spawning 1 worker agent(s)...
+[ERROR] Hive-mind not initialized. Run hive-mind/init first.
+EXIT2=0
+===HIVE-MIND STATUS===
+
++----- Hive Mind Status ------+
+| Hive ID: hive-1786491952144 |
+| Status: offline             |
+| Topology: mesh              |
+| Consensus: byzantine        |
+|                             |
+| Queen: N/A                  |
+|   Status: offline           |
+|   Load: 0.0%                |
+|   Queued Tasks: 0           |
++-----------------------------+
+
+Worker Agents
+[INFO] No workers in hive. Use "claude-flow hive-mind spawn" to add workers.

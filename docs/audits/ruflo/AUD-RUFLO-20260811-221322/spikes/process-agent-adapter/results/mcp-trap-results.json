@@ -1,0 +1,96 @@
+[
+  {
+    "id": "MCP-TRAP-1-no-args",
+    "argv_after_binary": [],
+    "predicted_mcp_mode": true,
+    "timeout_ms": 15000,
+    "elapsed_ms": 460,
+    "consumed_full_timeout": false,
+    "outcome": {
+      "ok": false,
+      "error_name": "ValidationError",
+      "error_message": "Agent response must include payload and usage."
+    },
+    "repo_hash_before": "2b3fb864bec1f0cffef592680d611ea797e8056f6fb3ea837adafea461cc051f",
+    "repo_hash_after": "2b3fb864bec1f0cffef592680d611ea797e8056f6fb3ea837adafea461cc051f",
+    "repo_mutated": false,
+    "residual_ruflo_processes": [],
+    "note": "the exact shape of a naive ProcessAgentConfig pointed at the ruflo binary"
+  },
+  {
+    "id": "MCP-TRAP-2-mcp-start",
+    "argv_after_binary": [
+      "mcp",
+      "start"
+    ],
+    "predicted_mcp_mode": true,
+    "timeout_ms": 15000,
+    "elapsed_ms": 146,
+    "consumed_full_timeout": false,
+    "outcome": {
+      "ok": false,
+      "error_name": "ValidationError",
+      "error_message": "Agent response must include payload and usage."
+    },
+    "repo_hash_before": "2b3fb864bec1f0cffef592680d611ea797e8056f6fb3ea837adafea461cc051f",
+    "repo_hash_after": "2b3fb864bec1f0cffef592680d611ea797e8056f6fb3ea837adafea461cc051f",
+    "repo_mutated": false,
+    "residual_ruflo_processes": [],
+    "note": "same trap, explicitly"
+  },
+  {
+    "id": "MCP-TRAP-3-explicit-subcommand",
+    "argv_after_binary": [
+      "--version"
+    ],
+    "predicted_mcp_mode": false,
+    "timeout_ms": 15000,
+    "elapsed_ms": 50,
+    "consumed_full_timeout": false,
+    "outcome": {
+      "ok": false,
+      "error_name": "ValidationError",
+      "error_message": "Agent returned invalid JSON: SyntaxError: Unexpected token 'r', \"ruflo v3.37.0\n\" is not valid JSON"
+    },
+    "repo_hash_before": "2b3fb864bec1f0cffef592680d611ea797e8056f6fb3ea837adafea461cc051f",
+    "repo_hash_after": "2b3fb864bec1f0cffef592680d611ea797e8056f6fb3ea837adafea461cc051f",
+    "repo_mutated": false,
+    "residual_ruflo_processes": [],
+    "note": "fast path in bin/ruflo.js:16-27; proves the branch, not the workload"
+  },
+  {
+    "id": "MCP-TRAP-4-raw-bytes-no-args",
+    "argv_after_binary": [],
+    "raw_capture": {
+      "how": "still-running-when-sampled",
+      "exit_code": null,
+      "elapsed_ms": 20020,
+      "stdout_bytes": 86,
+      "stdout_head": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32600,\"message\":\"Invalid Request: missing method\"}}\n",
+      "stderr_head": "[2026-08-11T23:51:30.309Z] INFO [claude-flow-mcp] (mcp-1786492290309-21cbaafd) Starting in stdio mode\n"
+    }
+  },
+  {
+    "id": "MCP-TRAP-5-raw-bytes-help",
+    "argv_after_binary": [
+      "--help"
+    ],
+    "raw_capture": {
+      "how": "exited",
+      "exit_code": 0,
+      "elapsed_ms": 495,
+      "stdout_bytes": 3627,
+      "stdout_head": "\nruflo v3.37.0\nRuflo - AI Agent Orchestration Platform\n\nUSAGE:\n  ruflo <command> [subcommand] [options]\n\nPRIMARY COMMANDS:\n  init         Initialize RuFlo in the current directory\n  start        Start the RuFlo orchestration system\n  status       Show system status\n  agent        Agent management commands\n  swarm        Swarm coordination commands\n  memory       Memory management commands\n  task         Task management commands\n  session      Session management commands\n  mcp          MCP server management\n  hooks        Self-learning hooks system for intelligent workflow automation\n\nADVANCED COMMANDS:\n  neural       Neural pattern training, MoE, Flash Attention, pattern learning\n  security     Security scanning, CVE detection, threat modeling, AI defense\n  policy       Agentic policy engine — evaluate actions, manage rules/approvals, and verify the decision ledger (ADR-324)\n  performanc",
+      "stderr_head": ""
+    }
+  },
+  {
+    "id": "MCP-TRAP-6-adapter-refuses-trap-argv",
+    "refusal": "Refusing to build a 'mcp' argv: that is the stdio-server trap.",
+    "safe_example": [
+      "swarm",
+      "run",
+      "--json"
+    ]
+  }
+]

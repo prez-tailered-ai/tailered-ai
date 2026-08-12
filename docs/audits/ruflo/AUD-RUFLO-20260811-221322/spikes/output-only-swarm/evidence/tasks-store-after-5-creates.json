@@ -1,0 +1,74 @@
+{
+  "tasks": {
+    "task-1786491857674-4of0nc": {
+      "taskId": "task-1786491857674-4of0nc",
+      "type": "implementation",
+      "description": "Add --json flag to src/dashboard.ts",
+      "priority": "normal",
+      "status": "in_progress",
+      "progress": 0,
+      "assignedTo": [
+        "agent-1786491716758-xy83th"
+      ],
+      "tags": [],
+      "createdAt": "2026-08-11T23:44:17.674Z",
+      "startedAt": "2026-08-11T23:45:12.227Z",
+      "completedAt": null
+    },
+    "task-1786491858117-7zhg2f": {
+      "taskId": "task-1786491858117-7zhg2f",
+      "type": "testing",
+      "description": "Add test for --json flag in test/dashboard.test.ts",
+      "priority": "normal",
+      "status": "in_progress",
+      "progress": 0,
+      "assignedTo": [
+        "agent-does-not-exist-999"
+      ],
+      "tags": [],
+      "createdAt": "2026-08-11T23:44:18.117Z",
+      "startedAt": "2026-08-11T23:45:12.647Z",
+      "completedAt": null
+    },
+    "task-1786491858513-5jkwob": {
+      "taskId": "task-1786491858513-5jkwob",
+      "type": "documentation",
+      "description": "Document --json flag in docs/v1-contract.md",
+      "priority": "normal",
+      "status": "pending",
+      "progress": 0,
+      "assignedTo": [],
+      "tags": [],
+      "createdAt": "2026-08-11T23:44:18.513Z",
+      "startedAt": null,
+      "completedAt": null
+    },
+    "task-1786491858697-8qnl2o": {
+      "taskId": "task-1786491858697-8qnl2o",
+      "type": "implementation",
+      "description": "Add --json flag to src/dashboard.ts",
+      "priority": "normal",
+      "status": "pending",
+      "progress": 0,
+      "assignedTo": [],
+      "tags": [],
+      "createdAt": "2026-08-11T23:44:18.697Z",
+      "startedAt": null,
+      "completedAt": null
+    },
+    "task-1786491858862-4vz4no": {
+      "taskId": "task-1786491858862-4vz4no",
+      "type": "implementation",
+      "description": "Remove the --json flag from src/dashboard.ts",
+      "priority": "normal",
+      "status": "pending",
+      "progress": 0,
+      "assignedTo": [],
+      "tags": [],
+      "createdAt": "2026-08-11T23:44:18.862Z",
+      "startedAt": null,
+      "completedAt": null
+    }
+  },
+  "version": "3.0.0"
+}

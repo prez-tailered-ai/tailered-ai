@@ -1,0 +1,505 @@
+{
+  "audit_id": "AUD-RUFLO-20260811-221322",
+  "lane": "AUD-L2a",
+  "generated": "2026-08-11T22:30:00Z",
+  "evidence_class": "MIXED",
+  "tailered_sha": "6172653e0aca0981d0abaf4ad8e9d587667737e9",
+  "ruflo_release": "v3.37.0",
+  "ruflo_sha": "6ce18b5a7fcd4939a2f72c2e3b8fdbdec660e5a9",
+  "evidence_level_ceiling": "PACKAGED \u2014 this lane observed only file contents of a git checkout and two extracted tarballs. No install, resolution, or execution was performed. No claim here rises to REACHABLE, EFFECTIVE, DURABLE, or GOVERNABLE.",
+  "trees_compared": {
+    "source_checkout": {
+      "path": "/tmp/aud-ruflo-20260811/upstream/ruflo-v3.37.0",
+      "file_count_excluding_git": 5494,
+      "counted_by": "find . -type f -not -path '*/.git/*' | wc -l"
+    },
+    "published_ruflo": {
+      "path": "/tmp/aud-ruflo-20260811/work/extract/ruflo/package",
+      "file_count": 526,
+      "composition": {
+        "bin": 1,
+        "src": 523,
+        "README.md": 1,
+        "package.json": 1
+      }
+    },
+    "published_claude_flow_cli": {
+      "path": "/tmp/aud-ruflo-20260811/work/extract/cli/package",
+      "file_count": 1507,
+      "composition": {
+        "dist": 730,
+        "node_modules": 372,
+        ".claude": 348,
+        "plugins": 50,
+        "bin": 3,
+        "scripts": 1,
+        "root_files": 3
+      }
+    }
+  },
+  "files_allowlists": {
+    "root_monorepo_claude_flow": {
+      "file_line": "package.json:24-50",
+      "note": "Governs the npm package `claude-flow`, which is NOT installed by `npm i ruflo`. It ships v3/@claude-flow/{cli,shared,guidance} dist output by path plus the repo-root .claude/** tree. None of that reaches a `ruflo` consumer.",
+      "entries": [
+        "bin/**",
+        "v3/@claude-flow/cli/bin/**",
+        "v3/@claude-flow/cli/dist/**/*.js",
+        "v3/@claude-flow/cli/dist/**/*.d.ts",
+        "!v3/@claude-flow/cli/dist/**/*.map",
+        "v3/@claude-flow/cli/package.json",
+        "v3/@claude-flow/cli/catalog-manifest.json",
+        "v3/@claude-flow/shared/dist/**/*.js",
+        "v3/@claude-flow/shared/dist/**/*.d.ts",
+        "!v3/@claude-flow/shared/dist/**/*.map",
+        "v3/@claude-flow/shared/package.json",
+        "v3/@claude-flow/guidance/dist/**/*.js",
+        "v3/@claude-flow/guidance/dist/**/*.d.ts",
+        "!v3/@claude-flow/guidance/dist/**/*.map",
+        "v3/@claude-flow/guidance/package.json",
+        ".claude-plugin/**",
+        ".claude/**",
+        "!.claude/**/*.db",
+        "!.claude/**/*.map",
+        "!.claude/worktrees/**",
+        "!.claude/projects/**",
+        "!.claude/scheduled_tasks.lock",
+        "!.claude/sessions/**",
+        "README.md",
+        "LICENSE"
+      ]
+    },
+    "ruflo": {
+      "file_line": "ruflo/package.json:19-25",
+      "entries": [
+        "bin/**",
+        "src/**",
+        "dist/**",
+        "README.md",
+        "LICENSE"
+      ],
+      "declared_but_absent_from_tarball": [
+        "dist/** (no dist/ directory exists in the published tarball)",
+        "LICENSE (no LICENSE file exists in the published tarball, nor at ruflo/LICENSE in source)"
+      ]
+    },
+    "claude_flow_cli": {
+      "file_line": "v3/@claude-flow/cli/package.json:72-82",
+      "entries": [
+        "dist",
+        "!dist/**/*.map",
+        "!dist/**/*.tsbuildinfo",
+        "bin",
+        "scripts/postinstall.cjs",
+        ".claude",
+        "plugins",
+        "README.md",
+        "catalog-manifest.json"
+      ],
+      "notes": "No `src` entry, no `LICENSE` entry, no `__tests__` entry. The `node_modules/@claude-flow/{codex,plugin-agent-federation,security}` tree (372 files) is present in the tarball via bundleDependencies (v3/@claude-flow/cli/package.json:163-167), not via this allowlist."
+    }
+  },
+  "comparisons": [
+    {
+      "id": "CMP-01",
+      "question": "Are the published package.json manifests rewritten at publish time?",
+      "method": "diff of python3 -m json.tool normalized source vs published manifests",
+      "result": "IDENTICAL for both packages",
+      "label": "VERIFIED",
+      "detail": "ruflo/package.json == published ruflo package.json; v3/@claude-flow/cli/package.json == published @claude-flow/cli package.json. The `engines: null` on @claude-flow/cli is a property of the source manifest, not a publish-time transformation: the source file simply has no `engines` key, while the root monorepo manifest declares node>=20 (package.json:157-159) and ruflo declares node>=20 (ruflo/package.json:79-81)."
+    },
+    {
+      "id": "CMP-02",
+      "question": "Is compiled dist/ shipped, and is source src/ shipped?",
+      "result": "dist IS shipped for @claude-flow/cli (730 files: 365 .js + 365 .d.ts). src is NOT shipped by either package.",
+      "label": "VERIFIED",
+      "detail": "The @claude-flow/cli tarball has no `src` directory and contains zero non-declaration .ts files. The `ruflo` tarball contains a `src/` directory but it is unrelated content (see CMP-06), not the orchestration source. dist is also absent from git: `git ls-files | grep '/dist/' | wc -l` returns 0, and .gitignore:104 ignores `dist/`."
+    },
+    {
+      "id": "CMP-03",
+      "question": "Does the shipped dist file set correspond 1:1 to the TypeScript source?",
+      "result": "YES at the file-set level. 365 source .ts files (excluding __tests__ and the single ambient .d.ts) map to 365 dist .js and 365 dist .d.ts. Per-directory counts match exactly for all 24 subdirectories plus the 12 root-level modules. No orphan dist file and no unemitted src directory except `src/types` (contains only optional-modules.d.ts, an ambient declaration that emits nothing).",
+      "label": "VERIFIED",
+      "caveat": "File-set correspondence only. Byte-level or semantic correspondence between dist and src is UNKNOWN in this lane: dist is not in git, and this lane does not compile."
+    },
+    {
+      "id": "CMP-04",
+      "question": "Do the shipped bundled internal packages carry their dependency declarations?",
+      "result": "NO. All three bundled packages ship with dependencies, optionalDependencies, peerDependencies and peerDependenciesMeta deleted from their manifests.",
+      "label": "VERIFIED",
+      "detail": "Observed in node_modules/@claude-flow/{codex,plugin-agent-federation,security}/package.json in the published tarball. The removed fields are stashed under a non-standard key `rufloBundledRuntime.sourceDependencies`. codex loses 7 runtime deps (commander, fs-extra, chalk, inquirer, yaml, toml, @iarna/toml); security loses 3 deps (@noble/ed25519, bcryptjs, zod) plus optional @napi-rs/keyring; plugin-agent-federation loses 2 deps (@noble/ed25519, ws) plus optional peers agentic-flow and midstreamer. All of the removed hard dependencies happen to also be declared at the @claude-flow/cli top level, so hoisting may satisfy them; whether it does at install time is UNKNOWN in this lane."
+    },
+    {
+      "id": "CMP-05",
+      "question": "Does the shipped dist import packages the published manifest does not declare?",
+      "result": "YES. Three: @claude-flow/guidance, @claude-flow/embeddings, @claude-flow/aidefence.",
+      "label": "VERIFIED",
+      "method": "Distinguished real module specifiers from string-literal catalog data. Raw substring scan of dist finds 37 distinct '@claude-flow/*' strings, but only 9 appear as actual module specifiers, and every one of those 9 is a DYNAMIC `await import(...)` \u2014 there are zero static `from '@claude-flow/*'` imports in dist. The other 28 strings are catalog/ownership table data (e.g. `packageOwner: '@claude-flow/swarm', pluginOwner: 'ruflo-swarm'`) and several name packages that do not exist in the source workspace at all (@claude-flow/core, @claude-flow/appliance, @claude-flow/agntcy, @claude-flow/teammate-plugin, @claude-flow/plugin-prime-radiant, @claude-flow/plugin-agentic-qe and eight further plugin-* names).",
+      "declared_at": "v3/@claude-flow/cli/package.json:99-134 declares @claude-flow/{cli-core,codex,mcp,neural,plugin-agent-federation,security,shared} as dependencies and @claude-flow/memory as an optionalDependency.",
+      "undeclared_import_sites": {
+        "@claude-flow/guidance": [
+          "dist/src/commands/guidance.js:40",
+          "dist/src/commands/guidance.js:110",
+          "dist/src/commands/guidance.js:111",
+          "dist/src/commands/guidance.js:187",
+          "dist/src/commands/guidance.js:280",
+          "dist/src/commands/guidance.js:343",
+          "dist/src/commands/guidance.js:433"
+        ],
+        "@claude-flow/embeddings": [
+          "dist/src/mcp-tools/neural-tools.js:154",
+          "dist/src/mcp-tools/neural-tools.js:173",
+          "dist/src/mcp-tools/hooks-tools.js:3726",
+          "dist/src/mcp-tools/hooks-tools.js:3742",
+          "dist/src/commands/embeddings.js:19",
+          "dist/src/commands/embeddings.js:913"
+        ],
+        "@claude-flow/aidefence": [
+          "dist/src/mcp-tools/wasm-agent-tools.js:766",
+          "dist/src/mcp-tools/browser-intent-tools.js:322",
+          "dist/src/mcp-tools/security-tools.js:464",
+          "dist/src/commands/security.js:950",
+          "dist/src/commands/doctor.js:959"
+        ]
+      },
+      "caveat": "Six of these eighteen call sites carry an explicit `.catch(() => null)`, and dist strings such as 'Install @claude-flow/embeddings for real ONNX embeddings' and 'Using built-in defense engine (install @claude-flow/aidefence for adaptive learning)' indicate an intended degraded path. Whether each site degrades or throws is a runtime question this lane cannot answer."
+    },
+    {
+      "id": "CMP-06",
+      "question": "Does the ruflo wrapper's shipped src/ serve its entry point?",
+      "result": "NO reference exists. bin/ruflo.js (77 lines, the sole file in bin/, sha256 af863233c65b825ae38c689f759d9dcbb18528b42771aed4e929ca6d57f21ccd, byte-identical to source ruflo/bin/ruflo.js) imports only @claude-flow/cli \u2014 bin/cli.js at line 58 or dist/src/index.js at line 61. It contains no reference to './src' or '../src'.",
+      "label": "VERIFIED",
+      "detail": "523 of the 526 published ruflo files are under src/, and 499 of those are a vendored third sub-project, src/ruvocal/. The remaining 24 are Docker/nginx/chat-ui/mcp-bridge scaffolding. src/ is reachable only through npm run-scripts declared at ruflo/package.json:28-40 (dev, start, deploy, package:rvf, generate:config), which are not invoked by installing or running the `ruflo` binary."
+    },
+    {
+      "id": "CMP-07",
+      "question": "Is non-build shipped content byte-identical to source?",
+      "result": "Mostly yes, with four publish-time deltas in .claude.",
+      "label": "VERIFIED",
+      "detail": "`diff -rq` finds ruflo tarball src/ identical to ruflo/src/ apart from .gitignore and .npmrc (npm always excludes these). plugins/ruflo-metaharness is identical to plugins/ruflo-metaharness in source. The cli .claude tree differs in exactly four ways: (1) .claude/proven-config.json is present in the tarball and absent from source; (2) .claude/.proven-config-version is present in the tarball and absent from source; (3) .claude/helpers/.helpers-version is 3.32.29 in source and 3.33.0 in the tarball; (4) .claude/helpers/helpers.manifest.json declares version 3.34.0 with one Ed25519 signature in source and version 3.37.0 with a different signature in the tarball."
+    }
+  ],
+  "source_only_subsystems": [
+    {
+      "name": "@claude-flow/guidance",
+      "source_path": "v3/@claude-flow/guidance (127 files)",
+      "status": "Dynamically imported by shipped dist at 7 sites; declared in no dependency field of the published @claude-flow/cli manifest; not bundled in the tarball's node_modules.",
+      "why_it_matters": "The entire `guidance` command surface in dist/src/commands/guidance.js resolves a module that npm is never instructed to install for a `ruflo` consumer. It ships only inside the separate `claude-flow` root package via the path allowlist at package.json:36-39."
+    },
+    {
+      "name": "@claude-flow/embeddings",
+      "source_path": "v3/@claude-flow/embeddings (32 files)",
+      "status": "Dynamically imported by shipped dist at 6 sites; undeclared; not bundled.",
+      "why_it_matters": "Governs real (ONNX) vector embeddings. Shipped dist carries a hash-based fallback string, implying semantic memory quality silently degrades on a clean install."
+    },
+    {
+      "name": "@claude-flow/aidefence",
+      "source_path": "v3/@claude-flow/aidefence (17 files)",
+      "status": "Dynamically imported by shipped dist at 5 sites including dist/src/mcp-tools/security-tools.js:464 and dist/src/commands/security.js:950; undeclared; not bundled.",
+      "why_it_matters": "This is the adaptive security-defense subsystem. Shipped dist falls back to dist/src/security/builtin-aidefence.js. A security control whose advertised implementation is not installed is the highest-consequence instance of the source-versus-shipped gap."
+    },
+    {
+      "name": "@claude-flow/browser",
+      "source_path": "v3/@claude-flow/browser (66 files)",
+      "status": "Not declared, not bundled, not imported by dist. Appears only as catalog string data.",
+      "why_it_matters": "Browser automation is advertised in the catalog surface but has no shipped implementation path."
+    },
+    {
+      "name": "@claude-flow/swarm",
+      "source_path": "v3/@claude-flow/swarm (73 files)",
+      "status": "Built at publish time by scripts/prepare-root-publish.mjs:47 and v3/@claude-flow/cli/scripts/prepare-publish.mjs:20, but its build output is not copied into either tarball and it is declared in no dependency field.",
+      "why_it_matters": "The publish pipeline compiles a package it then does not ship. dist/src/swarm contains exactly one file, which is the CLI's own module, not this workspace package."
+    },
+    {
+      "name": "@claude-flow/hooks",
+      "source_path": "v3/@claude-flow/hooks (33 files)",
+      "status": "Built at publish time by scripts/prepare-root-publish.mjs:14, not shipped in either audited tarball, not declared.",
+      "why_it_matters": "Self-learning hooks are a headline advertised capability. The shipped substitute is the shell/cjs helper set in .claude/helpers (43 files)."
+    },
+    {
+      "name": "@claude-flow/claims",
+      "source_path": "v3/@claude-flow/claims (35 files)",
+      "status": "Not declared, not bundled, not imported by dist.",
+      "why_it_matters": "Named in the shipped package-ownership catalog but has no shipped code path."
+    },
+    {
+      "name": "@claude-flow/plugins",
+      "source_path": "v3/@claude-flow/plugins (81 files)",
+      "status": "Not declared, not bundled, not imported by dist.",
+      "why_it_matters": "The plugin runtime package is absent even though a plugin catalog ships."
+    },
+    {
+      "name": "@claude-flow/testing",
+      "source_path": "v3/@claude-flow/testing (42 files)",
+      "status": "Not declared, not bundled, not imported by dist.",
+      "why_it_matters": "Test-generation capability has no shipped implementation."
+    },
+    {
+      "name": "@claude-flow/performance",
+      "source_path": "v3/@claude-flow/performance (22 files)",
+      "status": "Not declared, not bundled, not imported by dist.",
+      "why_it_matters": "Performance subsystem has no shipped implementation."
+    },
+    {
+      "name": "@claude-flow/integration",
+      "source_path": "v3/@claude-flow/integration (25 files)",
+      "status": "Not declared, not bundled, not imported by dist.",
+      "why_it_matters": "No shipped implementation."
+    },
+    {
+      "name": "@claude-flow/deployment",
+      "source_path": "v3/@claude-flow/deployment (15 files)",
+      "status": "Not declared, not bundled, not imported by dist.",
+      "why_it_matters": "No shipped implementation."
+    },
+    {
+      "name": "@claude-flow/providers",
+      "source_path": "v3/@claude-flow/providers (17 files)",
+      "status": "Not declared, not bundled, not imported by dist.",
+      "why_it_matters": "No shipped implementation."
+    },
+    {
+      "name": "@claude-flow/plugin-iot-cognitum",
+      "source_path": "v3/@claude-flow/plugin-iot-cognitum (63 files)",
+      "status": "Not declared, not bundled; appears in dist only as catalog string data.",
+      "why_it_matters": "No shipped implementation."
+    },
+    {
+      "name": "plugins/* \u2014 37 of 38 plugin directories",
+      "source_path": "plugins/ (38 directories, 599 files)",
+      "status": "Deleted and replaced at publish time. Only plugins/ruflo-metaharness (50 files) survives into the @claude-flow/cli tarball.",
+      "why_it_matters": "549 plugin files across 37 plugin directories exist in source and are in neither published tarball, including ruflo-security-audit, ruflo-swarm, ruflo-neural-trader, ruflo-aidefence, ruflo-browser, ruflo-sparc, ruflo-goals and ruflo-knowledge-graph. This is the single largest source-to-package deletion and it is performed by an explicit rm+recreate in the prepublish script."
+    }
+  ],
+  "catalog_count_reconciliation": {
+    "advertised": {
+      "source": "catalog-manifest.json (shipped in the @claude-flow/cli tarball)",
+      "agents": 164,
+      "tools": 397,
+      "skills": 34,
+      "gitSha": "6ce18b5a",
+      "generation": 4
+    },
+    "independently_recounted_in_source": {
+      "agents": "164 \u2014 reproduced exactly: git ls-files '.claude/agents/*.md' = 108 (repo-root tree) plus 'plugins/*/agents/*.md' = 56. Generator: v3/@claude-flow/cli/scripts/generate-catalog-manifest.mjs:81-82 with gitTrackedCount at line 33 executing against REPO_ROOT.",
+      "tools": "397 \u2014 reproduced exactly by re-running the generator's own regex /name:\\s*'([a-z_][a-z0-9_-]*)'/g over v3/@claude-flow/cli/src/mcp-tools/*.ts (generate-catalog-manifest.mjs:40-49).",
+      "skills": "34 \u2014 reproduced exactly: directories under v3/@claude-flow/cli/.claude/skills (generate-catalog-manifest.mjs:51-55, reads PKG_ROOT)."
+    },
+    "independently_counted_in_published_tarball": {
+      "agents": 90,
+      "agents_detail": ".claude/agents contains 89 .md files and plugins/ruflo-metaharness/agents contains 1. Only 1 of the 56 counted plugin agent files ships; 55 are stripped.",
+      "skills": 34,
+      "skills_detail": "34 skill directories ship (37 files). This is the one count that is package-accurate, because the generator reads the CLI package's own tree for it.",
+      "tools": "NOT INDEPENDENTLY VERIFIABLE FROM THE PACKAGE \u2014 the count is derived from src/mcp-tools/*.ts, and src/ is not shipped. dist/src/mcp-tools ships 48 .js modules; this lane did not attempt to re-derive a tool count from compiled output because the generator's regex is defined over TypeScript source."
+    },
+    "conflict": {
+      "numbers": [
+        164,
+        90
+      ],
+      "explanation": "The advertised 164 and the packaged 90 are computed over different, only partially overlapping file sets. The generator counts the REPO-ROOT .claude/agents tree (108 files) for agents but the CLI PACKAGE's .claude/skills tree for skills \u2014 two different roots in the same manifest (generate-catalog-manifest.mjs:33 uses REPO_ROOT, line 52 uses PKG_ROOT). The repo-root tree and the CLI package tree are not subset/superset: 36 agent files exist only at repo root, 17 exist only in the CLI package, 72 are common. The repo-root .claude/ tree ships only with the separate `claude-flow` npm package, never with `ruflo`.",
+      "verifiable": "Both numbers were verified directly. The manifest's own regex and git pathspecs were re-executed to reproduce 164/397/34, and the tarball contents were counted to obtain 90/34."
+    },
+    "label": "VERIFIED"
+  },
+  "tarball_only_content": [
+    {
+      "path": ".claude/proven-config.json",
+      "package": "@claude-flow/cli",
+      "size_bytes": 1050,
+      "note": "Present in the published tarball, absent from the v3.37.0 source tree. Contains an `adoptedAt` epoch (1785208363552) and a championId policy hash. Generated at publish time.",
+      "label": "VERIFIED"
+    },
+    {
+      "path": ".claude/.proven-config-version",
+      "package": "@claude-flow/cli",
+      "note": "Present in the published tarball, absent from source.",
+      "label": "VERIFIED"
+    },
+    {
+      "path": "node_modules/@claude-flow/{codex,plugin-agent-federation,security}",
+      "package": "@claude-flow/cli",
+      "file_count": 372,
+      "note": "Embedded via bundleDependencies. Not produced by the `files` allowlist. Their manifests are rewritten copies, not the source manifests (see CMP-04).",
+      "label": "VERIFIED"
+    }
+  ],
+  "prepublish_transformations": [
+    {
+      "script": "ruflo/scripts/prepare-publish.mjs",
+      "invoked_by": "ruflo/package.json:27 prepublishOnly",
+      "observed_behavior": "Its entire body is one statement: it overwrites ruflo/README.md with the monorepo root README.md. VERIFIED by checksum \u2014 the published ruflo README.md is sha256 fd3a16d0bbd889924a389764ea404e01117d5ead97f27b5511a15fde90520935, identical to the root README.md, while the ruflo/README.md that exists in the repository is a different 30004-byte file, sha256 24c10b72c52949fa6b0f384e3fd2b49e4158747dcfa5875eb1470b610b962915. The package-specific README in the repo is therefore never published; registry users of `ruflo` read the monorepo README instead.",
+      "file_line": "ruflo/scripts/prepare-publish.mjs:8"
+    },
+    {
+      "script": "v3/@claude-flow/cli/scripts/prepare-publish.mjs",
+      "invoked_by": "v3/@claude-flow/cli/package.json:90 prepublishOnly",
+      "observed_behavior": "Five distinct mutations. (1) Compiles ../swarm and then the CLI with the local tsc, because dist is git-ignored and 'publishing without a build can create a tarball whose declared entry point does not exist' (its own comment). (2) Stages the three internal runtime bundles. (3) Overwrites the package README.md with the monorepo root README.md \u2014 the CLI's own 30487-byte README.md at v3/@claude-flow/cli/README.md is never published. (4) DELETES the entire plugins/ directory and recreates it containing only ruflo-metaharness. (5) Runs generate-catalog-manifest.mjs, sign-helpers.mjs and verify-helpers.mjs.",
+      "file_line": "v3/@claude-flow/cli/scripts/prepare-publish.mjs:20-29 (build), :31 (stage), :33 (README), :34-40 (plugins rm+recreate), :42-54 (manifest+signing)"
+    },
+    {
+      "script": "v3/@claude-flow/cli/scripts/prepare-publish.mjs \u2014 plugin deletion detail",
+      "invoked_by": "prepublishOnly",
+      "observed_behavior": "`await rm(pluginsDir, { recursive: true, force: true })` followed by mkdir and a single `cp` of repoRoot/plugins/ruflo-metaharness. Source has 38 plugin directories and 599 files; the tarball has 1 directory and 50 files. 37 plugin directories are removed from the artifact by this code path.",
+      "file_line": "v3/@claude-flow/cli/scripts/prepare-publish.mjs:34-40"
+    },
+    {
+      "script": "scripts/stage-internal-runtime-bundles.mjs",
+      "invoked_by": "Both scripts/prepare-root-publish.mjs:43 and v3/@claude-flow/cli/scripts/prepare-publish.mjs:31",
+      "observed_behavior": "Builds @claude-flow/{security,codex,plugin-agent-federation} and copies only their dist (plus .agents/skills for codex, README/LICENSE where present) into the target package's node_modules/@claude-flow/. Before writing each bundled manifest it calls createBundledRuntimeManifest, which DELETES dependencies, optionalDependencies, peerDependencies and peerDependenciesMeta and moves them under a non-standard rufloBundledRuntime.sourceDependencies key. The stated intent (its own doc comment at :139-143) is that 'installation never depends on an unpublished internal package coordinate'. The consequence is that npm has no record of these three packages' runtime dependencies.",
+      "file_line": "scripts/stage-internal-runtime-bundles.mjs:112-137 (manifest rewrite), :132-135 (the four deletions), :199-204 (asset copy allowlist)"
+    },
+    {
+      "script": "scripts/prepare-root-publish.mjs",
+      "invoked_by": "package.json:55 prepublishOnly (root `claude-flow` package only)",
+      "observed_behavior": "Pins corepack pnpm@8.15.0 and builds @claude-flow/{hooks,shared,guidance}, then builds @claude-flow/swarm and @claude-flow/cli with npm, then stages internal runtime bundles into the repo root with build:false. Affects the `claude-flow` package, not the two audited tarballs.",
+      "file_line": "scripts/prepare-root-publish.mjs:9-21 (pnpm build set), :46-60 (swarm+cli build), :62 (root staging)"
+    },
+    {
+      "script": "v3/@claude-flow/cli/scripts/generate-catalog-manifest.mjs",
+      "invoked_by": "prepare-publish.mjs:42-54",
+      "observed_behavior": "Writes catalog-manifest.json at publish time. Counts agents from REPO_ROOT git-tracked files but skills from the CLI package root, so the shipped manifest mixes a repo-scoped number with a package-scoped number. Sets benchmark to null unless a signed submission exists for the same generation \u2014 the shipped manifest has benchmark: null, which is an honest disclosure.",
+      "file_line": "v3/@claude-flow/cli/scripts/generate-catalog-manifest.mjs:33 (REPO_ROOT), :52 (PKG_ROOT), :81-84 (counts)"
+    },
+    {
+      "script": "v3/@claude-flow/cli/scripts/sign-helpers.mjs",
+      "invoked_by": "prepare-publish.mjs:42-54",
+      "observed_behavior": "Ed25519-signs the critical helper set with a private key sourced from a GCP secret (RUFLO_HELPERS_SIGNING_SECRET), an explicit key path, or ~/.ruflo/helpers-signing.key, and writes the signed manifest. The public half is stated to be baked into src/init/helper-signing.ts. This re-signing at publish time is why the shipped helpers.manifest.json does not match the one in the tagged source.",
+      "file_line": "v3/@claude-flow/cli/scripts/sign-helpers.mjs:53-71 (key sources), :105-109 (sign and write)"
+    }
+  ],
+  "platform_specific": [
+    {
+      "declaration": "@ruvector/router-linux-x64-gnu@^0.1.30",
+      "declared_at": "package.json:95 (root monorepo `claude-flow` package, optionalDependencies)",
+      "finding": "Declared ONLY in the root `claude-flow` manifest. It appears in no published manifest under audit: neither ruflo/package.json nor v3/@claude-flow/cli/package.json references it, and grep finds zero occurrences anywhere in either extracted tarball.",
+      "consequence": "A user who runs `npm i ruflo` on any platform never receives this declaration, because `ruflo` depends only on @claude-flow/cli. The arm64-macOS-versus-linux-x64 divergence for this specific package therefore does not arise on the audited install path \u2014 it arises only for consumers of the separately published `claude-flow` package. There it is declared unconditionally with no os/cpu gate in the declaring manifest.",
+      "label": "VERIFIED"
+    },
+    {
+      "declaration": "os / cpu / libc fields",
+      "finding": "Neither published manifest declares any `os`, `cpu`, or `libc` field. Platform selection, where it happens, is delegated entirely to transitive optional dependencies.",
+      "label": "VERIFIED"
+    },
+    {
+      "declaration": "@metaharness/darwin@~0.9.0",
+      "declared_at": "v3/@claude-flow/cli/package.json:126 (optionalDependencies)",
+      "finding": "A platform-named optional dependency shipped in the published manifest, alongside @metaharness/{flywheel,radio,turn-credit} and optional peerDependencies @metaharness/router@^0.4.0 and metaharness@^0.4.1 (package.json:135-146). No Linux- or Windows-named counterpart is declared.",
+      "consequence": "INFERRED: an arm64 macOS user and a linux x64 user receive different resolved trees, but this lane cannot enumerate the difference without resolving the registry.",
+      "label": "INFERRED"
+    },
+    {
+      "declaration": "Native and WASM optional dependencies",
+      "declared_at": "v3/@claude-flow/cli/package.json:122-134",
+      "finding": "better-sqlite3@^12.9.0 (native, requires a prebuild or a compiler), @napi-rs/keyring@1.3.0 (native, per-platform), ruvector@^0.2.27, agentdb@^3.0.0-alpha.17, @agntcy/slim-bindings@2.0.0-alpha.5, agentic-flow@^3.0.0-alpha.1. All are optional, so install proceeds when they fail.",
+      "consequence": "UNKNOWN in this lane: which of these resolve on arm64 macOS versus linux x64 requires registry resolution and installation, which this lane does not perform. Note that the shipped @claude-flow/cli manifest declares no `engines` at all, so npm emits no Node version warning on any platform.",
+      "label": "UNKNOWN"
+    },
+    {
+      "declaration": "Cold-start heavy native/model load",
+      "finding": "The published ruflo entry point documents that '@claude-flow/cli dist eagerly loads ruvector + a 23 MB ONNX model on cold cache, blocking 60+ s and causing SIGTERM under common timeout windows'. This is the vendor's own comment in shipped code, quoted as a description of the artifact, not accepted as independent evidence.",
+      "file_line": "published ruflo bin/ruflo.js:9-15",
+      "label": "VERIFIED (the text is present in the shipped file); the behavior it describes is UNKNOWN in this lane"
+    }
+  ],
+  "unexpected_published_content": [
+    {
+      "item": "src/ruvocal/ \u2014 a complete vendored third-party sub-project",
+      "package": "ruflo",
+      "file_count": 499,
+      "detail": "499 of the 523 files under the published ruflo src/ belong to a SvelteKit-based chat application. It ships its own .github/ (14 files including 10 CI workflows: deploy-prod.yml, deploy-dev.yml, build-image.yml, trufflehog.yml, lint-and-test.yml and others), .husky/ (2 git hooks), .devcontainer/ (2), .claude/ (1), a Helm chart/ (15), docs/ (19), models/ (1), stub/ (2) and static/ (48). None of it is referenced by bin/ruflo.js.",
+      "severity_note": "Dead weight and an expanded review surface in a package whose stated role is a thin wrapper.",
+      "label": "VERIFIED"
+    },
+    {
+      "item": "Lockfiles inside the published tarball",
+      "package": "ruflo",
+      "detail": "src/ruvocal/package-lock.json (380678 bytes) and src/ruvocal/mcp-bridge/package-lock.json. Publishing a lockfile inside a package is inert but is unusual and inflates the artifact.",
+      "label": "VERIFIED"
+    },
+    {
+      "item": "Binary WASM payload",
+      "package": "ruflo",
+      "detail": "src/ruvocal/static/wasm/rvagent_wasm_bg.wasm, 543286 bytes. This is compiled code shipped inside an npm package whose corresponding Rust/source input is not in the same artifact.",
+      "label": "VERIFIED"
+    },
+    {
+      "item": "Large media assets",
+      "package": "ruflo",
+      "detail": "src/chat-ui/static/chatui/omni-welcome.gif (1300183 bytes), src/ruvocal/static/huggingchat/tools-thumbnail.png (439594 bytes), and four Inter .ttf font files of roughly 316 KB each. Together these dominate the tarball's byte size and serve no CLI function.",
+      "label": "VERIFIED"
+    },
+    {
+      "item": ".claude/proven-config.signed.rvf \u2014 a binary RVF container",
+      "package": "@claude-flow/cli",
+      "detail": "1259 bytes, magic header 'RVFA' version 1, embedding a JSON record named proven-config:sha256:6141a8ea\u2026. Accompanied by proven-config.json, proven-config.manifest.json and proven-config.signed.json. The manifest asserts benchmark receipt values (heldOutDelta 0.0738, redblue PASS, drift 0, rollbackRate 0, latencyP95 244.6, receiptCoverage 1) against a corpus 'ADR-081-labelled-v1' identified only by hash; the corpus itself is in neither tarball, so none of these receipt numbers can be checked by a registry user.",
+      "label": "VERIFIED"
+    },
+    {
+      "item": "A .claude/ tree carrying agent hook configuration",
+      "package": "@claude-flow/cli",
+      "file_count": 348,
+      "detail": ".claude/settings.json ships with an `env` block (CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1, CLAUDE_FLOW_V3_ENABLED=true, CLAUDE_FLOW_HOOKS_ENABLED=true) and PreToolUse/PostToolUse/UserPromptSubmit hooks that invoke `node \"$CLAUDE_PROJECT_DIR/.claude/helpers/hook-handler.cjs\"`. Alongside it: 167 command files, 91 agent files, 43 helpers, 37 skill files, 3 evolve-proof files. Shipping executable hook configuration inside an npm package is the notable part; whether installing the package causes this configuration to take effect is a runtime question outside this lane.",
+      "label": "VERIFIED"
+    },
+    {
+      "item": "No LICENSE file in either published package",
+      "package": "both",
+      "detail": "ruflo/package.json:24 declares 'LICENSE' in its files allowlist, but no LICENSE exists at ruflo/LICENSE in source and none is present in the published tarball. @claude-flow/cli does not declare one and does not ship one. Both manifests declare \"license\": \"MIT\". The MIT text exists only at the repository root and is distributed with neither audited artifact.",
+      "label": "VERIFIED"
+    },
+    {
+      "item": "Things that are NOT present \u2014 absences confirmed by direct search",
+      "package": "both",
+      "detail": "agentdb.rvf and agentdb.rvf.lock exist at the repo root and at v3/@claude-flow/cli/ but are in NEITHER tarball. No .env, .env.example, *.pem, *.key, *.p12, id_* or credential/secret-named file is present in either tarball (ruflo/.env.example exists in source but falls outside the ruflo files allowlist). No __tests__ directory and no *.test.js or *.spec.js file is present in either tarball, despite 195 entries under v3/@claude-flow/cli/__tests__ in source. No *.db or *.sqlite file is present in either tarball.",
+      "label": "VERIFIED"
+    }
+  ],
+  "dist_source_parity": "For @claude-flow/cli the shipped dist is a complete and non-redundant emission of the shipped-package's own TypeScript source AT THE FILE-SET LEVEL: 365 src .ts files produce exactly 365 dist .js and 365 dist .d.ts, with per-directory counts matching across all 24 subdirectories and the 12 root modules; the only src directory with no dist counterpart is src/types, which holds a single ambient optional-modules.d.ts that emits nothing. There are no orphan dist files. Byte-level or semantic equivalence is NOT established and cannot be in this lane, because zero dist files are git-tracked (.gitignore:104 ignores dist/, and `git ls-files | grep '/dist/'` returns 0) and this lane does not compile. A registry user therefore cannot audit what they run: src/ is absent from the tarball, so the only readable artifact is compiled output with no in-package source to diff it against. Separately, one genuine checked-in-versus-shipped divergence WAS detected: .claude/helpers/helpers.manifest.json in the v3.37.0 source tree declares version 3.34.0 and carries signature GyTvYvhL7vIta/4yyz1rIyl+DWJ+x4dJVfmcrKZJXlh4E/TcQK2bszRznlaG1o7LWSZTudaYj50w+/7dlv6lDg==, while the published tarball's copy declares 3.37.0 and carries a different signature wjNllO+6A/iFejatdXHUflp2Bx831zKmAHCsJANV8L93X/s/8unB79SJCG9MpiiFFnoCAx+ESPken/NV3oG2BQ==; and .claude/helpers/.helpers-version reads 3.32.29 in source but 3.33.0 in the tarball. Three mutually inconsistent version strings (3.37.0, 3.34.0, 3.33.0) are therefore in play across the tag and the artifact, and the shipped Ed25519 signature is not reproducible from, or checkable against, anything in the tagged repository.",
+  "conclusions": [
+    {
+      "label": "VERIFIED",
+      "text": "Source presence does not imply shipped availability here, and the gap is large and deliberate. Of 23 named @claude-flow workspace packages in the v3.37.0 source tree, 9 reach a `ruflo` consumer (the CLI itself, three bundled into the tarball, four declared as dependencies, one optional) and 14 do not. Of 38 plugin directories in source, 1 is published and 37 are deleted by an explicit rm+recreate at v3/@claude-flow/cli/scripts/prepare-publish.mjs:34-40."
+    },
+    {
+      "label": "VERIFIED",
+      "text": "Three packages that the shipped compiled code imports are declared in no dependency field of the published @claude-flow/cli manifest and are not bundled in the tarball: @claude-flow/guidance (7 dynamic import sites), @claude-flow/embeddings (6) and @claude-flow/aidefence (5). npm is never instructed to install them. Because @claude-flow/aidefence backs the security-tools and security-command paths, this is the highest-consequence instance of the gap."
+    },
+    {
+      "label": "VERIFIED",
+      "text": "The shipped catalog-manifest.json advertises 164 agents, but 90 agent markdown files are present in the published tarball. The two numbers are computed over different, only partially overlapping file sets, because the generator counts agents from the repository root while counting skills from the CLI package root (generate-catalog-manifest.mjs:33 versus :52). Both counts were reproduced independently. The advertised skills count of 34 is package-accurate; the advertised tools count of 397 was reproduced from source but cannot be checked against the package at all, because src/ is not shipped."
+    },
+    {
+      "label": "VERIFIED",
+      "text": "A registry user cannot audit what they run. @claude-flow/cli ships compiled dist only, with no src/ and no LICENSE; dist is git-ignored and produced at publish time by prepublishOnly, so there is no in-repo build output to compare against. The one checked-in artifact that could be compared, .claude/helpers/helpers.manifest.json, does NOT match: source says version 3.34.0 with one Ed25519 signature, the tarball says 3.37.0 with another."
+    },
+    {
+      "label": "VERIFIED",
+      "text": "The prepublish pipeline rewrites the three bundled internal packages' manifests to remove all four dependency fields (stage-internal-runtime-bundles.mjs:132-135), relocating them to a non-standard rufloBundledRuntime key that no package manager reads. Their runtime dependencies are consequently invisible to npm, to audit tooling, and to SBOM generation."
+    },
+    {
+      "label": "VERIFIED",
+      "text": "Both published packages ship the monorepo root README instead of their own. ruflo/scripts/prepare-publish.mjs:8 and v3/@claude-flow/cli/scripts/prepare-publish.mjs:33 each overwrite the package README with the root one; the package-specific READMEs that exist in the repository (ruflo/README.md, 30004 bytes; v3/@claude-flow/cli/README.md, 30487 bytes) are never published. Registry documentation for both packages therefore describes the monorepo, and the README is the same file the audit charter notes still identifies the project as claude-flow."
+    },
+    {
+      "label": "VERIFIED",
+      "text": "The `ruflo` package is 526 files of which the entry point uses 3. bin/ruflo.js imports only @claude-flow/cli and contains no reference to src/; the 523 src/ files, 499 of them a vendored SvelteKit sub-project complete with its own CI workflows, git hooks, Helm chart, a 543 KB WASM binary, two package-lock.json files and 1.3 MB of media, are packaged without being reachable from the binary."
+    },
+    {
+      "label": "VERIFIED",
+      "text": "@ruvector/router-linux-x64-gnu is declared only at root package.json:95, in the separately published `claude-flow` package, and appears nowhere in either audited tarball. On the audited install path (`npm i ruflo`) it is not a factor. Platform divergence on that path is instead carried by @metaharness/darwin and the native optional dependencies better-sqlite3 and @napi-rs/keyring."
+    },
+    {
+      "label": "VERIFIED",
+      "text": "Nothing credential-bearing was found. No .env, key, certificate, database or test-fixture file is present in either tarball, and agentdb.rvf is correctly excluded. The unexpected published content is bulk and opacity \u2014 a vendored sub-project, binaries, lockfiles, an agent-hook configuration tree and unverifiable benchmark receipts \u2014 not secrets."
+    },
+    {
+      "label": "INFERRED",
+      "text": "The pattern across all of the above is a monorepo publish pipeline that emits a much smaller artifact than the repository advertises, while the artifact's own catalog metadata continues to describe the repository. Nothing observed is evidence of malice; the deletions are explicit, commented and intentional. The audit consequence is that repository-level capability inventories cannot be used to reason about what an installed copy contains."
+    },
+    {
+      "label": "UNKNOWN",
+      "text": "Whether the three undeclared imports resolve at runtime, whether the bundled packages' stripped dependencies are satisfied by hoisting, whether the shipped .claude hook configuration activates on install, and what an arm64 macOS tree differs by from a linux x64 tree all require installation and execution. This lane performed neither and assigns no level above PACKAGED to any finding."
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "swarmId": "swarm-mspazrjq",
+  "objective": "Add a --json flag to the Tailered dashboard CLI and document it",
+  "strategy": "development",
+  "status": "stopped",
+  "agents": 8,
+  "agentPlan": [
+    {
+      "role": "Coordinator",
+      "type": "coordinator",
+      "count": 1,
+      "purpose": "Orchestrate workflow"
+    },
+    {
+      "role": "Architect",
+      "type": "architect",
+      "count": 1,
+      "purpose": "System design"
+    },
+    {
+      "role": "Coder",
+      "type": "coder",
+      "count": 3,
+      "purpose": "Implementation"
+    },
+    {
+      "role": "Tester",
+      "type": "tester",
+      "count": 2,
+      "purpose": "Quality assurance"
+    },
+    {
+      "role": "Reviewer",
+      "type": "reviewer",
+      "count": 1,
+      "purpose": "Code review"
+    }
+  ],
+  "startedAt": "2026-08-11T23:40:34.761Z",
+  "parallel": true,
+  "stoppedAt": "2026-08-11T23:46:06.616Z"
+}

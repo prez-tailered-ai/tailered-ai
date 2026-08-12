@@ -1,0 +1,15 @@
+=== single sequential create AFTER the concurrent burst ===
+[ERROR] Failed to create task: Failed to execute MCP tool 'task_create': policy-state-authentication-failed
+EXIT=1
+=== again ===
+[ERROR] Failed to create task: Failed to execute MCP tool 'task_create': policy-state-authentication-failed
+EXIT=1
+=== policy status ===
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+[ERROR] policy-state-authentication-failed
+=== memory store still works? ===
+[OK] Data stored successfully
+EXIT=0
+=== agent spawn still works? ===
+[ERROR] Failed to spawn agent: Failed to execute MCP tool 'agent_spawn': policy-state-authentication-failed
+EXIT=1

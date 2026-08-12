@@ -1,0 +1,12 @@
+--- setPolicyBudget via programmatic/MCP path (no TTY gate) ---
+setBudget OK: undefined
+budgets now: [{"id":"tailered-cap","action":"model.call","maxCostUsd":5,"periodMs":3600000}]
+mode: legacy
+--- setPolicyMode enforce ---
+mode set OK
+mode after: enforce budgets: 1
+--- evaluate a $9.99 model.call under a $5 cap ---
+costUsd 1 EVAL ERROR: The "paths[0]" argument must be of type string. Received an instance of Object
+costUsd 4 EVAL ERROR: The "paths[0]" argument must be of type string. Received an instance of Object
+costUsd 9.99 EVAL ERROR: The "paths[0]" argument must be of type string. Received an instance of Object
+usage rows: []

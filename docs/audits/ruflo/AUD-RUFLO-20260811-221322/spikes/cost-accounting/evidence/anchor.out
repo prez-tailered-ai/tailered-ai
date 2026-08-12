@@ -1,0 +1,12 @@
+### STEP 1: repoA mounted at /repo, fresh HOME ###
+[OK] Task created: task-1786492491224-4pc6kc
+  exit=0
+### STEP 2: repoB (different checkout) mounted at /repo2 ###
+[OK] Task created: task-1786492491516-5dxidw
+  exit=0
+### STEP 3: repoB ALSO bind-mounted at /repo3 -> same content, different path ###
+[OK] Task created: task-1786492491803-bnhwyq
+  exit=0
+### anchors in HOME ###
+--- /root/.config/ruflo/policy-trust/*/state.anchor.json
+cat: '/root/.config/ruflo/policy-trust/*/state.anchor.json': No such file or directory

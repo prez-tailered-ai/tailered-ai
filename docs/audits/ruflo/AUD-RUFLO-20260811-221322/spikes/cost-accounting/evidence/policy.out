@@ -1,0 +1,42 @@
+=== policy --help ===
+
+ruflo policy
+Agentic policy engine — evaluate actions, manage rules/approvals, and verify the decision ledger (ADR-324)
+
+OPTIONS:
+      --mode                Policy mode: legacy | observe | enforce
+      --project-root        Project root containing .claude-flow/policy
+
+EXAMPLES:
+  $ ruflo policy status
+    Show policy mode and ledger health
+  $ ruflo policy init --mode observe
+    Migrate an existing install without blocking legacy actions
+  $ ruflo policy budget set '{"id":"daily-model","action":"model.call","maxCostUsd":10,"periodMs":86400000}'
+    Set an atomic policy budget ceiling
+  $ ruflo policy evaluate '{"identity":{"id":"agent-1","type":"agent"},"action":{"type":"deploy","environment":"production"}}'
+    Evaluate an action and write a decision receipt
+
+RUFLO_EXIT=0
+=== policy status ===
+{
+  "version": 1,
+  "mode": "legacy",
+  "migratedFrom": "pre-ADR-324; capabilities=.swarm/memory.db",
+  "rules": 0,
+  "budgets": 0,
+  "approvals": 0,
+  "receipts": 27,
+  "ledger": {
+    "valid": true,
+    "length": 27
+  }
+}
+RUFLO_EXIT=0
+=== policy budget-set --budget {"id":"tailered-cap","principalId":"legacy-cli","limitUsd":5,"windowSeconds":3600} ===
+[ERROR] unknown policy operation: budget-set
+RUFLO_EXIT=1
+=== direct import probe of AgenticPolicyEngine ===
+IMPORT ERROR: Cannot find package '@claude-flow/security' imported from /repo/[eval1]
+=== direct import of policy-runtime ===
+OK exports: 12

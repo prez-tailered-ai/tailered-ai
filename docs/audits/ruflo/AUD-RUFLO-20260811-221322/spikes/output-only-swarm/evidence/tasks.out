@@ -1,0 +1,114 @@
++ RF='node /rf/node_modules/ruflo/bin/ruflo.js'
++ node /rf/node_modules/ruflo/bin/ruflo.js task create -t implementation -d 'Add --json flag to src/dashboard.ts'
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+
+[INFO] Creating implementation task...
+
+[OK] Task created: task-1786491857674-4of0nc
+
++-------------+-------------------------------------+
+| Property    | Value                               |
++-------------+-------------------------------------+
+| ID          | task-1786491857674-4of0nc           |
+| Type        | implementation                      |
+| Description | Add --json flag to src/dashboard.ts |
+| Priority    | normal                              |
+| Status      | pending                             |
+| Assigned To | Unassigned                          |
+| Tags        | None                                |
+| Created     | 8/11/2026, 11:44:17 PM              |
++-------------+-------------------------------------+
++ node /rf/node_modules/ruflo/bin/ruflo.js task create -t testing -d 'Add test for --json flag in test/dashboard.test.ts'
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+
+[INFO] Creating testing task...
+
+[OK] Task created: task-1786491858117-7zhg2f
+
++-------------+------------------------------------------+
+| Property    | Value                                    |
++-------------+------------------------------------------+
+| ID          | task-1786491858117-7zhg2f                |
+| Type        | testing                                  |
+| Description | Add test for --json flag in test/dash... |
+| Priority    | normal                                   |
+| Status      | pending                                  |
+| Assigned To | Unassigned                               |
+| Tags        | None                                     |
+| Created     | 8/11/2026, 11:44:18 PM                   |
++-------------+------------------------------------------+
++ node /rf/node_modules/ruflo/bin/ruflo.js task create -t documentation -d 'Document --json flag in docs/v1-contract.md'
+
+[INFO] Creating documentation task...
+
+[OK] Task created: task-1786491858513-5jkwob
+
++-------------+------------------------------------------+
+| Property    | Value                                    |
++-------------+------------------------------------------+
+| ID          | task-1786491858513-5jkwob                |
+| Type        | documentation                            |
+| Description | Document --json flag in docs/v1-contr... |
+| Priority    | normal                                   |
+| Status      | pending                                  |
+| Assigned To | Unassigned                               |
+| Tags        | None                                     |
+| Created     | 8/11/2026, 11:44:18 PM                   |
++-------------+------------------------------------------+
+===DUPLICATE TASK (same description as #1)===
++ echo '===DUPLICATE TASK (same description as #1)==='
++ node /rf/node_modules/ruflo/bin/ruflo.js task create -t implementation -d 'Add --json flag to src/dashboard.ts'
+
+[INFO] Creating implementation task...
+
+[OK] Task created: task-1786491858697-8qnl2o
+
++-------------+-------------------------------------+
+| Property    | Value                               |
++-------------+-------------------------------------+
+| ID          | task-1786491858697-8qnl2o           |
+| Type        | implementation                      |
+| Description | Add --json flag to src/dashboard.ts |
+| Priority    | normal                              |
+| Status      | pending                             |
+| Assigned To | Unassigned                          |
+| Tags        | None                                |
+| Created     | 8/11/2026, 11:44:18 PM              |
++-------------+-------------------------------------+
++ echo '===CONFLICTING TASK (same file, contradictory intent)==='
++ node /rf/node_modules/ruflo/bin/ruflo.js task create -t implementation -d 'Remove the --json flag from src/dashboard.ts'
+===CONFLICTING TASK (same file, contradictory intent)===
+
+[INFO] Creating implementation task...
+
+[OK] Task created: task-1786491858862-4vz4no
+
++-------------+------------------------------------------+
+| Property    | Value                                    |
++-------------+------------------------------------------+
+| ID          | task-1786491858862-4vz4no                |
+| Type        | implementation                           |
+| Description | Remove the --json flag from src/dashb... |
+| Priority    | normal                                   |
+| Status      | pending                                  |
+| Assigned To | Unassigned                               |
+| Tags        | None                                     |
+| Created     | 8/11/2026, 11:44:18 PM                   |
++-------------+------------------------------------------+
++ echo '===TASK LIST==='
++ node /rf/node_modules/ruflo/bin/ruflo.js task list --all
+===TASK LIST===
+
+Tasks
+
+[INFO] No tasks found matching criteria
+===TASK LIST JSON===
++ echo '===TASK LIST JSON==='
++ node /rf/node_modules/ruflo/bin/ruflo.js task list --all --format json
+{
+  "tasks": [],
+  "total": 0,
+  "filters": {
+    "status": "all"
+  }
+}
