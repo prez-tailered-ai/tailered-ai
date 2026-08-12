@@ -1,0 +1,11 @@
+1e33fe6f308e97267bc0b93074e431bb89c95f5d79e403ce8bc824fda0b40a46  ./branch.txt
+7e229918ce172160d9ab912c1fdc9a2f9489ab47fcef13ea32a1af6fad0e4707  ./files/docs/foundation/p0-agent-safety/p0-a/containment-contract.md
+5ce8fcec657482ebca1f3085c51b4b6311d10853b3e61f54e928bdd6b7f7fd58  ./files/docs/foundation/p0-agent-safety/p0-a/report.md
+02ec33b1817dcebe38bcb97b2f45af52a9e3e33cb141da14237c8b9aa613ee88  ./files/docs/foundation/p0-agent-safety/p0-a/test-matrix.md
+a3678a85c660e87fd5e86b99c3916825a8e8f53a7eb4726c0ba7e956401a570f  ./files/src/files.ts
+1cc5bcddbf8f724f50f87878c95e1483df10f3a536f52cea75e83b7ef5dd0cb8  ./files/test/containment.test.ts
+5a97a95e257e779486ebbb54db27b131bede3cfe6936f3b0afe3741ce8ba0e85  ./head.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./index.patch
+7a150716d1a5820282a32219c82c2c591320114b1ea169b64ed7e29fd84b14eb  ./status.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./untracked-list.txt
+f27af02ed7ea36ff552d24c714eec4368cfdeb78e3522980fddf15b607b2c312  ./worktree.patch

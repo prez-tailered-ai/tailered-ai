@@ -1,0 +1,53 @@
+=== CASE 16: product -> decisions ===
+checkout        : <home>/src/tailered-ai
+checkout HEAD   : 2f8fb9ae9e346a0313c27c6b6498483ad78c4754
+fixture         : /var/folders/xc/mwv04t7x4bbfbym30g4nclf40000gn/T/tailered-caproot-YCqSfv
+capability root : product -> decisions
+
+BEFORE
+  c9b0e7c4aa7870dae81d316a653afb22dbac622f8324ccc950d71860ad59dd46  decisions/ADR-000.md
+  b07189a88d7fcf3f1efdb0bb8a2f6650cf7cf9b7ad22e95f777e3105c8c6bdd9  decisions/ADR-001.md
+  4844e8de1737a3843dad671dc90437445671179a1175b9f61b320082f2ece2a3  AGENTS.md
+  3917c17e22979cc9c0d1aaf5b8f3095382c5672e3ed259a45259d40cfaa085a0  policies/gates.yaml
+
+RUN OUTCOME     : shipped
+
+AFTER
+  0a42ac400c02c7647d917b9c33224db298befe8d5d6e6714cc30c842dc912727  decisions/ADR-000.md  *** MUTATED ***
+  b07189a88d7fcf3f1efdb0bb8a2f6650cf7cf9b7ad22e95f777e3105c8c6bdd9  decisions/ADR-001.md  INTACT
+  4844e8de1737a3843dad671dc90437445671179a1175b9f61b320082f2ece2a3  AGENTS.md  INTACT
+  3917c17e22979cc9c0d1aaf5b8f3095382c5672e3ed259a45259d40cfaa085a0  policies/gates.yaml  INTACT
+
+decisions/ADR-000.md first line:
+  # ADR-000: OVERWRITTEN VIA A SYMLINKED CAPABILITY ROOT
+
+validate exit   : 1
+VERDICT         : ESCAPED — protected surface mutated
+repro exit=1
+
+=== CASE 17: product -> . (repository root) ===
+checkout        : <home>/src/tailered-ai
+checkout HEAD   : 2f8fb9ae9e346a0313c27c6b6498483ad78c4754
+fixture         : /var/folders/xc/mwv04t7x4bbfbym30g4nclf40000gn/T/tailered-caproot-mp9fop
+capability root : product -> .
+
+BEFORE
+  c9b0e7c4aa7870dae81d316a653afb22dbac622f8324ccc950d71860ad59dd46  decisions/ADR-000.md
+  b07189a88d7fcf3f1efdb0bb8a2f6650cf7cf9b7ad22e95f777e3105c8c6bdd9  decisions/ADR-001.md
+  4844e8de1737a3843dad671dc90437445671179a1175b9f61b320082f2ece2a3  AGENTS.md
+  3917c17e22979cc9c0d1aaf5b8f3095382c5672e3ed259a45259d40cfaa085a0  policies/gates.yaml
+
+RUN OUTCOME     : shipped
+
+AFTER
+  c9b0e7c4aa7870dae81d316a653afb22dbac622f8324ccc950d71860ad59dd46  decisions/ADR-000.md  INTACT
+  b07189a88d7fcf3f1efdb0bb8a2f6650cf7cf9b7ad22e95f777e3105c8c6bdd9  decisions/ADR-001.md  INTACT
+  4844e8de1737a3843dad671dc90437445671179a1175b9f61b320082f2ece2a3  AGENTS.md  INTACT
+  3917c17e22979cc9c0d1aaf5b8f3095382c5672e3ed259a45259d40cfaa085a0  policies/gates.yaml  INTACT
+
+decisions/ADR-000.md first line:
+  <!-- tailered: {"id":"ADR-000","status":"accepted","caused_by":[]} -->
+
+validate exit   : 0
+VERDICT         : CONTAINED — every protected surface byte-identical
+repro exit=0

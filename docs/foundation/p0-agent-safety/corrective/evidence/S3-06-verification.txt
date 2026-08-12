@@ -1,0 +1,16 @@
+# S3-06 complete repository verification
+# pwd: <home>/src/tailered-ai
+# HEAD: 60adb63ef6be09b93237d75758d3b2e817019f9c + uncommitted corrective work
+# date (UTC): 2026-08-12T07:43:15Z
+
+npm run check   exit=0
+npm test        exit=0
+  # tests 38
+  # pass 38
+  # fail 0
+  # skipped 0
+npm run validate exit=0
+  status: VERIFIED
+npm run demo    exit=0
+  "outcome": "shipped"
+  "costUsd": 0.068

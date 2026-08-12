@@ -1,0 +1,64 @@
+# S3-09 documentation and evidence integrity audit
+# date (UTC): 2026-08-12T07:47:28Z
+
+## 1. Manifest hash re-verification (independent recomputation)
+  36 entries, 0 mismatches
+  self-reference excluded: True
+
+## 2. Ledger event id uniqueness and JSON validity
+  23 events, 23 unique, all JSON valid
+  duplicates: none
+  SUPERSEDED events: ['P0A-COR-EV-021']
+
+## 3. Internal markdown links resolve
+  34 internal links, 0 broken
+
+## 4. Secret scan over the full diff
+  no secret pattern found in the diff
+
+## 5. Machine-specific absolute paths in committed docs
+docs/foundation/p0-agent-safety/p0-a/evidence/threat-matrix-v2-caproot.txt:2:# checkout: <home>/src/tailered-ai
+docs/foundation/p0-agent-safety/p0-a/evidence/capability-root-repro-v1.txt:2:checkout        : <home>/src/tailered-ai
+docs/foundation/p0-agent-safety/p0-a/evidence/capability-root-repro-v1.txt:29:checkout        : <home>/src/tailered-ai
+docs/foundation/p0-agent-safety/p0-a/evidence/tdd-red-run-caproot.txt:141:  location: '<home>/src/tailered-ai/dist/test/containment.test.js:272:1'
+docs/foundation/p0-agent-safety/p0-a/evidence/tdd-red-run-caproot.txt:153:    TestContext.<anonymous> (file://<home>/src/tailered-ai/dist/test/containment.test.js:280:12)
+docs/foundation/p0-agent-safety/p0-a/evidence/tdd-red-run-caproot.txt:162:  location: '<home>/src/tailered-ai/dist/test/containment.test.js:283:1'
+docs/foundation/p0-agent-safety/p0-a/evidence/tdd-red-run-caproot.txt:174:    TestContext.<anonymous> (file://<home>/src/tailered-ai/dist/test/containment.test.js:291:12)
+docs/foundation/p0-agent-safety/p0-a/evidence/tdd-red-run-caproot.txt:183:  location: '<home>/src/tailered-ai/dist/test/containment.test.js:294:1'
+docs/foundation/p0-agent-safety/p0-a/evidence/tdd-red-run-caproot.txt:195:    TestContext.<anonymous> (file://<home>/src/tailered-ai/dist/test/containment.test.js:303:12)
+docs/foundation/p0-agent-safety/p0-a/evidence/tdd-red-run-caproot.txt:204:  location: '<home>/src/tailered-ai/dist/test/containment.test.js:307:1'
+docs/foundation/p0-agent-safety/p0-a/evidence/tdd-red-run-caproot.txt:216:    TestContext.<anonymous> (file://<home>/src/tailered-ai/dist/test/containment.test.js:324:12)
+docs/foundation/p0-agent-safety/corrective/evidence/S1-07-summary.txt:1:pwd=<home>/src/tailered-ai
+docs/foundation/p0-agent-safety/p0-a/evidence/capability-root-repro-v2.txt:4:checkout        : <home>/src/tailered-ai
+docs/foundation/p0-agent-safety/p0-a/evidence/capability-root-repro-v2.txt:35:checkout        : <home>/src/tailered-ai
+docs/foundation/p0-agent-safety/p0-a/evidence/capability-root-repro-v2.txt:66:checkout        : <home>/src/tailered-ai
+docs/foundation/p0-agent-safety/corrective/evidence/S3-09-integrity.txt:20:docs/foundation/p0-agent-safety/p0-a/evidence/threat-matrix-v2-caproot.txt:2:# checkout: <home>/src/tailered-ai
+docs/foundation/p0-agent-safety/corrective/evidence/S3-09-integrity.txt:21:docs/foundation/p0-agent-safety/p0-a/evidence/capability-root-repro-v1.txt:2:checkout        : <home>/src/tailered-ai
+docs/foundation/p0-agent-safety/corrective/evidence/S3-09-integrity.txt:22:docs/foundation/p0-agent-safety/p0-a/evidence/capability-root-repro-v1.txt:29:checkout        : <home>/src/tailered-ai
+docs/foundation/p0-agent-safety/corrective/evidence/S3-09-integrity.txt:23:docs/foundation/p0-agent-safety/p0-a/evidence/tdd-red-run-caproot.txt:141:  location: '<home>/src/tailered-ai/dist/test/containment.test.js:272:1'
+docs/foundation/p0-agent-safety/corrective/evidence/S3-09-integrity.txt:24:docs/foundation/p0-agent-safety/p0-a/evidence/tdd-red-run-caproot.txt:153:    TestContext.<anonymous> (file://<home>/src/tailered-ai/dist/test/containment.test.js:280:12)
+docs/foundation/p0-agent-safety/corrective/evidence/S3-09-integrity.txt:25:docs/foundation/p0-agent-safety/p0-a/evidence/tdd-red-run-caproot.txt:162:  location: '<home>/src/tailered-ai/dist/test/containment.test.js:283:1'
+docs/foundation/p0-agent-safety/corrective/evidence/S3-09-integrity.txt:26:docs/foundation/p0-agent-safety/p0-a/evidence/tdd-red-run-caproot.txt:174:    TestContext.<anonymous> (file://<home>/src/tailered-ai/dist/test/containment.test.js:291:12)
+docs/foundation/p0-agent-safety/corrective/evidence/S3-09-integrity.txt:27:docs/foundation/p0-agent-safety/p0-a/evidence/tdd-red-run-caproot.txt:183:  location: '<home>/src/tailered-ai/dist/test/containment.test.js:294:1'
+docs/foundation/p0-agent-safety/corrective/evidence/S3-09-integrity.txt:28:docs/foundation/p0-agent-safety/p0-a/evidence/tdd-red-run-caproot.txt:195:    TestContext.<anonymous> (file://<home>/src/tailered-ai/dist/test/containment.test.js:303:12)
+docs/foundation/p0-agent-safety/corrective/evidence/S3-09-integrity.txt:29:docs/foundation/p0-agent-safety/p0-a/evidence/tdd-red-run-caproot.txt:204:  location: '<home>/src/tailered-ai/dist/test/containment.test.js:307:1'
+docs/foundation/p0-agent-safety/corrective/evidence/S3-09-integrity.txt:30:docs/foundation/p0-agent-safety/p0-a/evidence/tdd-red-run-caproot.txt:216:    TestContext.<anonymous> (file://<home>/src/tailered-ai/dist/test/containment.test.js:324:12)
+docs/foundation/p0-agent-safety/corrective/evidence/S3-09-integrity.txt:31:docs/foundation/p0-agent-safety/corrective/evidence/S1-07-summary.txt:1:pwd=<home>/src/tailered-ai
+docs/foundation/p0-agent-safety/corrective/evidence/S3-09-integrity.txt:32:docs/foundation/p0-agent-safety/p0-a/evidence/capability-root-repro-v2.txt:4:checkout        : <home>/src/tailered-ai
+docs/foundation/p0-agent-safety/corrective/evidence/S3-09-integrity.txt:33:docs/foundation/p0-agent-safety/p0-a/evidence/capability-root-repro-v2.txt:35:checkout        : <home>/src/tailered-ai
+docs/foundation/p0-agent-safety/corrective/evidence/S3-09-integrity.txt:34:docs/foundation/p0-agent-safety/p0-a/evidence/capability-root-repro-v2.txt:66:checkout        : <home>/src/tailered-ai
+docs/foundation/p0-agent-safety/corrective/evidence/S3-02-four-cases.txt:1:checkout      : <home>/src/tailered-ai
+docs/foundation/p0-agent-safety/corrective/evidence/S3-06-verification.txt:2:# pwd: <home>/src/tailered-ai
+
+## 6. Literal NUL bytes in committed files
+  0 files with literal NUL bytes
+
+## 7. P0-B implementation present?
+  production file changed: src/files.ts
+
+## 8. Redaction applied after the first audit pass
+Item 5 above flagged machine-specific absolute paths in raw evidence. The developer home
+prefix was replaced with the literal token <home> across 8 committed evidence files. This
+is the only alteration made to any raw output; run identity remains established by the
+recorded HEAD SHA, src/files.ts hash, and UTC timestamp in each file. The unredacted
+originals remain in the external Scope 1 backup outside the repository.

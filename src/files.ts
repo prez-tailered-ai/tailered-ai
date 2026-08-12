@@ -67,15 +67,50 @@ export async function resolveContainedWritePath(
     );
   }
 
+  // The capability root must itself be a real directory, reached without
+  // traversing a symbolic link at any point below the repository root.
+  // Canonicalising it instead — `realpath(root/product)` — would silently
+  // ACCEPT a symlinked `product/` and adopt its target as the boundary, which
+  // makes the boundary whatever the link points at. Symlinks ABOVE the
+  // repository root belong to the operator's own filesystem layout (`/tmp` ->
+  // `/private/tmp`), are not agent-reachable, and are resolved here once.
   let canonicalCapabilityRoot: string;
   try {
-    canonicalCapabilityRoot = await realpath(lexicalCapabilityRoot);
+    canonicalCapabilityRoot = await realpath(root);
   } catch (error) {
     throw new ValidationError(
-      `Capability root ${capabilityRoot} is unavailable, so containment cannot be established: ${
+      `Repository root is unavailable, so containment cannot be established: ${
         error instanceof Error ? error.message : String(error)
       }`,
     );
+  }
+
+  const capabilitySegments = relative(resolve(root), lexicalCapabilityRoot)
+    .split(sep)
+    .filter((segment) => segment !== "");
+  for (const segment of capabilitySegments) {
+    const candidate = resolve(canonicalCapabilityRoot, segment);
+    let entry;
+    try {
+      entry = await lstat(candidate);
+    } catch (error) {
+      throw new ValidationError(
+        `Capability root ${capabilityRoot} is unavailable, so containment cannot be established: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+      );
+    }
+    if (entry.isSymbolicLink()) {
+      throw new ValidationError(
+        `Capability root ${capabilityRoot} traverses a symbolic link and cannot be contained: ${relativePath}`,
+      );
+    }
+    if (!entry.isDirectory()) {
+      throw new ValidationError(
+        `Capability root ${capabilityRoot} is not a directory, so containment cannot be established: ${relativePath}`,
+      );
+    }
+    canonicalCapabilityRoot = candidate;
   }
 
   // Walk each component that already exists. A symlink anywhere on the path can
