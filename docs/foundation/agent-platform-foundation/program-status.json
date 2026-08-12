@@ -4,8 +4,8 @@
   "repository_exclusivity": "This program applies only to prez-tailered-ai/tailered-ai. No other first-party repository is a target, a dependency, or an implementation task.",
   "ruflo_disposition": "REJECTED \u2014 read-only external reference. Not installed, not a dependency.",
   "scope": "P0-B",
-  "technical_status": "IN_PROGRESS",
-  "human_gate": null,
+  "technical_status": "COMPLETE_PENDING_FINAL_MERGE_GATE",
+  "human_gate": "NEEDS_PREZ \u2014 P0-B FINAL MERGE. Review and merge the draft pull request; no other action is authorized.",
   "next_scope": "ADR-004",
   "frozen_base_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c",
   "p0_a_merge_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c",
@@ -17,7 +17,7 @@
       "merge_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c"
     },
     "P0-B": {
-      "status": "IN_PROGRESS",
+      "status": "COMPLETE_PENDING_MERGE",
       "branch": "fix/p0-b-ledger-concurrency",
       "composed_foundation": "origin/main 38e08bfb4b92966c275e778fe6b861a5763b0d86 merged via 4594ce995666d41849fe2466661e2a2eac1c10b8"
     },
@@ -35,7 +35,8 @@
   },
   "foundation_rule": "Per PR #5: 60adb63e is permanently invalid as a P0-B base; 978fbcc3 or any later main containing it is the minimum valid foundation. Satisfied by merge commit 4594ce99 (origin/main 38e08bfb merged into the branch).",
   "intermediate_design_gate": "APPROVED \u2014 A-01 and A-02 ratified by PREZ 2026-08-12 (gate-ledger.jsonl GATE-P0B-DESIGN-A01/A02). The earlier NEEDS_PREZ event stands in the program ledger, not overwritten.",
-  "next_step": "P0B-14",
-  "final_merge_gate": "NOT_REACHED",
-  "adr_numbering": "ADR-004 belongs to the Hermes-Honcho decision (PR #6, merged 482bc04a). The Ruflo decision uses the semantic handoff name RUFLO-DECISION-ADR; next_adr_id: RESOLVE_FROM_MAIN_AFTER_P0B_MERGE."
+  "next_step": "PREZ merge review",
+  "final_merge_gate": "REACHED \u2014 awaiting PREZ",
+  "adr_numbering": "ADR-004 belongs to the Hermes-Honcho decision (PR #6, merged 482bc04a). The Ruflo decision uses the semantic handoff name RUFLO-DECISION-ADR; next_adr_id: RESOLVE_FROM_MAIN_AFTER_P0B_MERGE.",
+  "requirements_summary": "R1-R8 VERIFIED (8/8), A1-A7 VERIFIED (7/7) per docs/foundation/p0-agent-safety/p0-b/requirements-status.json; machine-derived, never hand-counted"
 }

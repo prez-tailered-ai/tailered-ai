@@ -1,0 +1,10 @@
+allocate:after-read: PASS
+agent:during-invocation: PASS
+append:after-uniqueness: PASS
+finalize:before-intent: PASS
+adr:before-create: PASS
+finalize:before-terminal-eval: PASS
+finalize:before-marker: PASS
+control:no-kill: PASS
+control:broken-recovery: PASS
+all_points_pass: true

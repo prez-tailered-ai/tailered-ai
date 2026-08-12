@@ -1,9 +1,9 @@
 {
   "harness": "p0b-crash-matrix",
-  "repo_head": "9db25ad36a9b0991f6fa343944ff6ebf28760081",
+  "repo_head": "f2dfed8943856a1f86fa88fe940a9a4bc231eb85",
   "node_version": "v24.19.0",
   "harness_sha256": "4843af3aabd017fce8713085397efa3cd2a99913b86715886f7986398a11a976",
-  "generated_at": "2026-08-12T11:01:29.263Z",
+  "generated_at": "2026-08-12T11:03:18.068Z",
   "assurance": {
     "verified": "tested process-crash and SIGKILL recovery",
     "not_verified": "sudden power loss, kernel panic, or storage-device loss"
