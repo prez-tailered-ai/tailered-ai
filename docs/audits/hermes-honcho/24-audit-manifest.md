@@ -56,6 +56,7 @@ mutation of any kind.
 | 27 | [erratum](27-erratum.md) | **Append-only corrections** to TA-003, TA-004, and the POC-A scope statement |
 | 28 | [closure-receipt](28-closure-receipt.md) | Founder acceptance, and what closes versus what stays open |
 | 29 | [post-closure-remediation-receipt](29-post-closure-remediation-receipt.md) | **R-01 → CLOSED_VERIFIED**: P0-B merged (`81bdfd7a`), R1–R8 8/8, A1–A7 7/7, crash matrix 7+2/9 |
+| 30 | [workflow-benchmark-pointer](30-workflow-benchmark-pointer.md) | Post-closure Tailered-native workflow benchmark: pointer to `docs/foundation/agent-platform-optimization/HH-WORKFLOW-20260812T130507Z/`; no conclusion changes |
 | — | [`tooling/`](tooling/) | Citation resolver + regression tests |
 
 **Closure note.** Artifacts `27` and `28` were added at closure, after the audit's own
