@@ -13,6 +13,12 @@ Target: [`prez-tailered-ai/tailered-ai`](https://github.com/prez-tailered-ai/tai
 
 ## Part 1 — The invariant register
 
+> **ERRATUM — rows TA-003 and TA-004.** Both were recorded VERIFIED here on evidence later
+> shown insufficient. TA-003 was **REFUTED at this baseline** and is VERIFIED only after the
+> P0-A corrective closure. TA-004 conflated two claims: repository-root escape rejection was
+> VERIFIED, capability-root containment was **REFUTED**. The rows below are left exactly as
+> published. Corrections: [`27-erratum.md`](27-erratum.md) E-01 and E-02.
+
 These are the guarantees any adoption must not weaken. Each was read in source; the ones
 marked VERIFIED were additionally proven by executing the runtime.
 

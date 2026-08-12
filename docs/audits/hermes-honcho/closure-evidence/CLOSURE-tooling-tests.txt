@@ -1,0 +1,16 @@
+✔ resolves a Hermes path to an immutable Hermes permalink at the frozen SHA (0.707542ms)
+✔ resolves a Honcho path to Honcho, not to Hermes (0.615417ms)
+✔ resolves a Tailered path to the target repository (0.0715ms)
+✔ strips a leading repo-name segment before resolving (0.055292ms)
+✔ REGRESSION: an absolute path is rejected, never attributed to a repository (0.052166ms)
+✔ REGRESSION: attribution is by path existence, never by identifier prefix (0.603458ms)
+✔ REGRESSION: fan-out work items must carry an explicit repo key (0.214625ms)
+✔ every frozen repo pin is a full 40-character commit SHA (0.072166ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 65.653625
