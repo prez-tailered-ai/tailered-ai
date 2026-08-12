@@ -1,0 +1,63 @@
+[
+  {
+    "id": "CWD-1-status",
+    "argv_after_binary": [
+      "status"
+    ],
+    "timeout_ms": 60000,
+    "elapsed_ms": 721,
+    "outcome": {
+      "ok": false,
+      "error_name": "ValidationError",
+      "error_message": "Agent process failed (exit 1): [ERROR] RuFlo is not initialized in this directory"
+    },
+    "repo_hash_before": "2b3fb864bec1f0cffef592680d611ea797e8056f6fb3ea837adafea461cc051f",
+    "repo_hash_after": "2b3fb864bec1f0cffef592680d611ea797e8056f6fb3ea837adafea461cc051f",
+    "repo_mutated": false,
+    "paths_added_to_company_repo": [],
+    "paths_removed_from_company_repo": [],
+    "residual_processes": []
+  },
+  {
+    "id": "CWD-2-memory-store",
+    "argv_after_binary": [
+      "memory",
+      "store",
+      "audit-key",
+      "audit-value"
+    ],
+    "timeout_ms": 60000,
+    "elapsed_ms": 169,
+    "outcome": {
+      "ok": false,
+      "error_name": "ValidationError",
+      "error_message": "Agent process failed (exit 1): [ERROR] Required option missing: --key"
+    },
+    "repo_hash_before": "2b3fb864bec1f0cffef592680d611ea797e8056f6fb3ea837adafea461cc051f",
+    "repo_hash_after": "2b3fb864bec1f0cffef592680d611ea797e8056f6fb3ea837adafea461cc051f",
+    "repo_mutated": false,
+    "paths_added_to_company_repo": [],
+    "paths_removed_from_company_repo": [],
+    "residual_processes": []
+  },
+  {
+    "id": "CWD-3-swarm-status",
+    "argv_after_binary": [
+      "swarm",
+      "status"
+    ],
+    "timeout_ms": 60000,
+    "elapsed_ms": 141,
+    "outcome": {
+      "ok": false,
+      "error_name": "ValidationError",
+      "error_message": "Agent returned invalid JSON: SyntaxError: Unexpected token 'N', \"\nNo active \"... is not valid JSON"
+    },
+    "repo_hash_before": "2b3fb864bec1f0cffef592680d611ea797e8056f6fb3ea837adafea461cc051f",
+    "repo_hash_after": "2b3fb864bec1f0cffef592680d611ea797e8056f6fb3ea837adafea461cc051f",
+    "repo_mutated": false,
+    "paths_added_to_company_repo": [],
+    "paths_removed_from_company_repo": [],
+    "residual_processes": []
+  }
+]

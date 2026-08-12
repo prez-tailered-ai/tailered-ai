@@ -1,0 +1,6 @@
+  PID  PPID  PGID STAT     ELAPSED COMMAND
+    1     0     1 Ssl        01:00 node /spike/experiments/orphan/run-orphan.mjs
+   21     1    21 Zs         01:00 [MainThread] <defunct>
+   36     1    36 Zs         00:52 [MainThread] <defunct>
+   50     1    50 Zs         00:07 [MainThread] <defunct>
+   58     1     1 R          00:00 ps -eo pid,ppid,pgid,stat,etime,args

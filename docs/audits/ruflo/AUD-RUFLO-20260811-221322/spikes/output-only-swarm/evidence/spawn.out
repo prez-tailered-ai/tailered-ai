@@ -1,0 +1,96 @@
++ RF='node /rf/node_modules/ruflo/bin/ruflo.js'
++ node /rf/node_modules/ruflo/bin/ruflo.js agent spawn -t coder --name alpha-coder
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+[INFO] Spawning coder agent: alpha-coder
+
++--------------+------------------------------------------+
+| Property     | Value                                    |
++--------------+------------------------------------------+
+| ID           | agent-1786491716323-ul4b66               |
+| Type         | coder                                    |
+| Name         | alpha-coder                              |
+| Status       | registered                               |
+| Created      | 2026-08-11T23:41:56.323Z                 |
+| Capabilities | code-generation, refactoring, debuggi... |
++--------------+------------------------------------------+
+
+[OK] Agent alpha-coder spawned successfully
++ node /rf/node_modules/ruflo/bin/ruflo.js agent spawn -t tester --name beta-tester
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+[INFO] Spawning tester agent: beta-tester
+
++--------------+------------------------------------------+
+| Property     | Value                                    |
++--------------+------------------------------------------+
+| ID           | agent-1786491716758-xy83th               |
+| Type         | tester                                   |
+| Name         | beta-tester                              |
+| Status       | registered                               |
+| Created      | 2026-08-11T23:41:56.758Z                 |
+| Capabilities | unit-testing, integration-testing, co... |
++--------------+------------------------------------------+
+
+[OK] Agent beta-tester spawned successfully
++ node /rf/node_modules/ruflo/bin/ruflo.js agent spawn -t reviewer --name gamma-reviewer
+[INFO] Spawning reviewer agent: gamma-reviewer
+
++--------------+------------------------------------------+
+| Property     | Value                                    |
++--------------+------------------------------------------+
+| ID           | agent-1786491717045-ezghqt               |
+| Type         | reviewer                                 |
+| Name         | gamma-reviewer                           |
+| Status       | registered                               |
+| Created      | 2026-08-11T23:41:57.045Z                 |
+| Capabilities | code-review, security-audit, quality-... |
++--------------+------------------------------------------+
+
+[OK] Agent gamma-reviewer spawned successfully
+===AGENT LIST===
++ echo '===AGENT LIST==='
++ node /rf/node_modules/ruflo/bin/ruflo.js agent list
+
+Active Agents
+
++----------------------+----------+--------+-------------+--------------+
+| ID                   | Type     | Status | Created     | Last Acti... |
++----------------------+----------+--------+-------------+--------------+
+| agent-17864917163... | coder    | idle   | 11:41:56 PM | N/A          |
+| agent-17864917167... | tester   | idle   | 11:41:56 PM | N/A          |
+| agent-17864917170... | reviewer | idle   | 11:41:57 PM | N/A          |
++----------------------+----------+--------+-------------+--------------+
+
+[INFO] Total: 3 agents
+===AGENT LIST JSON===
++ echo '===AGENT LIST JSON==='
++ node /rf/node_modules/ruflo/bin/ruflo.js agent list --format json
+{
+  "agents": [
+    {
+      "agentId": "agent-1786491716323-ul4b66",
+      "agentType": "coder",
+      "status": "idle",
+      "health": 1,
+      "taskCount": 0,
+      "createdAt": "2026-08-11T23:41:56.323Z"
+    },
+    {
+      "agentId": "agent-1786491716758-xy83th",
+      "agentType": "tester",
+      "status": "idle",
+      "health": 1,
+      "taskCount": 0,
+      "createdAt": "2026-08-11T23:41:56.758Z"
+    },
+    {
+      "agentId": "agent-1786491717045-ezghqt",
+      "agentType": "reviewer",
+      "status": "idle",
+      "health": 1,
+      "taskCount": 0,
+      "createdAt": "2026-08-11T23:41:57.045Z"
+    }
+  ],
+  "total": 3,
+  "filters": {}
+}

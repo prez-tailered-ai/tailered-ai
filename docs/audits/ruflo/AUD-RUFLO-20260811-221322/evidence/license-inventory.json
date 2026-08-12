@@ -1,0 +1,1357 @@
+{
+  "audit_id": "AUD-RUFLO-20260811-221322",
+  "lane": "AUD-L3a",
+  "tailered_sha": "6172653e0aca0981d0abaf4ad8e9d587667737e9",
+  "ruflo_release": "v3.37.0",
+  "ruflo_sha": "6ce18b5a7fcd4939a2f72c2e3b8fdbdec660e5a9",
+  "generated": "2026-08-11T22:30:00Z",
+  "evidence_class": "MIXED",
+  "caused_by": [
+    "AUD-RUFLO-20260811-221322/01-audit-charter.md"
+  ],
+  "disclaimer": "technical observations, not legal advice",
+  "evidence_level_ceiling": {
+    "max_level_assignable_in_this_lane": "PACKAGED",
+    "text": "This lane inspected files at rest only: a read-only git clone, two extracted published npm tarballs, and read-only npm registry metadata queries. Nothing was installed, executed, or initialized. Every conclusion below is therefore at most PACKAGED (present in the published tarball). This lane CANNOT and DOES NOT establish REACHABLE, EFFECTIVE, DURABLE, or GOVERNABLE for any license, attribution, or dependency claim. In particular, whether an optionalDependency or a transitive native binary is actually fetched and materialized on a given platform is an installation-time behavior that only an execution lane can determine."
+  },
+  "host_repo_license": "Apache-2.0",
+  "host_repo_license_evidence": {
+    "label": "VERIFIED",
+    "license_file": "/tmp/aud-ruflo-20260811/tailered-ai-audit/LICENSE",
+    "line_count": 175,
+    "spdx_identity": "Apache-2.0",
+    "identity_markers_matched": [
+      "LICENSE:1 'Apache License'",
+      "LICENSE:2 'Version 2.0, January 2004'",
+      "LICENSE:3 'http://www.apache.org/licenses/'"
+    ],
+    "manifest_declaration": {
+      "file": "/tmp/aud-ruflo-20260811/tailered-ai-audit/package.json",
+      "name": "@tailered-ai/core",
+      "version": "0.1.0",
+      "license": "Apache-2.0"
+    },
+    "observations": [
+      "VERIFIED: The file terminates at 'END OF TERMS AND CONDITIONS' (LICENSE:175). It omits the optional 'APPENDIX: How to apply the Apache License to your work' boilerplate. This is a common and unobjectionable truncation.",
+      "VERIFIED: The file contains no copyright-holder attribution line. A grep for 'Copyright' matched only LICENSE:65, which is the body text of section 2 ('Grant of Copyright License'), not an attribution. Apache-2.0 does not require the holder line to appear in the LICENSE file itself, but its absence means the host repository currently states no copyright owner anywhere in its license text.",
+      "VERIFIED: The host repository has no NOTICE file. Verified by glob for '/tmp/aud-ruflo-20260811/tailered-ai-audit/NOTICE*', which matched nothing. This is presently correct because the repository does not yet redistribute third-party Apache-2.0 work, but see attribution_obligations if Ruflo is vendored."
+    ]
+  },
+  "ruflo_license": {
+    "label": "VERIFIED",
+    "spdx": "MIT",
+    "license_file": "/tmp/aud-ruflo-20260811/upstream/ruflo-v3.37.0/LICENSE",
+    "file_bytes": 1068,
+    "copyright_holder": "ruvnet",
+    "copyright_line": "Copyright (c) 2024-2026 ruvnet",
+    "copyright_line_location": "LICENSE:3",
+    "text_identity": "Standard unmodified MIT License text. Contains the MIT notice-retention condition verbatim at LICENSE:11-12: 'The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.'",
+    "npm_registry_declaration": {
+      "ruflo@3.37.0": "MIT",
+      "@claude-flow/cli@3.37.0": "MIT",
+      "source": "npm view <pkg>@3.37.0 license --json (read-only registry query)"
+    },
+    "readme_declaration": {
+      "file": "/tmp/aud-ruflo-20260811/upstream/ruflo-v3.37.0/README.md",
+      "line": 415,
+      "text": "## License\n\nMIT - [RuvNet](https://github.com/ruvnet)"
+    },
+    "critical_qualifier": "VERIFIED: The repository-root MIT grant is genuine and covers ruvnet's own authorship. It does NOT and cannot cover the Apache-2.0 third-party subtree described in bundled_code[0], which ruvnet did not author. See RUF-301."
+  },
+  "license_file_census": {
+    "label": "VERIFIED",
+    "method": "find over the git clone and both extracted tarballs for LICENSE*/NOTICE*/COPYING*/*licen* (case-insensitive), excluding .git and node_modules for the repo scan.",
+    "repo_license_files_total": 2,
+    "repo_license_files": [
+      {
+        "path": "/tmp/aud-ruflo-20260811/upstream/ruflo-v3.37.0/LICENSE",
+        "license": "MIT",
+        "holder": "ruvnet"
+      },
+      {
+        "path": "/tmp/aud-ruflo-20260811/upstream/ruflo-v3.37.0/ruflo/src/ruvocal/LICENSE",
+        "license": "Apache-2.0",
+        "holder": "The Hugging Face team",
+        "bytes": 11417,
+        "first_line": "Copyright 2018- The Hugging Face team. All rights reserved."
+      }
+    ],
+    "repo_notice_files_total": 0,
+    "ruflo_tarball_license_files_total": 1,
+    "ruflo_tarball_license_files": [
+      "/tmp/aud-ruflo-20260811/work/extract/ruflo/package/src/ruvocal/LICENSE (Apache-2.0, Hugging Face)"
+    ],
+    "ruflo_tarball_top_level_LICENSE_present": false,
+    "cli_tarball_license_files_total": 0,
+    "cli_tarball_top_level_LICENSE_present": false,
+    "notice_files_in_either_tarball": 0
+  },
+  "tarball_composition": {
+    "label": "VERIFIED",
+    "method": "Independent count via `find <package> -type f | wc -l` on the extracted tarballs. Cross-checked against npm registry dist.fileCount.",
+    "ruflo": {
+      "files_counted": 526,
+      "symlinks": 0,
+      "charter_stated": 526,
+      "agrees_with_charter": true,
+      "top_level_distribution": {
+        "src/ruvocal": 499,
+        "src/nginx": 8,
+        "src/mcp-bridge": 7,
+        "src/scripts": 4,
+        "src/chat-ui": 4,
+        "src/config": 1,
+        "bin": 1,
+        "(root) package.json": 1,
+        "(root) README.md": 1
+      },
+      "apache2_subtree_share": "499/526 = 94.87% of all files in the published ruflo package are the Apache-2.0-derived Hugging Face chat-ui fork.",
+      "declared_files_field_that_ships_nothing": [
+        "\"LICENSE\" \u2014 declared at package.json files[4]; no LICENSE exists in the ruflo/ package directory in the repo, so npm packed nothing for this entry and the published tarball has no top-level LICENSE.",
+        "\"dist/**\" \u2014 declared at package.json files[2]; no dist/ directory exists in the published tarball."
+      ]
+    },
+    "cli": {
+      "files_counted": 1507,
+      "symlinks": 0,
+      "charter_stated": 1507,
+      "registry_dist_fileCount": 1507,
+      "agrees_with_charter": true,
+      "registry_dist_unpackedSize_bytes": 12325611,
+      "registry_dist_shasum": "559be6ba258c5bbc9c5e219bc6a50968aab82900",
+      "registry_dist_integrity": "sha512-AdpAehqNVodqrB1oy4ljvlu6FBZTe3T6+KorgP2dsnaqn1KfJdHUaZoYYU4WtRxbpHzVDL+m04hTe/m3Cs6TOQ==",
+      "top_level_distribution": {
+        "dist/src": 730,
+        "node_modules/@claude-flow": 372,
+        ".claude/commands": 167,
+        ".claude/agents": 91,
+        "plugins/ruflo-metaharness": 50,
+        ".claude/helpers": 43,
+        ".claude/skills": 37,
+        ".claude/evolve-proof": 3,
+        "other .claude single files": 7,
+        "scripts/postinstall.cjs": 1,
+        "bin": 3,
+        "(root) package.json / catalog-manifest.json / README.md": 3
+      }
+    }
+  },
+  "dependency_count_reconciliation": {
+    "label": "VERIFIED",
+    "charter_frozen_fact_stated": "@claude-flow/cli has 24 dependencies and 12 optionalDependencies",
+    "independently_counted": {
+      "dependencies": 21,
+      "optionalDependencies": 11,
+      "peerDependencies": 2,
+      "devDependencies": 2,
+      "bundleDependencies": 3
+    },
+    "three_independent_sources_all_agree": [
+      {
+        "source": "repo package.json",
+        "path": "/tmp/aud-ruflo-20260811/upstream/ruflo-v3.37.0/v3/@claude-flow/cli/package.json",
+        "dependencies": 21,
+        "optionalDependencies": 11
+      },
+      {
+        "source": "published tarball package.json",
+        "path": "/tmp/aud-ruflo-20260811/work/extract/cli/package/package.json",
+        "dependencies": 21,
+        "optionalDependencies": 11
+      },
+      {
+        "source": "npm registry metadata",
+        "command": "npm view @claude-flow/cli@3.37.0 --json",
+        "dependencies": 21,
+        "optionalDependencies": 11
+      }
+    ],
+    "conflict_resolution": "CONFLICT REPORTED per audit rule 7. The charter's 24/12 could not be reproduced from any of the three sources. The verifiable number is 21 dependencies and 11 optionalDependencies. Note that 21 dependencies + 2 peerDependencies = 23, and 21 + 2 devDependencies = 23; neither reaches 24, so the charter figure is not explained by a peer/dev roll-up either. The coordinator should treat 21/11 as the counted value and correct the frozen fact.",
+    "which_one_i_could_verify": "21 dependencies / 11 optionalDependencies \u2014 verified directly from file contents and registry metadata."
+  },
+  "package_licenses": [
+    {
+      "name": "ruflo",
+      "version": "3.37.0",
+      "license": "MIT",
+      "source": "registry",
+      "note": "npm view ruflo@3.37.0 license --json"
+    },
+    {
+      "name": "ruflo",
+      "version": "3.37.0",
+      "license": "MIT",
+      "source": "package.json",
+      "note": "/tmp/aud-ruflo-20260811/work/extract/ruflo/package/package.json (published tarball)"
+    },
+    {
+      "name": "@claude-flow/cli",
+      "version": "3.37.0",
+      "license": "MIT",
+      "source": "registry",
+      "note": "npm view @claude-flow/cli@3.37.0 license --json"
+    },
+    {
+      "name": "@claude-flow/cli",
+      "version": "3.37.0",
+      "license": "MIT",
+      "source": "package.json",
+      "note": "/tmp/aud-ruflo-20260811/work/extract/cli/package/package.json (published tarball)"
+    },
+    {
+      "name": "@claude-flow/cli-core",
+      "version": "3.7.0-alpha.5",
+      "license": "MIT",
+      "source": "registry",
+      "class": "dependency"
+    },
+    {
+      "name": "@claude-flow/codex",
+      "version": "3.0.3",
+      "license": "UNRESOLVED_E404_IN_REGISTRY",
+      "source": "registry",
+      "class": "dependency+bundled",
+      "note": "Registry returns E404 'No match found for version 3.0.3'. License read from the BUNDLED copy instead: node_modules/@claude-flow/codex/package.json declares MIT, author 'rUv', repository git+https://github.com/ruvnet/ruflo.git directory v3/@claude-flow/codex."
+    },
+    {
+      "name": "@claude-flow/codex",
+      "version": "3.0.3",
+      "license": "MIT",
+      "source": "package.json",
+      "class": "bundled",
+      "note": "/tmp/aud-ruflo-20260811/work/extract/cli/package/node_modules/@claude-flow/codex/package.json"
+    },
+    {
+      "name": "@claude-flow/mcp",
+      "version": "3.0.0-alpha.8",
+      "license": "LICENSE_FIELD_ABSENT",
+      "source": "registry",
+      "class": "dependency",
+      "note": "Package is published; `npm view` returned name and version but no license field."
+    },
+    {
+      "name": "@claude-flow/neural",
+      "version": "3.0.0-alpha.9",
+      "license": "MIT",
+      "source": "registry",
+      "class": "dependency"
+    },
+    {
+      "name": "@claude-flow/plugin-agent-federation",
+      "version": "1.0.0-alpha.18",
+      "license": "UNRESOLVED_E404_IN_REGISTRY",
+      "source": "registry",
+      "class": "dependency+bundled",
+      "note": "Registry returns E404. License read from the BUNDLED copy instead."
+    },
+    {
+      "name": "@claude-flow/plugin-agent-federation",
+      "version": "1.0.0-alpha.18",
+      "license": "MIT",
+      "source": "package.json",
+      "class": "bundled",
+      "note": "/tmp/aud-ruflo-20260811/work/extract/cli/package/node_modules/@claude-flow/plugin-agent-federation/package.json, author 'Claude Flow Team'"
+    },
+    {
+      "name": "@claude-flow/security",
+      "version": "3.0.0-alpha.14",
+      "license": "UNRESOLVED_E404_IN_REGISTRY",
+      "source": "registry",
+      "class": "dependency+bundled",
+      "note": "Registry returns E404 AND the bundled copy declares no license field. See RUF-307."
+    },
+    {
+      "name": "@claude-flow/security",
+      "version": "3.0.0-alpha.14",
+      "license": "LICENSE_FIELD_ABSENT",
+      "source": "package.json",
+      "class": "bundled",
+      "note": "/tmp/aud-ruflo-20260811/work/extract/cli/package/node_modules/@claude-flow/security/package.json has no license key. README.md:5 carries an MIT shields.io badge and README.md:290-292 states '## License / MIT', but neither is machine-readable."
+    },
+    {
+      "name": "@claude-flow/shared",
+      "version": "3.0.0-alpha.7",
+      "license": "LICENSE_FIELD_ABSENT",
+      "source": "registry",
+      "class": "dependency",
+      "note": "Published; `npm view` returned no license field."
+    },
+    {
+      "name": "@iarna/toml",
+      "version": "2.2.5",
+      "license": "ISC",
+      "source": "registry",
+      "class": "dependency"
+    },
+    {
+      "name": "@noble/ed25519",
+      "version": "2.3.0",
+      "license": "MIT",
+      "source": "registry",
+      "class": "dependency"
+    },
+    {
+      "name": "@ruvector/rabitq-wasm",
+      "version": "0.1.0",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry",
+      "class": "dependency",
+      "note": "Dual-licensed; WASM artifact."
+    },
+    {
+      "name": "bcryptjs",
+      "version": "3.0.3",
+      "license": "BSD-3-Clause",
+      "source": "registry",
+      "class": "dependency"
+    },
+    {
+      "name": "chalk",
+      "version": "5.6.2",
+      "license": "MIT",
+      "source": "registry",
+      "class": "dependency",
+      "note": "Range ^5.3.0; all 6 matching versions 5.3.0-5.6.2 are MIT."
+    },
+    {
+      "name": "commander",
+      "version": "12.1.0",
+      "license": "MIT",
+      "source": "registry",
+      "class": "dependency",
+      "note": "Range ^12.0.0; both matching versions MIT."
+    },
+    {
+      "name": "fs-extra",
+      "version": "11.4.0",
+      "license": "MIT",
+      "source": "registry",
+      "class": "dependency",
+      "note": "Range ^11.2.0; all 9 matching versions MIT."
+    },
+    {
+      "name": "inquirer",
+      "version": "9.3.8",
+      "license": "MIT",
+      "source": "registry",
+      "class": "dependency",
+      "note": "Range ^9.2.0; all 33 matching versions MIT."
+    },
+    {
+      "name": "semver",
+      "version": "7.7.3",
+      "license": "ISC",
+      "source": "registry",
+      "class": "dependency",
+      "note": "Exact pin."
+    },
+    {
+      "name": "sql.js",
+      "version": "1.14.1",
+      "license": "MIT",
+      "source": "registry",
+      "class": "dependency",
+      "note": "Range ^1.13.0; all 3 matching versions MIT. Wraps SQLite (public domain) compiled to WASM."
+    },
+    {
+      "name": "toml",
+      "version": "3.0.0",
+      "license": "MIT",
+      "source": "registry",
+      "class": "dependency"
+    },
+    {
+      "name": "ws",
+      "version": "8.21.3",
+      "license": "MIT",
+      "source": "registry",
+      "class": "dependency",
+      "note": "Range ^8.21.0; all 4 matching versions MIT."
+    },
+    {
+      "name": "yaml",
+      "version": "2.9.0",
+      "license": "ISC",
+      "source": "registry",
+      "class": "dependency",
+      "note": "Range ^2.8.0; all 6 matching versions ISC."
+    },
+    {
+      "name": "zod",
+      "version": "3.25.76",
+      "license": "MIT",
+      "source": "registry",
+      "class": "dependency",
+      "note": "Range ^3.22.0; all 94 matching versions MIT."
+    },
+    {
+      "name": "@agntcy/slim-bindings",
+      "version": "2.0.0-alpha.5",
+      "license": "Apache-2.0",
+      "source": "registry",
+      "class": "optionalDependency",
+      "note": "The only Apache-2.0 direct dependency of @claude-flow/cli. Native bindings."
+    },
+    {
+      "name": "@napi-rs/keyring",
+      "version": "1.3.0",
+      "license": "MIT",
+      "source": "registry",
+      "class": "optionalDependency",
+      "note": "Native N-API module; OS keychain access."
+    },
+    {
+      "name": "@claude-flow/memory",
+      "version": "3.0.0-alpha.22",
+      "license": "LICENSE_FIELD_ABSENT",
+      "source": "registry",
+      "class": "optionalDependency"
+    },
+    {
+      "name": "@metaharness/darwin",
+      "version": "0.9.1",
+      "license": "MIT",
+      "source": "registry",
+      "class": "optionalDependency",
+      "note": "Range ~0.9.0; 2 matching versions."
+    },
+    {
+      "name": "@metaharness/flywheel",
+      "version": "0.1.10",
+      "license": "MIT",
+      "source": "registry",
+      "class": "optionalDependency"
+    },
+    {
+      "name": "@metaharness/radio",
+      "version": "0.1.0",
+      "license": "MIT",
+      "source": "registry",
+      "class": "optionalDependency"
+    },
+    {
+      "name": "@metaharness/turn-credit",
+      "version": "0.1.0",
+      "license": "MIT",
+      "source": "registry",
+      "class": "optionalDependency"
+    },
+    {
+      "name": "agentdb",
+      "version": "3.0.0-alpha.20",
+      "license": "MIT",
+      "source": "registry",
+      "class": "optionalDependency",
+      "note": "Range ^3.0.0-alpha.17; 4 matching versions."
+    },
+    {
+      "name": "agentic-flow",
+      "version": "3.0.0-alpha.2",
+      "license": "MIT",
+      "source": "registry",
+      "class": "optionalDependency",
+      "note": "Range ^3.0.0-alpha.1; 2 matching versions."
+    },
+    {
+      "name": "better-sqlite3",
+      "version": "12.11.1",
+      "license": "MIT",
+      "source": "registry",
+      "class": "optionalDependency",
+      "note": "Range ^12.9.0; 4 matching versions. Native module; bundles SQLite, which is public domain."
+    },
+    {
+      "name": "ruvector",
+      "version": "0.2.41",
+      "license": "MIT",
+      "source": "registry",
+      "class": "optionalDependency",
+      "note": "Range ^0.2.27; 15 matching versions."
+    },
+    {
+      "name": "@metaharness/router",
+      "version": "0.4.0",
+      "license": "MIT",
+      "source": "registry",
+      "class": "peerDependency (optional)"
+    },
+    {
+      "name": "metaharness",
+      "version": "0.4.5",
+      "license": "MIT",
+      "source": "registry",
+      "class": "peerDependency (optional)",
+      "note": "Range ^0.4.1; 5 matching versions."
+    },
+    {
+      "name": "typescript",
+      "version": "^5.3.0",
+      "license": "Apache-2.0",
+      "source": "registry",
+      "class": "devDependency",
+      "note": "INFERRED from the root lockfile tally, not queried individually in this lane."
+    },
+    {
+      "name": "vitest",
+      "version": "^4.1.0",
+      "license": "MIT",
+      "source": "registry",
+      "class": "devDependency",
+      "note": "INFERRED from the root lockfile tally, not queried individually in this lane."
+    },
+    {
+      "name": "@ruvector/rvf-wasm",
+      "version": "0.1.5",
+      "license": "MIT",
+      "source": "registry",
+      "class": "ruflo overrides[] pin"
+    },
+    {
+      "name": "@ruvector/ruvllm",
+      "version": "2.6.2",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry",
+      "class": "ruflo overrides[] pin"
+    },
+    {
+      "name": "chat-ui (vendored as ruvocal)",
+      "version": "0.20.0",
+      "license": "Apache-2.0",
+      "source": "file",
+      "class": "vendored third-party",
+      "note": "License read from /tmp/aud-ruflo-20260811/work/extract/ruflo/package/src/ruvocal/LICENSE, first line 'Copyright 2018- The Hugging Face team. All rights reserved.'. The package.json in that directory declares name 'chat-ui' version '0.20.0' and has NO license field."
+    }
+  ],
+  "monorepo_package_json_census": {
+    "label": "VERIFIED",
+    "method": "find . -name package.json -not -path '*/node_modules/*' -not -path './.git/*' over the git clone, parsed with JSON.parse",
+    "total_package_json_files": 50,
+    "declaring_a_license": 33,
+    "all_declared_values_observed": [
+      "MIT"
+    ],
+    "omitting_the_license_field": 17,
+    "packages_omitting_license": [
+      {
+        "path": "ruflo/src/mcp-bridge/package.json",
+        "name": "mcp-bridge",
+        "version": "1.0.0"
+      },
+      {
+        "path": "ruflo/src/ruvocal/mcp-bridge/package.json",
+        "name": "mcp-bridge",
+        "version": "1.0.0"
+      },
+      {
+        "path": "ruflo/src/ruvocal/package.json",
+        "name": "chat-ui",
+        "version": "0.20.0",
+        "note": "This is the Apache-2.0 Hugging Face fork. See RUF-301."
+      },
+      {
+        "path": "ruflo/src/ruvocal/stub/@reflink/reflink/package.json",
+        "name": "@reflink/reflink",
+        "version": "0.0.0"
+      },
+      {
+        "path": "v3/@claude-flow/cli/cloud-functions/publish-registry/package.json",
+        "name": "publish-registry",
+        "version": "1.0.0"
+      },
+      {
+        "path": "v3/@claude-flow/deployment/package.json",
+        "name": "@claude-flow/deployment",
+        "version": "3.0.0-alpha.7"
+      },
+      {
+        "path": "v3/@claude-flow/guidance/wasm-pkg/package.json",
+        "name": "guidance-kernel",
+        "version": "0.1.0"
+      },
+      {
+        "path": "v3/@claude-flow/integration/package.json",
+        "name": "@claude-flow/integration",
+        "version": "3.0.0"
+      },
+      {
+        "path": "v3/@claude-flow/mcp/package.json",
+        "name": "@claude-flow/mcp",
+        "version": "3.0.0-alpha.9"
+      },
+      {
+        "path": "v3/@claude-flow/memory/package.json",
+        "name": "@claude-flow/memory",
+        "version": "3.0.0-alpha.22"
+      },
+      {
+        "path": "v3/@claude-flow/performance/package.json",
+        "name": "@claude-flow/performance",
+        "version": "3.0.0-alpha.6"
+      },
+      {
+        "path": "v3/@claude-flow/security/package.json",
+        "name": "@claude-flow/security",
+        "version": "3.0.0-alpha.14",
+        "note": "Bundled and redistributed inside the cli tarball. See RUF-307."
+      },
+      {
+        "path": "v3/@claude-flow/shared/package.json",
+        "name": "@claude-flow/shared",
+        "version": "3.0.0-alpha.8"
+      },
+      {
+        "path": "v3/@claude-flow/swarm/package.json",
+        "name": "@claude-flow/swarm",
+        "version": "3.0.0-alpha.7"
+      },
+      {
+        "path": "v3/@claude-flow/testing/package.json",
+        "name": "@claude-flow/testing",
+        "version": "3.0.0-alpha.6"
+      },
+      {
+        "path": "v3/goal_ui/package.json",
+        "name": "@ruflo/research",
+        "version": "0.1.0"
+      },
+      {
+        "path": "v3/package.json",
+        "name": "@claude-flow/v3-monorepo",
+        "version": "3.0.0-alpha.1"
+      }
+    ],
+    "note": "VERIFIED: A package.json with no license field is treated as unlicensed / all-rights-reserved by most automated license scanners and SCA tooling, regardless of any prose claim in a README. 11 of the 17 are @claude-flow/* packages."
+  },
+  "transitive_closure_scan": {
+    "label": "VERIFIED",
+    "source_file": "/tmp/aud-ruflo-20260811/upstream/ruflo-v3.37.0/package-lock.json",
+    "lockfile_version": 3,
+    "lockfile_declares_package_name": "claude-flow",
+    "lockfile_declares_version": "3.35.0",
+    "repo_package_json_version": "3.37.0",
+    "version_drift_observed": true,
+    "drift_note": "VERIFIED: The committed root package-lock.json declares version 3.35.0 while the root package.json at the audited tag declares 3.37.0. The lockfile is therefore stale relative to the tagged release, so the closure below is an approximation of the v3.37.0 tree, not an exact record of it. See RUF-314.",
+    "scope_caveat": "IMPORTANT: This is the ROOT monorepo lockfile (development tree of `claude-flow`). It is NOT the runtime install closure of `ruflo` or `@claude-flow/cli` as a consumer would resolve them. No lockfile ships in either published tarball, and this lane may not run `npm install`, so the true consumer-side closure is UNKNOWN in this lane and must be established by an execution lane.",
+    "total_package_entries": 888,
+    "entries_carrying_a_license_field": 879,
+    "entries_missing_a_license_field": 9,
+    "license_tally": {
+      "MIT": 676,
+      "Apache-2.0": 73,
+      "ISC": 49,
+      "MIT OR Apache-2.0": 16,
+      "BSD-3-Clause": 14,
+      "MPL-2.0": 12,
+      "BlueOak-1.0.0": 11,
+      "BSD-2-Clause": 8,
+      "LGPL-3.0-or-later": 7,
+      "(MIT OR CC0-1.0)": 3,
+      "SEE LICENSE IN README.md": 1,
+      "Apache-2.0 AND LGPL-3.0-or-later": 1,
+      "Python-2.0": 1,
+      "(MIT OR WTFPL)": 1,
+      "SEE LICENSE IN LICENSE.txt": 1,
+      "(Zlib OR MIT OR Apache-2.0)": 1,
+      "(BSD-2-Clause OR MIT OR Apache-2.0)": 1,
+      "0BSD": 1,
+      "http://geraintluff.github.io/tv4/LICENSE.txt": 1
+    },
+    "gpl_or_agpl_found": false,
+    "gpl_agpl_statement": "VERIFIED: Zero GPL-* and zero AGPL-* entries across all 888 lockfile entries. The regex applied was /\\b(GPL|AGPL|LGPL|MPL|EPL|CDDL|EUPL|CPAL|OSL|SSPL|CC-BY-SA|Elastic|BUSL|Commons-Clause|Prosperity|PolyForm)\\b/i and it produced 20 matches, all of which were LGPL-3.0-or-later or MPL-2.0 and are enumerated in copyleft_found. No strong network-copyleft (AGPL) or strong copyleft (GPL) license is present in this closure. This is the single most material negative result in this lane and it is a favorable one."
+  },
+  "unresolved": [
+    {
+      "item": "@claude-flow/codex@3.0.3",
+      "class": "dependency + bundleDependency",
+      "reason": "npm registry returns E404: 'No match found for version 3.0.3'. The pinned version is not publicly retrievable from the registry.",
+      "mitigation_observed": "A copy is bundled inside the published cli tarball at node_modules/@claude-flow/codex (120 files) and that copy declares license MIT.",
+      "label": "VERIFIED"
+    },
+    {
+      "item": "@claude-flow/plugin-agent-federation@1.0.0-alpha.18",
+      "class": "dependency + bundleDependency",
+      "reason": "npm registry returns E404 for the pinned version.",
+      "mitigation_observed": "Bundled copy present (130 files), declares license MIT, author 'Claude Flow Team'.",
+      "label": "VERIFIED"
+    },
+    {
+      "item": "@claude-flow/security@3.0.0-alpha.14",
+      "class": "dependency + bundleDependency",
+      "reason": "npm registry returns E404 for the pinned version AND the bundled copy's package.json declares no license field. Doubly unresolved.",
+      "mitigation_observed": "Bundled copy present (122 files). README.md:5 carries an MIT shields.io badge and README.md:290-292 states MIT, but no machine-readable declaration and no LICENSE file.",
+      "label": "VERIFIED"
+    },
+    {
+      "item": "@claude-flow/mcp@3.0.0-alpha.8",
+      "class": "dependency",
+      "reason": "Published to the registry but the license field is absent from its metadata.",
+      "label": "VERIFIED"
+    },
+    {
+      "item": "@claude-flow/shared@3.0.0-alpha.7",
+      "class": "dependency",
+      "reason": "Published to the registry but the license field is absent from its metadata.",
+      "label": "VERIFIED"
+    },
+    {
+      "item": "@claude-flow/memory@3.0.0-alpha.22",
+      "class": "optionalDependency",
+      "reason": "Published to the registry but the license field is absent from its metadata.",
+      "label": "VERIFIED"
+    },
+    {
+      "item": "Inter font family (9 TTF files, 2,825,268 bytes = 2.69 MB)",
+      "path": "src/ruvocal/src/lib/server/fonts/Inter-{Black,Bold,ExtraBold,ExtraLight,Light,Medium,Regular,SemiBold,Thin}.ttf",
+      "class": "vendored binary asset in the ruflo tarball",
+      "reason": "No font license text accompanies these files. A recursive search of the entire ruflo tarball for 'SIL Open Font', 'Open Font License', and any *OFL* filename matched nothing. An attempt to read the embedded TTF name-table license records via `strings` and `strings -e b` returned no license or copyright records.",
+      "label_for_license_identity": "UNKNOWN",
+      "note": "INFERRED (weak, not observed): Inter is publicly distributed under the SIL Open Font License 1.1, which requires the copyright notice and license to accompany redistribution. This lane could NOT verify that identity from any artifact in evidence, so the license of these specific TTF binaries is recorded as UNKNOWN. What IS verified is that no license text of any kind ships with them."
+    },
+    {
+      "item": "rvagent_wasm_bg.wasm (543,286 bytes) and rvagent_wasm.js (55,085 bytes)",
+      "path": "src/ruvocal/static/wasm/",
+      "class": "vendored WASM binary in the ruflo tarball",
+      "reason": "No license file, no attribution, and no license header accompany the blob. Its source project and license are not stated anywhere in the tarball.",
+      "label": "UNKNOWN"
+    },
+    {
+      "item": "@anthropic-ai/claude-agent-sdk@0.1.76",
+      "class": "devOptional transitive lockfile entry",
+      "reason": "Declares license 'SEE LICENSE IN README.md' \u2014 a non-SPDX pointer, not a license identifier. Resolution requires reading that package's README, which is outside this lane's evidence set.",
+      "label": "VERIFIED (that the string is ambiguous); UNKNOWN (the actual terms)"
+    },
+    {
+      "item": "flatbuffers@1.12.0",
+      "class": "devOptional transitive lockfile entry",
+      "reason": "Declares license 'SEE LICENSE IN LICENSE.txt' \u2014 non-SPDX pointer.",
+      "label": "VERIFIED (ambiguous string); UNKNOWN (actual terms)"
+    },
+    {
+      "item": "uri-templates@0.2.0",
+      "class": "devOptional transitive lockfile entry",
+      "reason": "Declares license as a bare URL, 'http://geraintluff.github.io/tv4/LICENSE.txt'. Not an SPDX identifier and not resolvable without a network fetch outside this lane's evidence set.",
+      "label": "VERIFIED (ambiguous string); UNKNOWN (actual terms)"
+    },
+    {
+      "item": "Consumer-side runtime dependency closure for `ruflo` / `@claude-flow/cli`",
+      "class": "structural gap",
+      "reason": "No lockfile ships in either published tarball and this lane is forbidden from running npm install. The 888-entry closure analyzed here is the upstream development monorepo lockfile, stale at 3.35.0. What a Tailered consumer would actually resolve \u2014 especially which of the 11 optionalDependencies and their native transitive binaries materialize on a given platform \u2014 is UNKNOWN in this lane and requires an execution lane.",
+      "label": "UNKNOWN"
+    },
+    {
+      "item": "Whether upstream huggingface/chat-ui v0.20.0 ships a NOTICE file",
+      "class": "structural gap",
+      "reason": "Apache-2.0 section 4(d) obligations attach only if the upstream Work includes a NOTICE file. The vendored copy in the ruflo tarball contains no NOTICE, but this lane cannot distinguish 'upstream had none' from 'upstream had one and it was dropped during vendoring'. That distinction materially changes the obligation and requires fetching upstream, which is outside this lane.",
+      "label": "UNKNOWN"
+    }
+  ],
+  "copyleft_found": [
+    {
+      "license": "LGPL-3.0-or-later",
+      "severity_class": "weak copyleft",
+      "count": 7,
+      "dev": false,
+      "optional": true,
+      "packages": [
+        "@img/sharp-libvips-darwin-arm64@1.0.4",
+        "@img/sharp-libvips-darwin-x64@1.0.4",
+        "@img/sharp-libvips-linux-arm@1.0.5",
+        "@img/sharp-libvips-linux-arm64@1.0.4",
+        "@img/sharp-libvips-linux-x64@1.0.4",
+        "@img/sharp-libvips-linuxmusl-arm64@1.0.4",
+        "@img/sharp-libvips-linuxmusl-x64@1.0.4"
+      ],
+      "label": "VERIFIED",
+      "note": "These are prebuilt native libvips binaries pulled in by `sharp`, which reaches the tree via the ruvocal/chat-ui fork's dependency on sharp ^0.33.4. Every entry is marked optional:true and dev:false in the lockfile. LGPL is weak copyleft: dynamic linking against an unmodified library does not by itself impose source-disclosure on the calling application, but relinking rights and license/notice delivery obligations do attach to redistribution of the library. This is NOT GPL/AGPL and is NOT a viral risk to Tailered's Apache-2.0 source, but it is the most restrictive license in the closure and should be tracked."
+    },
+    {
+      "license": "Apache-2.0 AND LGPL-3.0-or-later",
+      "severity_class": "weak copyleft (conjunctive)",
+      "count": 1,
+      "dev": false,
+      "optional": true,
+      "packages": [
+        "@img/sharp-win32-x64@0.33.5"
+      ],
+      "label": "VERIFIED",
+      "note": "AND, not OR \u2014 both sets of terms apply simultaneously. Windows-only artifact."
+    },
+    {
+      "license": "MPL-2.0",
+      "severity_class": "weak file-level copyleft",
+      "count": 12,
+      "dev": true,
+      "packages": [
+        "lightningcss@1.32.0",
+        "lightningcss-android-arm64@1.32.0",
+        "lightningcss-darwin-arm64@1.32.0",
+        "lightningcss-darwin-x64@1.32.0",
+        "lightningcss-freebsd-x64@1.32.0",
+        "lightningcss-linux-arm-gnueabihf@1.32.0",
+        "lightningcss-linux-arm64-gnu@1.32.0",
+        "lightningcss-linux-arm64-musl@1.32.0",
+        "lightningcss-linux-x64-gnu@1.32.0",
+        "lightningcss-linux-x64-musl@1.32.0",
+        "lightningcss-win32-arm64-msvc@1.32.0",
+        "lightningcss-win32-x64-msvc@1.32.0"
+      ],
+      "label": "VERIFIED",
+      "note": "All 12 are marked dev:true in the lockfile, i.e. build-time only, not shipped. MPL-2.0 copyleft is per-file and does not extend to code that merely uses the library. Low concern."
+    }
+  ],
+  "gpl_agpl_summary": {
+    "label": "VERIFIED",
+    "gpl_found": 0,
+    "agpl_found": 0,
+    "text": "No GPL and no AGPL license appears anywhere in the 888-entry root lockfile closure, in either published tarball's manifests, or in any of the 50 monorepo package.json files. For a commercial platform this is the favorable outcome and no AGPL/GPL escalation is warranted on the evidence available to this lane. This clearance is bounded by transitive_closure_scan.scope_caveat: it covers the upstream development lockfile (stale at 3.35.0), not the consumer-side install closure, which is UNKNOWN here."
+  },
+  "native_deps": [
+    {
+      "name": "better-sqlite3",
+      "declared_range": "^12.9.0",
+      "resolved_max_satisfying": "12.11.1",
+      "license": "MIT",
+      "source": "registry",
+      "class": "optionalDependency of @claude-flow/cli",
+      "label": "VERIFIED",
+      "note": "Native C++ addon requiring compilation or a prebuilt binary at install time. Embeds SQLite itself, which is dedicated to the public domain and imposes no attribution obligation. Also pinned in ruflo's overrides at exactly '12.9.0' while @claude-flow/cli's own overrides pin '^12.9.0' \u2014 the two override blocks disagree in strictness."
+    },
+    {
+      "name": "@napi-rs/keyring",
+      "declared_version": "1.3.0",
+      "license": "MIT",
+      "source": "registry",
+      "class": "optionalDependency of @claude-flow/cli",
+      "label": "VERIFIED",
+      "note": "Native N-API Rust binding providing OS credential-store access. Exact pin. License is clean; the security implications of a keychain-touching optional native module are out of scope for this lane and belong to the security lane."
+    },
+    {
+      "name": "@ruvector/rabitq-wasm",
+      "declared_version": "0.1.0",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry",
+      "class": "dependency of @claude-flow/cli",
+      "label": "VERIFIED",
+      "note": "Dual-licensed; a consumer may elect either. Electing Apache-2.0 aligns with Tailered's own license."
+    },
+    {
+      "name": "@ruvector/rvf-wasm",
+      "declared_version": "0.1.5",
+      "license": "MIT",
+      "source": "registry",
+      "class": "ruflo overrides[] pin",
+      "label": "VERIFIED"
+    },
+    {
+      "name": "@ruvector/ruvllm",
+      "declared_range": ">=2.6.0",
+      "resolved": "2.6.2",
+      "license": "MIT OR Apache-2.0",
+      "source": "registry",
+      "class": "ruflo overrides[] pin",
+      "label": "VERIFIED",
+      "note": "Unbounded lower-pin override ('>=2.6.0'), so the resolved version drifts forward indefinitely."
+    },
+    {
+      "name": "ruvector",
+      "declared_range": "^0.2.27",
+      "resolved_max_satisfying": "0.2.41",
+      "license": "MIT",
+      "source": "registry",
+      "class": "optionalDependency of @claude-flow/cli",
+      "label": "VERIFIED",
+      "note": "15 versions satisfy the declared range."
+    },
+    {
+      "name": "agentdb",
+      "declared_range": "^3.0.0-alpha.17",
+      "resolved_max_satisfying": "3.0.0-alpha.20",
+      "license": "MIT",
+      "source": "registry",
+      "class": "optionalDependency of @claude-flow/cli",
+      "label": "VERIFIED"
+    },
+    {
+      "name": "@agntcy/slim-bindings",
+      "declared_version": "2.0.0-alpha.5",
+      "license": "Apache-2.0",
+      "source": "registry",
+      "class": "optionalDependency of @claude-flow/cli",
+      "label": "VERIFIED",
+      "note": "The only Apache-2.0-licensed direct dependency of @claude-flow/cli. Native bindings. Apache-2.0 attribution obligations attach to redistribution of this component."
+    },
+    {
+      "name": "@img/sharp-libvips-* (7 platform binaries) and @img/sharp-win32-x64",
+      "license": "LGPL-3.0-or-later (7) and 'Apache-2.0 AND LGPL-3.0-or-later' (1)",
+      "source": "package-lock.json",
+      "class": "transitive, optional:true, dev:false",
+      "label": "VERIFIED",
+      "note": "The most restrictively licensed native artifacts in the closure. Reached via the ruvocal/chat-ui fork's `sharp ^0.33.4` dependency. See copyleft_found."
+    },
+    {
+      "name": "sql.js",
+      "declared_range": "^1.13.0",
+      "resolved_max_satisfying": "1.14.1",
+      "license": "MIT",
+      "source": "registry",
+      "class": "dependency of @claude-flow/cli",
+      "label": "VERIFIED",
+      "note": "SQLite compiled to WebAssembly. Pure-WASM rather than a native addon; listed here for completeness of the compiled-artifact inventory."
+    },
+    {
+      "name": "rvagent_wasm_bg.wasm",
+      "path": "ruflo tarball: src/ruvocal/static/wasm/rvagent_wasm_bg.wasm",
+      "bytes": 543286,
+      "license": "UNKNOWN",
+      "source": "file",
+      "class": "vendored WASM binary shipped in the published ruflo tarball",
+      "label": "VERIFIED (that it ships with no license); UNKNOWN (its terms)",
+      "note": "The only .wasm/.node/.so/.dylib/.dll binary found in either published tarball. No accompanying license, NOTICE, or attribution of any kind."
+    }
+  ],
+  "bundled_code": [
+    {
+      "id": "BC-1",
+      "what": "Fork of huggingface/chat-ui v0.20.0, vendored as 'ruvocal'",
+      "where": "ruflo tarball: src/ruvocal/ (499 of 526 files = 94.87% of the package)",
+      "repo_path": "/tmp/aud-ruflo-20260811/upstream/ruflo-v3.37.0/ruflo/src/ruvocal/",
+      "upstream_license": "Apache-2.0",
+      "upstream_copyright": "Copyright 2018- The Hugging Face team. All rights reserved.",
+      "license_file_accompanies_it": true,
+      "license_file_path": "src/ruvocal/LICENSE (11,417 bytes)",
+      "notice_file_accompanies_it": false,
+      "modification_notices_present": false,
+      "label": "VERIFIED",
+      "evidence": [
+        "src/ruvocal/LICENSE:1 \u2014 'Copyright 2018- The Hugging Face team. All rights reserved.' followed by the full Apache License 2.0 text.",
+        "src/ruvocal/package.json:2-3 \u2014 declares name 'chat-ui', version '0.20.0', and has NO license field.",
+        "src/ruvocal/README.md:10 \u2014 'It started as a fork of the [HuggingFace chat-ui](https://github.com/huggingface/chat-ui) v0.20.0'.",
+        "src/ruvocal/README.md:160 \u2014 '\ud83c\udf74 Upstream \u2014 huggingface/chat-ui (RuVocal is forked from v0.20.0)'.",
+        "src/ruvocal/README.md:162-164 \u2014 '## License' / 'MIT \u2014 same as the parent RuFlo project.' This directly contradicts the Apache-2.0 LICENSE file sitting in the same directory.",
+        "src/ruvocal/docs/adr/ADR-038-RUVOCAL-FORK.md:1 \u2014 'ADR-038: RuVocal \u2014 HF Chat UI Fork with Self-Contained RVF Document Store', status 'Implemented'.",
+        "src/ruvocal/docs/adr/ADR-029-HUGGINGFACE-CHAT-UI-CLOUD-RUN.md:51 \u2014 acknowledges upstream as '(Apache 2.0, 10,400+ GitHub stars)'.",
+        "Change-notice scan: grep -rl for 'Copyright.*Hugging Face' across src/ruvocal matched ONLY the LICENSE file \u2014 0 of 358 files under src/ruvocal/src carry an upstream copyright header. grep -ril for 'modified from upstream|changes from upstream|modified by ruv|derived from chat-ui' matched 0 files.",
+        "Spot-check of 8 forked source files (src/app.d.ts, src/ambient.d.ts, src/hooks.server.ts, src/hooks.ts, src/lib/buildPrompt.ts, src/lib/createShareLink.ts, src/lib/switchTheme.ts, src/lib/APIClient.ts) \u2014 none carries a copyright header or a statement of modification."
+      ]
+    },
+    {
+      "id": "BC-2",
+      "what": "HuggingChat brand assets, shipped verbatim",
+      "where": "ruflo tarball: src/ruvocal/static/huggingchat/ (24 files)",
+      "contents": "logo.svg, fulltext-logo.svg, icon.svg, favicon.svg, favicon-dark.svg, favicon-dev.svg, favicon.ico, apple-touch-icon.png, icon-{36,48,72,96,128,144,192,256,512}x*.png, thumbnail.png, tools-thumbnail.png (439,594 B), assistants-thumbnail.png (211,156 B), omni-welcome.gif (241,898 B), castle-example.jpg, manifest.json, routes.chat.json",
+      "label": "VERIFIED",
+      "evidence": [
+        "src/ruvocal/static/huggingchat/manifest.json declares \"name\": \"HuggingChat\" and \"short_name\": \"HuggingChat\", with icon paths rooted at /chat/huggingchat/.",
+        "Directory listing confirms the full HuggingChat icon and logo set ships in the published npm tarball."
+      ],
+      "note": "Apache-2.0 section 6 expressly does NOT grant trademark rights: 'This License does not grant permission to use the trade names, trademarks, service marks, or product names of the Licensor.' Redistributing the HuggingChat name and logo set is a trademark question independent of the Apache-2.0 copyright grant."
+    },
+    {
+      "id": "BC-3",
+      "what": "Inter font family, 9 TTF binaries (2,825,268 bytes = 2.69 MB total)",
+      "where": "ruflo tarball: src/ruvocal/src/lib/server/fonts/",
+      "license_file_accompanies_it": false,
+      "label": "VERIFIED (no license ships); UNKNOWN (font terms)",
+      "note": "See unresolved[] for the full basis. No OFL or any other font license text exists anywhere in the tarball or the repository, and the TTF name-table license records were not readable via strings."
+    },
+    {
+      "id": "BC-4",
+      "what": "rvagent WASM module",
+      "where": "ruflo tarball: src/ruvocal/static/wasm/rvagent_wasm_bg.wasm (543,286 B) + rvagent_wasm.js (55,085 B)",
+      "license_file_accompanies_it": false,
+      "label": "VERIFIED (no license ships); UNKNOWN (terms)"
+    },
+    {
+      "id": "BC-5",
+      "what": "Second chat-ui asset copy",
+      "where": "ruflo tarball: src/chat-ui/ (4 files: Dockerfile, patch-mcp-url-safety.sh, static/chatui/omni-welcome.gif at 1,300,183 B)",
+      "label": "VERIFIED",
+      "note": "A separate, smaller chat-ui-derived directory alongside src/ruvocal. Its 1.3 MB omni-welcome.gif is the single largest file in the ruflo tarball. No license file accompanies it."
+    },
+    {
+      "id": "BC-6",
+      "what": "Three bundleDependencies vendored into the @claude-flow/cli tarball",
+      "where": "cli tarball: node_modules/@claude-flow/ (372 files, 2.6 MB)",
+      "breakdown": {
+        "@claude-flow/security@3.0.0-alpha.14": {
+          "files": 122,
+          "license_field": "ABSENT"
+        },
+        "@claude-flow/plugin-agent-federation@1.0.0-alpha.18": {
+          "files": 130,
+          "license_field": "MIT"
+        },
+        "@claude-flow/codex@3.0.3": {
+          "files": 120,
+          "license_field": "MIT"
+        }
+      },
+      "license_file_accompanies_them": false,
+      "label": "VERIFIED",
+      "note": "Declared at cli package.json bundleDependencies. None of the three ships a LICENSE file. A grep for '@license' or 'Copyright (c)' across the entire bundled node_modules tree matched 0 files. All three return E404 from the npm registry at these exact pinned versions, so the bundle is their only published provenance."
+    },
+    {
+      "id": "BC-7",
+      "what": "Agent, command, skill, and helper definition corpus",
+      "where": "cli tarball: .claude/ (348 files: 167 commands, 91 agents, 43 helpers, 37 skills, 3 evolve-proof, 7 config/manifest files)",
+      "label": "VERIFIED",
+      "note": "Shipped inside the published cli tarball via the files[] entry '.claude'. Authorship and provenance of these definitions were not traced in this lane; content-provenance is another lane's scope. No license or attribution files accompany them."
+    },
+    {
+      "id": "BC-8",
+      "what": "ruflo-metaharness plugin",
+      "where": "cli tarball: plugins/ruflo-metaharness/ (50 files)",
+      "label": "VERIFIED",
+      "note": "No license file accompanies it. Its parent @claude-flow/cli declares MIT."
+    },
+    {
+      "id": "BC-9",
+      "what": "Absence of minified or vendored third-party JavaScript in cli dist",
+      "where": "cli tarball: dist/src/ (730 files)",
+      "label": "VERIFIED (negative result)",
+      "note": "A scan for any .js file containing a line longer than 5,000 characters (a minification proxy) matched 0 files, and a grep for '/*!', '@license', or 'Copyright (c)' headers across dist/ matched 0 files. The dist tree appears to be plain tsc output of first-party TypeScript with no vendored third-party bundles. The three largest files are dist/src/commands/neural.js (253,073 B), dist/src/mcp-tools/hooks-tools.js (237,865 B), and dist/src/commands/hooks.js (226,092 B), all unminified."
+    }
+  ],
+  "attribution_obligations": [
+    {
+      "id": "AO-1",
+      "trigger": "MIT (Ruflo's own grant) \u2014 applies the moment Tailered redistributes any Ruflo code",
+      "obligation": "MIT requires that the copyright notice and the permission notice be included in all copies or substantial portions of the Software (LICENSE:11-12). If Tailered vendors, forks, or otherwise redistributes Ruflo source, it must carry 'Copyright (c) 2024-2026 ruvnet' plus the full MIT text.",
+      "current_state_in_ruflo": "VERIFIED: Neither published tarball ships a LICENSE file at its root, so both `ruflo` and `@claude-flow/cli` as published already fail to carry the notice their own MIT grant requires. A downstream redistributor cannot satisfy MIT by copying the tarball alone; it must fetch the LICENSE from the GitHub repository.",
+      "label": "VERIFIED"
+    },
+    {
+      "id": "AO-2",
+      "trigger": "Apache-2.0 section 4(a) \u2014 redistribution of the Hugging Face chat-ui subtree",
+      "obligation": "Recipients of the Work or Derivative Works must be given a copy of the Apache License.",
+      "current_state_in_ruflo": "SATISFIED for the ruvocal subtree specifically: src/ruvocal/LICENSE ships in the published ruflo tarball and contains the full Apache-2.0 text with the Hugging Face copyright line. Note it does NOT ship for BC-5 (src/chat-ui/), which has no license file.",
+      "label": "VERIFIED"
+    },
+    {
+      "id": "AO-3",
+      "trigger": "Apache-2.0 section 4(b) \u2014 modified files",
+      "obligation": "'You must cause any modified files to carry prominent notices stating that You changed the files.'",
+      "current_state_in_ruflo": "NOT SATISFIED. VERIFIED: 0 of 358 files under src/ruvocal/src carry any statement of modification, and 0 carry an upstream Hugging Face copyright header. The fork is documented as heavily modified (README.md:12-20 and ADR-038 both describe substantial additions and the replacement of MongoDB with an RVF document store), so a large number of these files are modified files within the meaning of 4(b).",
+      "label": "VERIFIED"
+    },
+    {
+      "id": "AO-4",
+      "trigger": "Apache-2.0 section 4(c) \u2014 retention of notices",
+      "obligation": "'You must retain, in the Source form of any Derivative Works that You distribute, all copyright, patent, trademark, and attribution notices from the Source form of the Work.'",
+      "current_state_in_ruflo": "NOT VERIFIABLE AS SATISFIED, and the available evidence points against it. VERIFIED: no file in the vendored tree other than LICENSE itself carries a Hugging Face copyright notice. Whether upstream chat-ui v0.20.0 carried per-file notices that were then stripped, or carried none to begin with, is UNKNOWN in this lane \u2014 resolving it requires fetching upstream.",
+      "label": "MIXED (VERIFIED absence locally; UNKNOWN upstream baseline)"
+    },
+    {
+      "id": "AO-5",
+      "trigger": "Apache-2.0 section 4(d) \u2014 NOTICE file propagation",
+      "obligation": "If the Work includes a NOTICE text file, Derivative Works must include a readable copy of its attribution notices.",
+      "current_state_in_ruflo": "VERIFIED: no NOTICE file exists anywhere \u2014 not in the Ruflo repository, not in the ruflo tarball, not in the cli tarball. Whether this is compliant depends entirely on whether upstream chat-ui v0.20.0 shipped a NOTICE, which is UNKNOWN in this lane. If upstream had one, 4(d) is breached; if it did not, 4(d) never attached.",
+      "label": "MIXED"
+    },
+    {
+      "id": "AO-6",
+      "trigger": "Apache-2.0 \u2014 @agntcy/slim-bindings@2.0.0-alpha.5 (optionalDependency) and the Apache-2.0 half of @img/sharp-win32-x64",
+      "obligation": "Standard Apache-2.0 4(a)-(d) obligations attach to redistribution of these components.",
+      "current_state": "Not applicable unless Tailered redistributes them. Consumption from the registry at install time is not redistribution.",
+      "label": "INFERRED"
+    },
+    {
+      "id": "AO-7",
+      "trigger": "LGPL-3.0-or-later \u2014 @img/sharp-libvips-* prebuilt native binaries",
+      "obligation": "LGPL redistribution carries license-delivery and relinking obligations for the library itself. It does not, on dynamic linking of an unmodified library, impose source-disclosure on the calling application.",
+      "current_state": "These arrive as optional:true transitive artifacts of the chat-ui fork's `sharp` dependency. Whether they are ever actually materialized on a Tailered install is an installation-time question this lane cannot answer.",
+      "label": "INFERRED"
+    },
+    {
+      "id": "AO-8",
+      "trigger": "Font redistribution (BC-3)",
+      "obligation": "Open-source font licenses in common use for Inter require the copyright notice and license to travel with the font binaries.",
+      "current_state_in_ruflo": "VERIFIED: no font license text ships with the 9 TTF files. The specific license identity of these binaries is UNKNOWN in this lane, so the precise obligation cannot be stated.",
+      "label": "MIXED"
+    },
+    {
+      "id": "AO-9",
+      "trigger": "Tailered's own Apache-2.0 obligations if it vendors Ruflo",
+      "obligation": "Tailered AI is Apache-2.0 and currently has no NOTICE file (verified). If Tailered vendors Ruflo source into its own tree, it inherits the full stack above: the MIT notice for ruvnet, the Apache-2.0 4(a)-(d) obligations for the Hugging Face subtree, and the unresolved font and WASM attributions. Establishing a NOTICE file and a third-party attribution manifest would become a prerequisite, and Ruflo's own artifacts do not supply the inputs that manifest needs.",
+      "label": "INFERRED"
+    }
+  ],
+  "trademark_observations": [
+    {
+      "id": "TM-1",
+      "observation": "No trademark, branding, or non-affiliation language exists anywhere in Ruflo's governing documents.",
+      "evidence": "VERIFIED: A case-insensitive grep for 'trademark|\u2122|\u00ae|registered mark|brand guideline|not affiliated|no affiliation|endorsed by' across README.md, SECURITY.md, LICENSE, CONTRIBUTING.md, and package.json at /tmp/aud-ruflo-20260811/upstream/ruflo-v3.37.0/ returned zero matches. There is no disclaimer of affiliation with Anthropic and none with Hugging Face.",
+      "label": "VERIFIED"
+    },
+    {
+      "id": "TM-2",
+      "observation": "The claude-flow to ruflo rename is surface-level. The Anthropic-adjacent naming is still pervasive and is what actually gets installed.",
+      "counts": {
+        "packages_named_@claude-flow/*": 39,
+        "of_50_package_json_files_scanned": 50,
+        "binaries_whose_command_name_contains_claude": 6
+      },
+      "binaries": [
+        "claude-flow -> bin: claude-flow (root package)",
+        "@claude-flow/cli -> bin: claude-flow",
+        "@claude-flow/cli -> bin: claude-flow-mcp",
+        "@claude-flow/cli-core -> bin: claude-flow-core",
+        "@claude-flow/codex -> bin: claude-flow-codex",
+        "@claude-flow/hooks -> bin: claude-flow-hooks"
+      ],
+      "evidence": "VERIFIED: Root package.json declares name 'claude-flow'. The npm package a consumer installs as `ruflo` depends on `@claude-flow/cli`, whose bin map (published tarball package.json) is {cli, claude-flow, claude-flow-mcp}. Installing `ruflo` therefore places executables named `claude-flow` and `claude-flow-mcp` on PATH.",
+      "label": "VERIFIED"
+    },
+    {
+      "id": "TM-3",
+      "observation": "The published `ruflo` package itself carries 'claude', 'claude-code', 'claude-flow', and 'anthropic' as npm keywords.",
+      "evidence": "VERIFIED: /tmp/aud-ruflo-20260811/work/extract/ruflo/package/package.json keywords[] includes 'claude-flow', 'claude', 'claude-code', 'anthropic'. Across the monorepo, 49 keyword entries containing 'claude' or 'anthropic' were counted, spanning packages including @claude-flow/cli, @claude-flow/guidance, @claude-flow/neural, @claude-flow/providers, and @claude-flow/teammate-plugin.",
+      "label": "VERIFIED"
+    },
+    {
+      "id": "TM-4",
+      "observation": "Third-party trademark redistribution: HuggingChat brand assets ship in the published ruflo npm tarball.",
+      "evidence": "VERIFIED: src/ruvocal/static/huggingchat/ contains 24 files including logo.svg, fulltext-logo.svg, the complete favicon and icon-*.png set, and a manifest.json that declares \"name\": \"HuggingChat\". See BC-2.",
+      "note": "Apache-2.0 section 6 grants no trademark rights. The Apache-2.0 license on the chat-ui source does not authorize redistribution of the HuggingChat marks.",
+      "label": "VERIFIED"
+    },
+    {
+      "id": "TM-5",
+      "observation": "The repository presents inconsistent identity across its own metadata.",
+      "evidence": "VERIFIED: The published ruflo package.json sets homepage and bugs.url to https://github.com/ruvnet/claude-flow and repository.url to https://github.com/ruvnet/claude-flow.git, while README and ADR text point at https://github.com/ruvnet/ruflo. The bundled @claude-flow/codex/package.json points at https://github.com/ruvnet/ruflo.git. Two different canonical repository URLs are asserted within the same published artifact set.",
+      "label": "VERIFIED"
+    },
+    {
+      "id": "TM-6",
+      "observation": "SECURITY.md routes vulnerability reports to two different organizational domains and declares a supported-version range that does not include the audited release.",
+      "evidence": "VERIFIED: SECURITY.md instructs reporting to security@cognitum.one, then closes with 'For questions about this policy, contact security@ruv.io.' Its supported-versions table lists '3.5.x \u2014 Yes' and '3.0-3.4 \u2014 No'. The audited release is 3.37.0, which the table does not describe. This is a governance-hygiene observation surfaced by the license review, not a license finding.",
+      "label": "VERIFIED"
+    },
+    {
+      "id": "TM-7",
+      "observation": "TECHNICAL NOTE ON SCOPE: whether any of the above constitutes trademark infringement, nominative fair use, or permissible descriptive use is a legal question this lane does not and cannot answer. What is recorded here is only the observable fact that Anthropic-associated and Hugging Face-associated names and marks appear in package names, binary names, keywords, and redistributed image assets, with no accompanying permission statement or non-affiliation disclaimer.",
+      "label": "VERIFIED (scope statement)"
+    }
+  ],
+  "apache_mit_compatibility": {
+    "label": "VERIFIED",
+    "text": "MIT is a permissive license with no copyleft provision, and its only condition is retention of the copyright and permission notices. It is one-way compatible with Apache-2.0: MIT-licensed code can be incorporated into an Apache-2.0-licensed project provided the MIT notice is preserved, and this is a routine, well-established combination. Tailered AI (Apache-2.0) consuming or incorporating Ruflo (MIT) therefore presents no license-conflict problem at the top level, and no GPL or AGPL license was found anywhere in the 888-entry dependency closure examined (see gpl_agpl_summary). The compatibility risk in this engagement is NOT the Apache-2.0/MIT pairing. It is that Ruflo's declared MIT license does not accurately describe what Ruflo actually distributes: 94.87% of the files in the published `ruflo` npm package are a fork of Apache-2.0-licensed Hugging Face chat-ui, whose own README inside the package declares itself MIT while an Apache-2.0 LICENSE sits in the same directory. Apache-2.0 imposes stricter obligations than MIT (sections 4(b) modification notices, 4(c) notice retention, 4(d) NOTICE propagation), and those obligations travel with that code regardless of the MIT label applied on top. Separately, neither published tarball ships a root LICENSE file at all, so a downstream redistributor working from the tarballs cannot satisfy even the MIT notice condition without going back to GitHub. The practical consequence for Tailered is that Ruflo cannot be treated as a clean single-license MIT input: any vendoring or redistribution requires reconstructing the attribution set by hand, because the upstream artifacts do not supply it. All statements here are technical observations about file contents and license texts, not legal advice."
+  },
+  "findings": [
+    {
+      "id": "RUF-301",
+      "severity": "high",
+      "summary": "The published `ruflo` npm package declares license MIT, but 499 of its 526 files (94.87%) are a fork of Apache-2.0-licensed huggingface/chat-ui v0.20.0 (Copyright 2018- The Hugging Face team). The fork's own README.md:162-164 states '## License / MIT \u2014 same as the parent RuFlo project' while the Apache-2.0 LICENSE file sits in the same directory, and the fork's package.json declares no license field at all. The package-level license declaration materially misdescribes the package contents.",
+      "evidence_level": "PACKAGED",
+      "label": "VERIFIED",
+      "citations": [
+        "work/extract/ruflo/package/package.json (license: MIT, files: bin/**, src/**, dist/**, README.md, LICENSE)",
+        "work/extract/ruflo/package/src/ruvocal/LICENSE:1",
+        "work/extract/ruflo/package/src/ruvocal/README.md:162-164",
+        "work/extract/ruflo/package/src/ruvocal/package.json:2-3",
+        "upstream/ruflo-v3.37.0/ruflo/src/ruvocal/docs/adr/ADR-038-RUVOCAL-FORK.md:1"
+      ]
+    },
+    {
+      "id": "RUF-302",
+      "severity": "high",
+      "summary": "Neither published tarball ships a root LICENSE file. `ruflo`'s package.json files[] array declares 'LICENSE' but no LICENSE exists in the ruflo/ package directory in the repository, so npm packed nothing for that entry; `@claude-flow/cli`'s files[] array does not list LICENSE at all. Both packages therefore fail the MIT notice-retention condition for their own grant, and a downstream redistributor cannot become compliant from the tarballs alone.",
+      "evidence_level": "PACKAGED",
+      "label": "VERIFIED",
+      "citations": [
+        "work/extract/ruflo/package/package.json files[4] = 'LICENSE'",
+        "find over work/extract/ruflo/package matched only src/ruvocal/LICENSE",
+        "find over work/extract/cli/package matched zero license files",
+        "upstream/ruflo-v3.37.0/ruflo/ directory listing contains no LICENSE"
+      ]
+    },
+    {
+      "id": "RUF-303",
+      "severity": "high",
+      "summary": "No NOTICE file exists anywhere in the Ruflo repository or either published tarball, and the vendored Apache-2.0 subtree carries no modification notices: 0 of 358 files under src/ruvocal/src bear a Hugging Face copyright header or any statement that they were changed, despite the fork being documented as substantially modified. This is a direct gap against Apache-2.0 sections 4(b) and 4(c), and potentially 4(d).",
+      "evidence_level": "PACKAGED",
+      "label": "VERIFIED",
+      "citations": [
+        "find for LICENSE*/NOTICE*/COPYING* over the repo returned exactly 2 files, both LICENSE, no NOTICE",
+        "grep -rl 'Copyright.*Hugging Face' over src/ruvocal matched only LICENSE",
+        "grep -ril 'modified from upstream|changes from upstream|modified by ruv|derived from chat-ui' over src/ruvocal matched 0 files",
+        "work/extract/ruflo/package/src/ruvocal/README.md:12-20 (documents substantial modification)"
+      ]
+    },
+    {
+      "id": "RUF-304",
+      "severity": "high",
+      "summary": "All three bundleDependencies of @claude-flow/cli return HTTP 404 from the npm registry at their pinned versions \u2014 @claude-flow/codex@3.0.3, @claude-flow/plugin-agent-federation@1.0.0-alpha.18, @claude-flow/security@3.0.0-alpha.14 \u2014 yet 372 files (2.6 MB) of their code ship inside the published cli tarball. The bundle is their only available provenance, so their contents cannot be independently verified against a registry-published source.",
+      "evidence_level": "PACKAGED",
+      "label": "VERIFIED",
+      "citations": [
+        "npm view @claude-flow/codex@3.0.3 -> E404 'No match found for version 3.0.3'",
+        "npm view @claude-flow/plugin-agent-federation@1.0.0-alpha.18 -> E404",
+        "npm view @claude-flow/security@3.0.0-alpha.14 -> E404",
+        "work/extract/cli/package/package.json bundleDependencies[]",
+        "work/extract/cli/package/node_modules/@claude-flow/ (372 files: security 122, plugin-agent-federation 130, codex 120)"
+      ]
+    },
+    {
+      "id": "RUF-305",
+      "severity": "medium",
+      "summary": "@claude-flow/security@3.0.0-alpha.14 is bundled and redistributed inside the cli tarball (122 files) with NO license field in its package.json and no LICENSE file. Its README carries an MIT shields.io badge (README.md:5) and a '## License / MIT' section (README.md:290-292), but neither is machine-readable, so automated SCA and license scanners will classify a redistributed security-critical component as unlicensed.",
+      "evidence_level": "PACKAGED",
+      "label": "VERIFIED",
+      "citations": [
+        "work/extract/cli/package/node_modules/@claude-flow/security/package.json (no license key)",
+        "work/extract/cli/package/node_modules/@claude-flow/security/README.md:5,290-292",
+        "upstream/ruflo-v3.37.0/v3/@claude-flow/security/package.json (no license key)"
+      ]
+    },
+    {
+      "id": "RUF-306",
+      "severity": "medium",
+      "summary": "HuggingChat trademarked brand assets ship verbatim in the published ruflo npm tarball: 24 files under src/ruvocal/static/huggingchat/ including logo.svg, fulltext-logo.svg, the full favicon and icon set, and a manifest.json declaring \"name\": \"HuggingChat\". Apache-2.0 section 6 expressly grants no trademark rights, so the source license does not authorize redistribution of these marks.",
+      "evidence_level": "PACKAGED",
+      "label": "VERIFIED",
+      "citations": [
+        "work/extract/ruflo/package/src/ruvocal/static/huggingchat/ (24 files)",
+        "work/extract/ruflo/package/src/ruvocal/static/huggingchat/manifest.json (name and short_name = 'HuggingChat')"
+      ]
+    },
+    {
+      "id": "RUF-307",
+      "severity": "medium",
+      "summary": "17 of 50 package.json files in the Ruflo monorepo omit the license field entirely, including 11 @claude-flow/* packages and the vendored chat-ui fork. Every package that does declare a license declares MIT, so the omissions are the entire ambiguity surface.",
+      "evidence_level": "PACKAGED",
+      "label": "VERIFIED",
+      "citations": [
+        "Enumerated in monorepo_package_json_census.packages_omitting_license (17 entries with paths, names, versions)"
+      ]
+    },
+    {
+      "id": "RUF-308",
+      "severity": "medium",
+      "summary": "Nine Inter TTF font binaries (2,825,268 bytes = 2.69 MB) and a 543 KB WASM module (rvagent_wasm_bg.wasm) ship in the published ruflo tarball with no accompanying license text, no attribution, and no stated provenance. A recursive search of the entire tarball for any font or WASM license matched nothing, and the TTF name-table license records were not readable. Their license terms are UNKNOWN.",
+      "evidence_level": "PACKAGED",
+      "label": "VERIFIED (absence of license); UNKNOWN (terms)",
+      "citations": [
+        "work/extract/ruflo/package/src/ruvocal/src/lib/server/fonts/ (9 TTF files)",
+        "work/extract/ruflo/package/src/ruvocal/static/wasm/rvagent_wasm_bg.wasm (543,286 bytes)",
+        "grep -ril 'SIL Open Font|Open Font License' over the ruflo tarball matched 0 files"
+      ]
+    },
+    {
+      "id": "RUF-309",
+      "severity": "medium",
+      "summary": "LGPL-3.0-or-later is present in the non-development dependency closure: 7 @img/sharp-libvips-* prebuilt native binaries plus @img/sharp-win32-x64 under conjunctive 'Apache-2.0 AND LGPL-3.0-or-later'. All are optional:true, dev:false, and reach the tree via the chat-ui fork's sharp ^0.33.4 dependency. This is weak copyleft on a dynamically linked native library, not a viral risk to Tailered's Apache-2.0 source, but it is the most restrictive license in the closure and warrants tracking. No GPL and no AGPL was found anywhere.",
+      "evidence_level": "PACKAGED",
+      "label": "VERIFIED",
+      "citations": [
+        "upstream/ruflo-v3.37.0/package-lock.json \u2014 8 entries enumerated in copyleft_found[0] and copyleft_found[1]"
+      ]
+    },
+    {
+      "id": "RUF-310",
+      "severity": "low",
+      "summary": "Three registry-published @claude-flow/* dependencies expose no license field in their npm metadata: @claude-flow/mcp@3.0.0-alpha.8 and @claude-flow/shared@3.0.0-alpha.7 (both direct dependencies) and @claude-flow/memory@3.0.0-alpha.22 (optionalDependency). Combined with RUF-304 and RUF-305, 6 of the 21 direct dependencies of @claude-flow/cli have an unresolvable or absent registry license.",
+      "evidence_level": "PACKAGED",
+      "label": "VERIFIED",
+      "citations": [
+        "npm view @claude-flow/mcp@3.0.0-alpha.8 name version license --json -> no license key",
+        "npm view @claude-flow/shared@3.0.0-alpha.7 -> no license key",
+        "npm view @claude-flow/memory@^3.0.0-alpha.22 -> no license key"
+      ]
+    },
+    {
+      "id": "RUF-311",
+      "severity": "low",
+      "summary": "Three transitive lockfile entries carry non-SPDX, unresolvable license strings: @anthropic-ai/claude-agent-sdk@0.1.76 ('SEE LICENSE IN README.md'), flatbuffers@1.12.0 ('SEE LICENSE IN LICENSE.txt'), and uri-templates@0.2.0 (a bare URL, 'http://geraintluff.github.io/tv4/LICENSE.txt'). All three are devOptional. Automated license policy gates cannot evaluate these without manual resolution.",
+      "evidence_level": "PACKAGED",
+      "label": "VERIFIED",
+      "citations": [
+        "upstream/ruflo-v3.37.0/package-lock.json entries for node_modules/@anthropic-ai/claude-agent-sdk, node_modules/flatbuffers, node_modules/uri-templates"
+      ]
+    },
+    {
+      "id": "RUF-312",
+      "severity": "low",
+      "summary": "The claude-flow to ruflo rename is surface-level and Anthropic-adjacent naming remains what actually gets installed: 39 of 50 packages are named @claude-flow/*, 6 binaries carry 'claude' in their command name, and installing `ruflo` places executables named `claude-flow` and `claude-flow-mcp` on PATH. The published `ruflo` package itself lists 'claude', 'claude-code', 'claude-flow', and 'anthropic' as npm keywords. No non-affiliation disclaimer or trademark statement appears anywhere in README.md, SECURITY.md, LICENSE, CONTRIBUTING.md, or package.json.",
+      "evidence_level": "PACKAGED",
+      "label": "VERIFIED",
+      "citations": [
+        "work/extract/cli/package/package.json bin = {cli, claude-flow, claude-flow-mcp}",
+        "work/extract/ruflo/package/package.json keywords[]",
+        "upstream/ruflo-v3.37.0/package.json name = 'claude-flow'",
+        "grep for trademark/affiliation language across root docs returned 0 matches"
+      ]
+    },
+    {
+      "id": "RUF-313",
+      "severity": "low",
+      "summary": "The committed root package-lock.json declares version 3.35.0 while package.json at the audited tag declares 3.37.0. The lockfile is stale relative to the tagged release, so any dependency-closure analysis derived from it is an approximation of v3.37.0 rather than an exact record. Additionally, no lockfile ships in either published tarball, so the consumer-side install closure cannot be determined from published artifacts at all.",
+      "evidence_level": "PACKAGED",
+      "label": "VERIFIED",
+      "citations": [
+        "upstream/ruflo-v3.37.0/package-lock.json (version: 3.35.0)",
+        "upstream/ruflo-v3.37.0/package.json (version: 3.37.0)"
+      ]
+    },
+    {
+      "id": "RUF-314",
+      "severity": "informational",
+      "summary": "COUNT CORRECTION to the audit charter. The charter's frozen facts state that @claude-flow/cli has 24 dependencies and 12 optionalDependencies. Independent counting from three sources \u2014 the repo package.json, the published tarball package.json, and npm registry metadata \u2014 all agree on 21 dependencies and 11 optionalDependencies (plus 2 peerDependencies, 2 devDependencies, 3 bundleDependencies). The charter figures could not be reproduced and are not explained by a peer or dev roll-up (21+2 = 23). The verifiable values are 21 and 11.",
+      "evidence_level": "PACKAGED",
+      "label": "VERIFIED",
+      "citations": [
+        "upstream/ruflo-v3.37.0/v3/@claude-flow/cli/package.json",
+        "work/extract/cli/package/package.json",
+        "npm view @claude-flow/cli@3.37.0 --json"
+      ]
+    },
+    {
+      "id": "RUF-315",
+      "severity": "informational",
+      "summary": "FAVORABLE RESULT, recorded explicitly so it is not mistaken for an unexamined area. Zero GPL and zero AGPL licenses appear in the 888-entry root lockfile closure, in either tarball's manifests, or in any of the 50 monorepo package.json files. For a commercial platform this is the desired outcome and no copyleft escalation is warranted on this lane's evidence. The clearance is bounded: it covers the upstream development lockfile (stale at 3.35.0), not the consumer-side install closure, which is UNKNOWN in this lane because no lockfile ships in the tarballs and installation is forbidden here.",
+      "evidence_level": "PACKAGED",
+      "label": "VERIFIED",
+      "citations": [
+        "upstream/ruflo-v3.37.0/package-lock.json \u2014 full license tally in transitive_closure_scan.license_tally"
+      ]
+    }
+  ],
+  "counts_established": {
+    "host_repo_license_file_lines": 175,
+    "ruflo_license_file_bytes": 1068,
+    "monorepo_package_json_files": 50,
+    "monorepo_packages_declaring_a_license": 33,
+    "monorepo_packages_omitting_license": 17,
+    "distinct_license_values_declared_in_monorepo": 1,
+    "repo_license_files_total": 2,
+    "repo_notice_files_total": 0,
+    "ruflo_tarball_files": 526,
+    "ruflo_tarball_files_in_apache2_subtree": 499,
+    "ruflo_tarball_apache2_share_percent": 94.87,
+    "ruflo_tarball_license_files": 1,
+    "cli_tarball_files": 1507,
+    "cli_tarball_license_files": 0,
+    "cli_bundled_thirdparty_files": 372,
+    "cli_direct_dependencies": 21,
+    "cli_optional_dependencies": 11,
+    "cli_peer_dependencies": 2,
+    "cli_dev_dependencies": 2,
+    "cli_bundle_dependencies": 3,
+    "cli_direct_deps_with_unresolvable_or_absent_license": 6,
+    "lockfile_total_entries": 888,
+    "lockfile_entries_with_license": 879,
+    "lockfile_entries_without_license": 9,
+    "lockfile_distinct_license_strings": 19,
+    "gpl_entries": 0,
+    "agpl_entries": 0,
+    "lgpl_entries_nondev": 8,
+    "mpl_entries_devonly": 12,
+    "ambiguous_nonspdx_license_strings": 3,
+    "packages_named_claude_flow_scope": 39,
+    "binaries_containing_claude_in_name": 6,
+    "huggingchat_brand_asset_files": 24,
+    "inter_font_binaries": 9,
+    "wasm_binaries_in_tarballs": 1,
+    "native_binaries_in_tarballs": 0
+  }
+}

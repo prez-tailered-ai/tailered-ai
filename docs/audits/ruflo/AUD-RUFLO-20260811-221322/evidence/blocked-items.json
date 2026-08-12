@@ -1,0 +1,516 @@
+{
+  "audit_id": "AUD-RUFLO-20260811-221322",
+  "generated": "2026-08-11T23:45:00Z",
+  "spec_reference": "gh-audit-ruflo.md \u00a724 HARD ADOPTION BLOCKERS (lines 1178-1204). Blocker wording below is quoted from that list verbatim.",
+  "scope_key": "whole product = the blocker holds on the default install path with no opt-in. specific capability = the blocker condemns one named capability, not the product. opt-in surface only = the blocker holds only where an explicitly enabled, non-default surface is used.",
+  "hard_blockers": [
+    {
+      "blocker": "a successful response without a durable postcondition",
+      "triggered_by": [
+        "RUF-011",
+        "RUF-401",
+        "RUF-402",
+        "RUF-440",
+        "RUF-201",
+        "RUF-300",
+        "RUF-L6b-03",
+        "RUF-002",
+        "RUF-701@AUD-L7b",
+        "RUF-705@AUD-L7b",
+        "RUF-720@AUD-L7b",
+        "RUF-013"
+      ],
+      "evidence": "RUF-011: `ruflo verify` prints 'pass: 0, drift: 53, regressed: 0, missing: 2' then '[OK] All fixes verified' and exits 0 on a pristine install (work/verify-npm.txt; dist/src/commands/verify.js:201,244). RUF-401: memory store prints '[OK] Data stored successfully', exits 0, and discards the write \u2014 DB byte-identical, sentinel absent from a full-filesystem grep (evidence/test-results.json#S02-S06,S16). RUF-402: verifyMemoryInit reports 'Verification passed (6/6 tests)' in exactly that state (#S07). RUF-440: 6 concurrent `issues claim` callers all print '[OK] Claimed' and exit 0 while 2-3 claims are discarded, 3/3 trials (work/lane-L4b/logs/t14-claimlost.log). RUF-201: memory_store returns stored:true and a second process reads totalEntries:0 (evidence/full-init-process-diff.json). RUF-300: `plugins list` prints 'Registry discovered: 21 plugins available' with a random CID after all five gateways fail, exit 0 (work/lane-L3b/logs/net-sink/plugins.out). RUF-L6b-03: github_pr_manage returns {success:true, action:'merged'} from a local JSON store when `gh` is absent (github-tools.js:333-337). RUF-002: init prints 'Files: 111 created' having created 255.",
+      "scope": "whole product",
+      "label": "VERIFIED",
+      "scope_note": "This is the audit's defining defect class. It reproduces independently in provenance verification, memory persistence, ownership claiming, plugin discovery, GitHub actions and init self-reporting \u2014 six unrelated subsystems on the default path. It is not confined to one capability and is not opt-in.",
+      "spike_corroboration": "Strengthened by spike evidence merged after the initial synthesis pass."
+    },
+    {
+      "blocker": "direct Ruflo mutation of the company repository",
+      "triggered_by": [
+        "RUF-009",
+        "RUF-208",
+        "RUF-411",
+        "RUF-L6a-04",
+        "RUF-220",
+        "RUF-314",
+        "RUF-702@AUD-L7b",
+        "RUF-720@AUD-L7a"
+      ],
+      "evidence": "RUF-208: starting the MCP server alone, with no init, writes 9 artifacts into the repository including ruvector.db (1,589,248 B) at the root (evidence/full-init-process-diff.json#mcp_execution_surface). RUF-411: every `memory` subcommand \u2014 including read-only ones \u2014 spawns a 7-worker daemon and writes 6 repository files plus one HOME file (evidence/test-results.json#S18). RUF-L6a-04: 32 distinct repo-local state path literals across 219 process.cwd() sites; even agent_execute writes .claude-flow/agents/store.json (agent-execute-core.js:31-34,405). RUF-009: init modifies the tracked .gitignore and writes a binary into the repository root. RUF-314: .swarm/, ruvector.db, .mcp.json and 241 .claude/ files are not gitignored.",
+      "scope": "whole product",
+      "label": "VERIFIED",
+      "scope_note": "There is no read-only mode. Compatibility question Q5 answers NO. The only containment is to point Ruflo at a directory that is not the company repository, which is a deployment constraint rather than a product capability.",
+      "spike_corroboration": "Strengthened by spike evidence merged after the initial synthesis pass."
+    },
+    {
+      "blocker": "unverifiable published artifacts",
+      "triggered_by": [
+        "RUF-011",
+        "RUF-012",
+        "RUF-L2a-004",
+        "RUF-304@AUD-L3a",
+        "RUF-L2a-009"
+      ],
+      "evidence": "RUF-011: the Ed25519 seed is sha256(gitCommit + ':ruflo-witness/v1') \u2014 both inputs public, so the private key is publicly derivable and any party can forge a valid signature (verify.js:124). RUF-012: the manifest is fetched at runtime from the mutable branch fix/issues-may-1-3 (verify.js:21,139,161), so what 'verified' means can change at any time, and the verification/ directory ships in neither tarball. RUF-L2a-004: src/ is not shipped, dist is git-ignored (.gitignore:104), neither tarball ships a LICENSE, and the one comparable checked-in artifact diverges (helpers.manifest.json 3.34.0 with one signature in source vs 3.37.0 with a different signature in the tarball). RUF-304@AUD-L3a: all three bundleDependencies return E404 at their pinned versions while 372 files of their code ship inside the tarball. RUF-L2a-009: proven-config.signed.rvf asserts benchmark receipts against a corpus present in neither tarball.",
+      "scope": "whole product",
+      "label": "VERIFIED",
+      "scope_note": "Verification fails from both directions: the vendor's own verify command produces no integrity evidence, and independent verification of the artifact against the tagged source is not possible either."
+    },
+    {
+      "blocker": "uncontrolled global configuration changes",
+      "triggered_by": [
+        "RUF-003",
+        "RUF-L6a-10",
+        "RUF-205",
+        "RUF-213",
+        "RUF-316"
+      ],
+      "evidence": "RUF-003: `ruflo init` with no global flag appends a 'Ruflo Integration' block to ~/.claude/CLAUDE.md and creates ~/.claude-flow/update-state.json; the appended block instructs any Claude Code agent to invoke ruflo MCP tools (work/global-overwrite/). RUF-205: the global ~/.claude/CLAUDE.md is NOT restored by cleanup --force (46 to 369 B). RUF-213/RUF-316: every hook falls back to $HOME/.claude/helpers/, so a partially-cleaned repository executes the user's global copy.",
+      "scope": "whole product",
+      "label": "VERIFIED",
+      "scope_note": "The write is APPEND-ONLY and non-destructive, and the pre-existing global settings.json and CLAUDE.md content survive verbatim (RUF-003, VERIFIED) \u2014 but it is unrequested, machine-wide, has no opt-in flag, and is not reverted by the uninstall path. RUFLO_NO_SKILLS_SH / --no-skills-sh do not cover it."
+    },
+    {
+      "blocker": "unbounded or unkillable background agents",
+      "triggered_by": [
+        "RUF-202",
+        "RUF-505",
+        "RUF-411",
+        "RUF-453",
+        "RUF-211",
+        "RUF-L6a-03",
+        "TAI-002"
+      ],
+      "evidence": "RUF-202: `ruflo cleanup` \u2014 including the documented DRY RUN \u2014 starts a background daemon and never stops it; the daemon survives cleanup --force (ps -ef, PPID 1). RUF-505: `ruflo status`, `memory list` and even `memory --help` spawn a --quiet daemon with 7 periodic workers and a 12 h TTL, measured at 4.20 CPU-seconds over 418 s, ~100 MB RSS. RUF-211 and RUF-L6a-03: SessionStart spawns detached, unref'd children explicitly designed to outlive the hook; grandchildren reparent to init and escape Tailered's direct-child-only kill (TAI-002, a PRE-EXISTING TAILERED FINDING).",
+      "scope": "whole product",
+      "label": "VERIFIED",
+      "scope_note": "The daemon itself stops cleanly when asked and opens no listening sockets (RUF-221, positive). The blocker is that it starts without consent from read-only commands and from the uninstaller, and that detached grandchildren outlive every kill path the host has."
+    },
+    {
+      "blocker": "concurrent state corruption",
+      "triggered_by": [
+        "RUF-440",
+        "RUF-441",
+        "RUF-442",
+        "RUF-444",
+        "RUF-L1b-07"
+      ],
+      "evidence": "RUF-440: 2-3 of 6 concurrent claims silently discarded, 3/3 trials, with proven overlapping ownership. RUF-441: root cause is an unlocked read-modify-write persisted by non-atomic whole-file fs.writeFileSync (claim-service.ts:258,265-286) while the correct locked/atomic pattern exists unused in workspace-lease.ts:92-142. RUF-444: daemon mutual exclusion is PID-based and two live daemons ran on one shared repository across PID namespaces (host-verified via docker top). RUF-L1b-07: 'Byzantine fault-tolerant consensus' is unlocked vote arithmetic over one JSON file.",
+      "scope": "specific capability",
+      "label": "VERIFIED",
+      "scope_note": "Scoped deliberately. The STORAGE layer is sound \u2014 cross-project isolation holds, concurrent distinct-key writes are never lost, and integrity_check passes after contention, SIGABRT and SIGKILL (RUF-455, positive). The corruption is in the OWNERSHIP and COORDINATION layer: claims, hive-mind consensus, and cross-namespace daemon exclusion."
+    },
+    {
+      "blocker": "missing causal links",
+      "triggered_by": [
+        "RUF-446",
+        "RUF-206",
+        "RUF-416"
+      ],
+      "evidence": "RUF-446: memory_entries.owner_id is declared and indexed but never written by any INSERT or UPDATE; provenance_type is always 'unknown' despite ADR-323's enum; expires_at is always NULL, verified across every database produced in the lane. RUF-206: repoHash \u2014 the ledger key \u2014 changes from one memory_store touching no company file. RUF-416: the metadata table records the wrong storage backend.",
+      "scope": "specific capability",
+      "label": "VERIFIED",
+      "scope_note": "Scoped to Ruflo's own state: nothing Ruflo writes can be attributed to a run or an agent. It does not by itself break causal links that Tailered maintains outside Ruflo."
+    },
+    {
+      "blocker": "missing terminal state",
+      "triggered_by": [
+        "RUF-417",
+        "RUF-418",
+        "RUF-409"
+      ],
+      "evidence": "RUF-417: `workflow run` exits 0, writes a status:'running' checkpoint, executes nothing, and never writes a terminal state (evidence/test-results.json#S22,S25). RUF-418: `workflow list` can never list anything, so the zombie records are also invisible. RUF-409: autopilot treats an unreadable task source as 'no tasks' and reports ALLOW STOP at 0/0 (100%).",
+      "scope": "specific capability",
+      "label": "VERIFIED",
+      "scope_note": "Scoped to the workflow and autopilot subsystems. Autopilot CHECKPOINTS are durable across processes and real terminal states do exist for max-iterations and disabled (AUD-L4 passing capabilities); the failure is on the `workflow run` path and in fail-open completion."
+    },
+    {
+      "blocker": "missing failure accounting",
+      "triggered_by": [
+        "RUF-L6a-12",
+        "RUF-404",
+        "RUF-L6b-03",
+        "RUF-301@AUD-L3b"
+      ],
+      "evidence": "RUF-L6a-12: provider failures are returned as SUCCESSFUL tool results carrying {success:false, error} (agent-execute-core.js:100-104,142,165), so an adapter reading the transport layer records a failed model call as completed. RUF-404: `memory init` reports failure AFTER its work committed \u2014 a false failure. RUF-301@AUD-L3b: init aborts with SIGABRT after writing 250 files, with no completion signal and a non-zero exit.",
+      "scope": "specific capability",
+      "label": "VERIFIED",
+      "scope_note": "Scoped to the agent-execution and memory-init surfaces. Correctable in an adapter that inspects the payload rather than the transport status, which is why it is not product-wide."
+    },
+    {
+      "blocker": "executed provider or model differing from the authorized selection",
+      "triggered_by": [
+        "RUF-304@AUD-L3b",
+        "RUF-305@AUD-L3b",
+        "RUF-L6a-01",
+        "RUF-312@AUD-L3b"
+      ],
+      "evidence": "RUF-304@AUD-L3b: provider is chosen by ambient environment (agent-execute-core.js:71-106) \u2014 no ANTHROPIC_API_KEY plus OPENROUTER_API_KEY routes to openrouter.ai, plus OLLAMA_API_KEY routes to ollama.com \u2014 and the success shape AnthropicCallResult has no provider or endpoint field by explicit design. RUF-L6a-01: determineAgentModel (agent-tools.js:127-131) silently discards any model outside five literals; agent_execute accepts no model at all. RUF-305@AUD-L3b: agent-execute-core.js:111 hardcodes https://api.anthropic.com/v1/messages, bypassing ANTHROPIC_BASE_URL. RUF-312@AUD-L3b: init writes \"model\": \"claude-sonnet-5\" into the host project's settings.json unasked.",
+      "scope": "specific capability",
+      "label": "VERIFIED",
+      "scope_note": "Scoped to the agent_execute / agent_spawn capability and to init's harness-configuration write. This is the DEFAULT-path instance of the model-identity blocker and is separate from RUF-010 below. Live fallback ordering under real credentials is UNKNOWN \u2014 no credentials existed in the containers."
+    },
+    {
+      "blocker": "executed provider or model differing from the authorized selection",
+      "triggered_by": [
+        "RUF-010"
+      ],
+      "evidence": "Upstream's own v3.37.0 release notes disclose that the cloud plane 'picks a tier per prompt instead of honoring the client's requested model' (upstream/release-v3.37.0.json). v3.37.0 adds --routing-mode <auto|low|mid|high> to pin a TIER; pinning a tier is not pinning a MODEL.",
+      "scope": "opt-in surface only",
+      "label": "VERIFIED",
+      "scope_note": "EXPLICITLY SCOPED, do not inflate. This applies to the `ruflo proxy` surface when the cloud plane is enabled. The meta-proxy is not installed by `npm i` or by `init`, cloud routing defaults to 'passthrough', and the consent framework defaults every domain to granted:false (RUF-325, VERIFIED positive). It is NOT evidence that a default Ruflo install substitutes models; that was not observed. It blocks adoption of the proxy/cloud-routing capability specifically and requires any integration to disable it explicitly rather than rely on defaults. Note that RUF-210 shows the default-on UserPromptSubmit hook advertises this opt-in surface inside the agent's context."
+    },
+    {
+      "blocker": "bypass of reserve-and-settle accounting",
+      "triggered_by": [
+        "RUF-406",
+        "RUF-407",
+        "RUF-408",
+        "RUF-L6a-02",
+        "RUF-L6a-08",
+        "RUF-730@AUD-L7b",
+        "RUF-734@AUD-L7b"
+      ],
+      "evidence": "RUF-406: headless-worker-executor.js contains ZERO policy-engine references; cost is parsed post-hoc from the result envelope (line 371); the only gated surface never supplies costUsd. RUF-L6a-02: no Ruflo surface returns a hard pre-execution {maxCostUsd, maxTokens}. RUF-407: the ledger accumulates IEEE-754 float USD (4.000000000000002 from 40 x $0.10). RUF-408: `policy budget set` refuses in any non-TTY context, so the only cost control is unconfigurable from CI, containers or headless sessions. RUF-L6a-08: Ruflo's own measured $1.56/call x >=4 calls = $6.24 against a $5.00 exclusive cap.",
+      "scope": "whole product",
+      "label": "VERIFIED",
+      "scope_note": "No configuration achieves a hard pre-spend ceiling. The policy budget check that DOES exist is genuine, pre-decision, persistent across processes and hash-chained (AUD-L4 passing capabilities) \u2014 but it is not on the model-spending path and cannot be configured in automation. Success of `policy budget set` under a genuine pty is UNKNOWN.",
+      "spike_corroboration": "Strengthened by spike evidence merged after the initial synthesis pass."
+    },
+    {
+      "blocker": "bypass of Tailered routing",
+      "triggered_by": [
+        "RUF-305@AUD-L3b",
+        "RUF-304@AUD-L3b",
+        "RUF-L6a-01"
+      ],
+      "evidence": "RUF-305@AUD-L3b: two Anthropic call sites in the same package disagree \u2014 managed-agent-tools.js:20 honours ANTHROPIC_BASE_URL, agent-execute-core.js:111 is a bare literal. RUF-L6a-01: Ruflo ships a stateful Thompson-bandit router persisting .swarm/model-router-state.json and preempts the caller's model on retryable errors (agent-execute-core.js:425-456, FALLBACK_MAX_RETRIES=1 at :423), which answers compatibility question Q11 NO.",
+      "scope": "specific capability",
+      "label": "VERIFIED",
+      "scope_note": "Scoped to the agent-execution path. It is the same mechanism as the model-identity blocker viewed from the routing side; a gateway-routed environment such as the agent platform's is bypassed on that path only."
+    },
+    {
+      "blocker": "inability to stop or remove Ruflo",
+      "triggered_by": [
+        "RUF-205",
+        "RUF-202",
+        "RUF-209",
+        "RUF-212",
+        "RUF-003",
+        "RUF-447"
+      ],
+      "evidence": "RUF-205: cleanup --force reverts 56 of 258 changes (21.7%); 204 files, 57 directories, ruvector.db, .mcp.json, CLAUDE.md, the .gitignore edit and the global ~/.claude/CLAUDE.md block all survive. RUF-202: cleanup starts a daemon it never stops. RUF-209: the surviving settings.json keeps the permission grants, the model pin and a statusLine pointing at deleted helpers whose $HOME fallback then executes the user's global copy. RUF-212: the mutable-tag .mcp.json survives. RUF-447: per-agent branches are never deleted.",
+      "scope": "whole product",
+      "label": "VERIFIED",
+      "scope_note": "Removal by discarding a disposable worktree DOES work, and the Tailered repository still validates in all three states (RUF-222, positive) \u2014 but the vendor's own uninstall path does not remove Ruflo, and it cannot remove the global and out-of-repository state at all."
+    },
+    {
+      "blocker": "autonomous modification of policy or accepted decisions",
+      "triggered_by": [
+        "RUF-309",
+        "RUF-303@AUD-L3b",
+        "RUF-312@AUD-L3b",
+        "RUF-209",
+        "RUF-L6b-09"
+      ],
+      "evidence": "RUF-309: plain `init` injects permissions.allow ['Bash(npx @claude-flow*)','Bash(npx claude-flow*)','Bash(node .claude/*)','mcp__claude-flow__*'] into an existing settings.json without prompting \u2014 a standing grant to execute any of the 241 files it just wrote under .claude/ \u2014 and sets CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 (work/lane-L3b/logs/ctl4.log). RUF-303@AUD-L3b: `init --force` replaces project settings.json and .mcp.json WHOLESALE; 0 of 6 configuration canaries survived. RUF-312@AUD-L3b: init pins the harness model. RUF-L6b-09: the .claude/ tree it grants itself execution over contains auto-commit.sh with AUTO_PUSH=true by default.",
+      "scope": "whole product",
+      "label": "VERIFIED",
+      "scope_note": "A tool writing its own execution allowlist into the host's security policy is a privilege escalation by construction. Both the merging (plain init) and replacing (--force) paths trigger it, so it is not avoidable by flag choice."
+    },
+    {
+      "blocker": "inability to preserve the founder gate",
+      "triggered_by": [
+        "RUF-L6b-01",
+        "RUF-L6b-02",
+        "RUF-L6b-09"
+      ],
+      "evidence": "RUF-L6b-01: github_pr_manage action merge runs `gh pr merge <N> --merge` with no CI-status, approval or branch-protection precondition (github-tools.js:322), auto-approved by the mcp__claude-flow__* grant init adds. RUF-L6b-02: github_workflow runs `gh workflow run <id> --ref <ref>` (:565) and `gh run cancel` (:574), reaching manually-gated CI workflows and able to cancel the gates that would catch the result. RUF-L6b-09: auto-commit.sh defaults AUTO_PUSH=true.",
+      "scope": "specific capability",
+      "label": "VERIFIED (packaged code and permission grant) / INFERRED (the agent platform deploy consequence)",
+      "scope_note": "Scoped to the GitHub tool family. The packaged code and the auto-approving permission grant are VERIFIED; that a merge constitutes a production deploy is a property of the the agent platform host (CLAUDE.md:291) and the end-to-end consequence was not executed, so it is INFERRED. For the agent platform specifically this is the decisive blocker on any write-capable adoption."
+    },
+    {
+      "blocker": "license incompatibility",
+      "triggered_by": [
+        "RUF-301@AUD-L3a",
+        "RUF-302@AUD-L3a",
+        "RUF-303@AUD-L3a",
+        "RUF-306@AUD-L3a"
+      ],
+      "evidence": "RUF-301@AUD-L3a: `ruflo` declares MIT while 499 of 526 files (94.87%) are a fork of Apache-2.0 huggingface/chat-ui v0.20.0. RUF-302@AUD-L3a: neither tarball ships a LICENSE, so both fail the MIT notice condition for their own grant. RUF-303@AUD-L3a: zero NOTICE files anywhere and 0 of 358 files in the vendored subtree carry a copyright header or modification notice, against Apache-2.0 4(b)/(c). RUF-306@AUD-L3a: 24 HuggingChat trademarked brand assets ship verbatim, including a manifest.json declaring name 'HuggingChat', while Apache-2.0 section 6 grants no trademark rights.",
+      "scope": "specific capability",
+      "label": "VERIFIED",
+      "scope_note": "SCOPED TO THE `ruflo` WRAPPER PACKAGE, which is where the vendored subtree lives. Depending on `@claude-flow/cli` directly removes the entire 499-file Apache-2.0 payload and the trademarked assets. Zero GPL and zero AGPL appear anywhere in the closure (RUF-315@AUD-L3a, positive). These are technical license observations, not legal advice, and the clearance is bounded to the upstream development lockfile (stale at 3.35.0)."
+    },
+    {
+      "blocker": "hidden cloud egress",
+      "triggered_by": [
+        "RUF-306@AUD-L3b",
+        "RUF-320@AUD-L3b",
+        "RUF-004",
+        "RUF-313@AUD-L3b",
+        "RUF-012",
+        "RUF-211"
+      ],
+      "evidence": "RUF-306@AUD-L3b: refreshRemoteMessages() fetches https://funnel.ruv.io/v1/messages with NO consent gate anywhere in its path, is spawned detached from the SessionStart hook init installs, and renders unsigned content in the developer's statusline; doctor states 'Funnel (ADR-305): enabled (decided by: package-default; disclosure: never_seen)'. RUF-320@AUD-L3b: one `plugins list` produced 21 requests to api.npmjs.org plus one to a vendor Cloud Function whose actions include track-download and analytics, with no consent domain gating it. RUF-004/RUF-313@AUD-L3b: init downloads a 90,387,606-byte ONNX model, undeclared in any lockfile and with no integrity check, into node_modules. RUF-012: `ruflo verify` fetches its trust anchor from raw.githubusercontent.com at verify time.",
+      "scope": "whole product",
+      "label": "VERIFIED",
+      "scope_note": "The consent framework itself is correctly built and defaults to granted:false for all twelve domains (RUF-325, positive); the /v1/events telemetry path DOES gate on it. The blocker is that /v1/messages, the npm registry calls and the Cloud Function call bypass the framework rather than break it, and all fire on the default install path."
+    },
+    {
+      "blocker": "sensitive prompt, source, or credential leakage",
+      "triggered_by": [
+        "RUF-314@AUD-L3b",
+        "RUF-308@AUD-L3b",
+        "RUF-445"
+      ],
+      "evidence": "RUF-314@AUD-L3b: .swarm/agentdb-memory.db is mode 0644 (world-readable) beside a 0600 memory.db; a stored value was recovered verbatim with `strings`; doctor states 'Encryption at Rest: Off'; and .swarm/, ruvector.db, .mcp.json and 241 .claude/ files are NOT gitignored, so `git add -A` stages them. RUF-308@AUD-L3b: `memory export --output ../../../tmp/\u2026` wrote outside the project root \u2014 an arbitrary-file-write primitive. RUF-445: `memory search` and `memory list` default to ALL namespaces and returned another namespace's secret to an unscoped caller.",
+      "scope": "specific capability",
+      "label": "VERIFIED",
+      "scope_note": "Scoped to the memory subsystem and to data deliberately stored in it. AMBIENT credentials did NOT leak: with ANTHROPIC_API_KEY and DB-URL canaries in the environment, neither appeared in any Ruflo artifact after doctor, status and memory store (RUF-326, VERIFIED negative). The exposure is of what an agent puts into memory, plus the export path."
+    },
+    {
+      "blocker": "Ruflo becoming a second canonical ledger",
+      "triggered_by": [
+        "RUF-203",
+        "RUF-206",
+        "RUF-L6a-09",
+        "RUF-009"
+      ],
+      "evidence": "RUF-203: after `ruflo init` the Tailered context snapshot admits 96 files of which ZERO are Tailered governing files \u2014 100% eviction of AGENTS.md, 4 ADRs and 13 docs \u2014 while `validate` still reports VERIFIED. RUF-206: one memory_store changed repoHash, the ledger key. RUF-L6a-09: .claude-flow/ and .swarm/ fall outside the snapshot's six exclusions. RUF-009: 14 mutable SQLite tables plus a 1.5 MB binary enter the repository that ADR-000:19 declares sole company state.",
+      "scope": "whole product",
+      "label": "VERIFIED",
+      "scope_note": "Recorded as a blocker because Ruflo's state both enters the repository hash and displaces the repository's own governing content, so the two stores compete. Bounded by RUF-222 (positive): the Tailered validator still passes in all three states \u2014 which is precisely why the displacement is silent. The three enabling mechanisms are PRE-EXISTING TAILERED design properties, recorded on RUF-203, not Ruflo defects."
+    },
+    {
+      "blocker": "inability to run within a disposable worker",
+      "triggered_by": [
+        "RUF-444",
+        "RUF-450",
+        "RUF-L6a-03",
+        "RUF-403"
+      ],
+      "evidence": "RUF-444: daemon mutual exclusion is PID-based and two live daemons ran on one bind-mounted repository across PID namespaces \u2014 the containerised topology is exactly where it fails. RUF-450: agent worktrees are created OUTSIDE the repository at dirname(repoRoot)/.ruflo-worktrees/, escaping the boundary a disposable worktree would define. RUF-L6a-03: detached grandchildren reparent to init and survive the host's kill paths. RUF-403: the SAME install directory persists on glibc and loses every write on musl with no error, so a disposable container's base image silently determines durability.",
+      "scope": "specific capability",
+      "label": "VERIFIED",
+      "scope_note": "Scoped deliberately. Ruflo DOES run inside a disposable container \u2014 every execution lane in this audit did exactly that. The blocker is that the isolation properties a disposable worker is supposed to provide (single-instance, boundary containment, kill-on-teardown, environment-independent behaviour) do not hold, so containerisation contains the blast radius without making the behaviour correct."
+    }
+  ],
+  "unresolved_areas": [
+    {
+      "area": "Live provider behaviour under real credentials \u2014 the actual endpoint contacted, the actual model served, and fallback ordering under 429/5xx",
+      "why_blocked": "No API credentials exist in the audit containers and the charter forbids creating them; paid model calls are forbidden.",
+      "what_would_resolve_it": "A founder-authorised, USD-capped run against a gateway that logs the executed model and endpoint independently of Ruflo's own reporting. AUD-L5 section 9 contains an executable 10-scenario design (S1-S10) with 7 preconditions, ready to run.",
+      "label": "UNKNOWN"
+    },
+    {
+      "area": "Model-driven performance and cost \u2014 task throughput, token efficiency, cost per accepted change, and any comparison against the Tailered baseline on model-dependent axes",
+      "why_blocked": "Paid model calls forbidden. Only model-independent axes (install footprint, CLI/MCP latency, hook overhead, idle/background cost) were measured.",
+      "what_would_resolve_it": "Execute the AUD-L5 section 9 benchmark under the stated preconditions, reporting 3 repetitions without averaging away non-determinism.",
+      "label": "UNKNOWN"
+    },
+    {
+      "area": "meta-proxy runtime behaviour \u2014 routing, logging, retention, and what api.cognitum.one receives; whether Cognitum retains, logs or trains on routed prompts",
+      "why_blocked": "cognitum-one/meta-proxy source is private; only the signed distribution is public and it was never downloaded or executed. Retention questions require the vendor's live service and terms.",
+      "what_would_resolve_it": "Vendor terms plus an instrumented run against the proxy with a controlled prompt corpus. Note RUF-324 VERIFIED that the proxy INSTALL path is genuinely hardened; the unknown is the binary's behaviour, not its delivery.",
+      "label": "UNKNOWN"
+    },
+    {
+      "area": "Behaviour behind the `training-data-sharing` and `hosted-memory` consent domains once granted",
+      "why_blocked": "Never granted; granting would produce real egress to vendor infrastructure.",
+      "what_would_resolve_it": "A sandboxed grant with full egress capture and a synthetic corpus.",
+      "label": "UNKNOWN"
+    },
+    {
+      "area": "Architecture scope of the better-sqlite3 SIGABRT (RUF-301@AUD-L3b, RUF-207, RUF-404, RUF-443, RUF-502)",
+      "why_blocked": "All runs were linux/arm64 on Node v24.19.0. The shared installs' prebuilt .node binaries are ELF aarch64, so an amd64 container cannot exercise the same artifact and cross-arch emulation cannot load them. Node 22 was also untested.",
+      "what_would_resolve_it": "A native linux/x86_64 host performing its own default install, plus a Node 22 pass. This matters because the whole 'the default install is broken' conclusion may be architecture-specific.",
+      "label": "UNKNOWN"
+    },
+    {
+      "area": "Whether `policy budget set` succeeds under a genuine pty",
+      "why_blocked": "No pty was allocatable from the audit harness (`script` failed with 'tcgetattr/ioctl: Operation not supported on socket'). Refusal in non-TTY and stdout-only-TTY contexts is VERIFIED.",
+      "what_would_resolve_it": "An interactive terminal session on a developer machine. It would not change RUF-408's automation conclusion, only its interactive one.",
+      "label": "UNKNOWN"
+    },
+    {
+      "area": "Credentialed workflow and autopilot execution \u2014 whether a real run writes step-level progress, and whether resume replays completed external effects (the 'duplicate irreversible effects after retry' blocker)",
+      "why_blocked": "No model credentials. Static reading established only that a checkpoint file exists, that autopilot keeps no effect ledger, and that the `workflow run` path writes no terminal state.",
+      "what_would_resolve_it": "A credentialed run with an externally observable idempotent effect (for example a counter file) and a forced interruption plus resume. This is the one hard blocker in the specification's list that this audit could NOT test.",
+      "label": "UNKNOWN"
+    },
+    {
+      "area": "hive-mind, swarm and autopilot multi-agent coordination behaviour under concurrency",
+      "why_blocked": "Exercising them requires model calls, which the charter forbids. Their concurrency behaviour is therefore unmeasured, although the underlying consensus implementation was read (RUF-L1b-07).",
+      "what_would_resolve_it": "A credentialed multi-agent run with independent observation of who owned what.",
+      "label": "UNKNOWN"
+    },
+    {
+      "area": "`global-ai-budget` reserve-and-settle correctness under concurrency",
+      "why_blocked": "Read but not exercised; it was budget-lane scope and shares the PID-liveness defect class of RUF-444.",
+      "what_would_resolve_it": "A concurrency harness against the budget ledger, ideally across PID namespaces given RUF-444.",
+      "label": "UNKNOWN"
+    },
+    {
+      "area": "Whether the mock random-vector embedding fallback (RUF-419) actually degrades semantic search",
+      "why_blocked": "Documented in Ruflo's own shipped source but not reproduced: on every install where that path is reachable, nothing persists at all, so embedding quality is unobservable. Labelled INFERRED.",
+      "what_would_resolve_it": "An install where the fallback path is reachable AND persistence works, then a semantic-quality probe with known-similar and known-dissimilar pairs.",
+      "label": "UNKNOWN"
+    },
+    {
+      "area": "Whether the invalid published .claude/settings.json (RUF-L1a-01) is ever read at runtime, and whether the postinstall's 12-level upward walk escapes the dependency subtree in a real layout (RUF-L1a-07)",
+      "why_blocked": "Both are REACHABLE questions and the inventory lane's ceiling was PACKAGED. The coordinator executed the postinstall against a SYNTHETIC agentdb tree (RUF-001) but not against a real pnpm monorepo layout.",
+      "what_would_resolve_it": "Run the postinstall inside a disposable copy of a pnpm monorepo and enumerate every mutated path.",
+      "label": "UNKNOWN"
+    },
+    {
+      "area": "Whether any Ruflo egress path, hook, daemon or MCP tool activates on a the agent platform-shaped install, and whether 3.37.0's hook entries displace or coexist with the agent platform's UserPromptSubmit plus three SessionStart hooks",
+      "why_blocked": "AUD-L6b was read-only by charter; nothing was installed or executed against the agent platform. The 3.36.0 trial preserved the agent platform's hooks byte-identically, but RUF-006 records that hook behaviour changed between 3.36.0 and 3.37.0.",
+      "what_would_resolve_it": "A 3.37.0 init against a disposable the agent platform clone outside the the agent platform repository, with a full before/after manifest.",
+      "label": "UNKNOWN"
+    },
+    {
+      "area": "`daemon install-supervisor` (launchd / systemd-user) survival across cleanup, and whether `daemon start --headless` (E2B) or `daemon budget` spend money",
+      "why_blocked": "Installing a supervisor would write outside the audit sandbox on the host; the headless and budget paths need API keys the containers deliberately lack. cleanup's artifact list does not mention any supervisor unit.",
+      "what_would_resolve_it": "A disposable VM where a host-level supervisor may be installed and then removed.",
+      "label": "UNKNOWN"
+    },
+    {
+      "area": "Whether Claude Code end-to-end treats the exit-1 pre-bash hook as non-blocking (RUF-204)",
+      "why_blocked": "The exit code 1 was observed directly (VERIFIED), but Claude Code was not driven end to end; the conclusion that the command therefore runs rests on documented exit-2 blocking semantics.",
+      "what_would_resolve_it": "An instrumented Claude Code session with the hook installed and a denylisted command attempted.",
+      "label": "UNKNOWN"
+    },
+    {
+      "area": "Whether the fabricated demo plugin catalog (RUF-300) is ever INSTALLED FROM rather than merely listed, and whether the plugin store enforces the registry checksum before executing plugin code",
+      "why_blocked": "The `plugins install` path was not exercised; doing so would execute third-party plugin code fetched over IPFS.",
+      "what_would_resolve_it": "A sinkholed `plugins install` against the demo catalog in a throwaway container, observing whether the placeholder checksums (RUF-319) are enforced.",
+      "label": "UNKNOWN"
+    },
+    {
+      "area": "Full functional parity of the `--omit=optional` tree, which is this audit's highest-leverage containment control (RUF-321)",
+      "why_blocked": "Only presence and absence were measured (124 MB / 11,956 files vs 1.5 GB / 50,012). AUD-L4 separately found that on such installs memory persistence is a total no-op (RUF-401), so the mitigation trades one failure class for another.",
+      "what_would_resolve_it": "A capability matrix run against the reduced tree, command by command, with independent postcondition checks.",
+      "label": "UNKNOWN"
+    },
+    {
+      "area": "Windows and macOS-native behaviour; native-filesystem (non-virtiofs) cold-start figures",
+      "why_blocked": "Only linux/arm64 containers were available, and every measurement ran over Docker Desktop's macOS virtiofs. Cold figures are upper bounds on this host; warm figures are unaffected.",
+      "what_would_resolve_it": "Runs on native Linux and Windows hosts.",
+      "label": "UNKNOWN"
+    },
+    {
+      "area": "Whether commands that showed zero DNS activity contact hosts under other configurations",
+      "why_blocked": "Absence of observation is scoped to the exact runs recorded \u2014 logged out, no consent granted, no proxy installed, warm caches. AUD-L3b labelled this INFERRED rather than VERIFIED.",
+      "what_would_resolve_it": "Egress capture across the configuration matrix (logged in, consent granted, cold cache, proxy installed).",
+      "label": "UNKNOWN"
+    },
+    {
+      "area": "The canonical 25-invariant mapping for Tailered",
+      "why_blocked": "gh-audit-ruflo.md was not in AUD-L6a's evidence set, so that lane mapped its findings against AGENTS.md:17-36 plus the four accepted ADRs instead, and explicitly asked the coordinator to re-map. AUD-L6a also could not determine `getProjectCwd()` semantics \u2014 it is defined in @claude-flow/cli-core@3.7.0-alpha.5, a plain dependency that is not bundled \u2014 and if an environment variable can redirect Ruflo's project root it would materially soften the read-only-mount blocker.",
+      "what_would_resolve_it": "Re-map AUD-L6a's twelve findings against the master specification's canonical invariant list, and resolve getProjectCwd() by reading the installed cli-core package.",
+      "label": "UNKNOWN"
+    },
+    {
+      "area": "Ruflo's non-packaged surfaces \u2014 37 of 38 plugins, v3/plugins/, the 6 Rust crates, and the verification/ evidence set",
+      "why_blocked": "They are absent from the installed artifact (RUF-L2a-002, RUF-L1a-04) and were not assessed for compatibility. No Rust toolchain exists on the audit host, so no crate test could run.",
+      "what_would_resolve_it": "A separate assessment scoped to the GitHub repository rather than the registry artifact, on a host with cargo installed. Note that anything found there is not what `npm i ruflo` delivers.",
+      "label": "UNKNOWN"
+    },
+    {
+      "area": "Whether ruflo@3.37.0 carries npm provenance / OIDC attestation",
+      "why_blocked": "Requires `npm audit signatures` against the live registry, which was not run. The 3.34.0 changelog claims a Trusted Publishing workflow.",
+      "what_would_resolve_it": "npm audit signatures against the registry. It would not alter RUF-011, which concerns the vendor's own witness mechanism rather than registry attestation.",
+      "label": "UNKNOWN"
+    },
+    {
+      "area": "Shared-evidence integrity note raised by AUD-L5",
+      "why_blocked": "work/install-default grew from 50,012 to 50,016 files during the audit \u2014 a 4-file HuggingFace model cache with mtime 15:43. All AUD-L5 mounts of that tree were read-only and its own measurements bracket the change, so AUD-L5's numbers are unaffected. AUD-L5 INFERRED that a concurrent lane mounted install-default writable. It is itself an instance of RUF-507/RUF-313.",
+      "what_would_resolve_it": "Per-lane private install trees, or a read-only enforcement check on shared evidence. Recorded so the file-count discrepancy is not later read as a measurement error.",
+      "label": "UNKNOWN"
+    }
+  ],
+  "environment_limitations": [
+    "no model credentials",
+    "no Rust toolchain",
+    "no GitHub push permission",
+    "Node 24 only via Docker",
+    "8 GB RAM",
+    "linux/arm64 (Apple Silicon) only \u2014 no linux/x86_64, no Windows, no native-Linux host",
+    "~34 GB free disk against a 1.5 GiB default install footprint",
+    "all container filesystem I/O over Docker Desktop macOS virtiofs, which inflates cold-start figures",
+    "no pty allocatable from the harness (blocks the interactive `policy budget set` path)",
+    "paid model calls forbidden by charter; provider behaviour observed only via fixtures or static reading is labelled INFERRED",
+    "network egress sinkholed by default (local DNS + TLS-SNI sinkhole); the only real egress was `npm audit --package-lock-only` to registry.npmjs.org",
+    "no writes to main, no merges, no ADR rewrites, no synthetic rows in canonical Tailered ledgers",
+    "AUD-L7 integration-spike lanes had not produced their artifacts when this findings set was assembled"
+  ],
+  "spike_lanes_status": {
+    "status": "COMPLETE",
+    "correction": "An earlier synthesis pass recorded the spike lanes as absent. That was a timing artefact: the synthesis agents ran while the spike lanes were still executing. Both spike documents subsequently landed and their findings are merged into findings.jsonl. The stale 'spikes absent' entries have been removed from unresolved_areas.",
+    "documents": [
+      "13-integration-spikes.md (Spike A)",
+      "13-integration-spikes-bcde.md (Spikes B/C/D/E)"
+    ],
+    "spike_findings_merged": 45,
+    "entries_removed_from_unresolved_areas": 1
+  },
+  "host_repository_findings": {
+    "note": "Defects this audit found in the HOST repository (tailered-ai @ 6172653e). These are NOT Ruflo defects and are actionable today, independently of the Ruflo verdict.",
+    "findings": [
+      {
+        "id": "RUF-710@AUD-L7a",
+        "severity": "CRITICAL",
+        "summary": "product/ confinement is a textual prefix test; product/../decisions/ADR-000.md passes it and overwrites an accepted, immutable ADR."
+      },
+      {
+        "id": "RUF-713@AUD-L7a",
+        "severity": "CRITICAL",
+        "summary": "ProcessAgent passes no cwd or env; agents inherit the company repository and every secret in the parent environment."
+      },
+      {
+        "id": "RUF-715@AUD-L7a",
+        "severity": "CRITICAL",
+        "summary": "timeoutMs does not bound invoke(); a descendant holding stdout disarms the abort and the run hangs unboundedly."
+      },
+      {
+        "id": "RUF-714@AUD-L7a",
+        "severity": "HIGH",
+        "summary": "usage is agent-asserted and cross-checked by nothing; a lying agent controls the cost ledger."
+      },
+      {
+        "id": "RUF-712@AUD-L7a",
+        "severity": "HIGH",
+        "summary": "AgentResponse carries no model or provider identity, so model-identity law is unverifiable at the boundary."
+      },
+      {
+        "id": "RUF-716@AUD-L7a",
+        "severity": "HIGH",
+        "summary": "Cancellation kills only the direct child and never escalates past SIGTERM, leaking the descendant tree."
+      },
+      {
+        "id": "RUF-711@AUD-L7a / TAI-001",
+        "severity": "MEDIUM",
+        "summary": "AgentRequest omits the projection; the agent is never told the ceiling it is measured against."
+      },
+      {
+        "id": "RUF-718@AUD-L7a",
+        "severity": "MEDIUM",
+        "summary": "A failed call writes usage.input = projection.maxTokens into the append-only trace as if measured."
+      },
+      {
+        "id": "RUF-719@AUD-L7a",
+        "severity": "MEDIUM",
+        "summary": "{files: []} is a valid, billable codegen success."
+      },
+      {
+        "id": "RUF-722@AUD-L7a",
+        "severity": "LOW",
+        "summary": "Agent stderr is captured but discarded on success; a successful call has no diagnostic channel."
+      }
+    ]
+  }
+}

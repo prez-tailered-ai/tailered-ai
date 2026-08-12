@@ -1,0 +1,90 @@
+{
+  "id": "CONTAIN-1-ruflo-init-through-adapter",
+  "elapsed_ms": 1370,
+  "outcome_ok": true,
+  "usage": {
+    "input": 207,
+    "output": 368,
+    "costUsd": 0.000615
+  },
+  "ruflo_observation": {
+    "how": "closed",
+    "exit_code": null,
+    "signal": "SIGABRT",
+    "stdout_bytes": 84,
+    "stdout_head": "\nInitializing RuFlo V3\n\n\r... Initializing...\r... Initializing...\r..: Initializing...",
+    "stderr_head": "onnxruntime cpuid_info warning: Unknown CPU vendor. cpuinfo_vendor value: 0\n\n  #  /usr/local/bin/node[25]: void node::RemoveEnvironmentCleanupHook(v8::Isolate*, CleanupHook, void*) at ../src/api/hooks.cc:142\n  #  Assertion failed: (env) != nullptr\n\n----- Native stack trace -----\n\n 1: 0x8f2290 node::Assert(node::AssertionInfo const&) [/usr/local/bin/node]\n 2: 0x7f1f74 node::RemoveEnvironmentCleanup"
+  },
+  "containment": {
+    "cwd": "/out/sandboxes/tpa-f94O2U/work",
+    "argv": [
+      "init"
+    ],
+    "env_sealed": true
+  },
+  "provenance": {
+    "adapter": "tailered-process-agent-adapter",
+    "adapter_version": "0.1.0-spike",
+    "engine": "ruflo-3.37.0-sandboxed",
+    "provider_actual": "ruflo.cli.local",
+    "model_requested": "mid-available",
+    "model_actual": "UNKNOWN(requested=mid-available)",
+    "context_repo_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "context_snapshot_sha256": "c867b37a399b1e7a57df763d7b3d287345eb22589b9a954f7064e3d4ba192436",
+    "context_files": 1,
+    "engine_wall_ms": 1327,
+    "measured": {
+      "input_tokens": 207,
+      "output_tokens": 368
+    }
+  },
+  "error": null,
+  "repo_hash_before": "2b3fb864bec1f0cffef592680d611ea797e8056f6fb3ea837adafea461cc051f",
+  "repo_hash_after": "2b3fb864bec1f0cffef592680d611ea797e8056f6fb3ea837adafea461cc051f",
+  "repo_mutated": false,
+  "sandbox_contents": [
+    {
+      "sandbox": "/out/sandboxes/tpa-f94O2U",
+      "entry_count": 313,
+      "top_level": [
+        "context",
+        "work"
+      ],
+      "sample": [
+        "context/",
+        "context/AGENTS.md",
+        "work/",
+        "work/.claude/",
+        "work/.claude/agents/",
+        "work/.claude/agents/browser/",
+        "work/.claude/agents/browser/browser-agent.yaml",
+        "work/.claude/agents/consensus/",
+        "work/.claude/agents/consensus/byzantine-coordinator.md",
+        "work/.claude/agents/consensus/crdt-synchronizer.md",
+        "work/.claude/agents/consensus/gossip-coordinator.md",
+        "work/.claude/agents/consensus/performance-benchmarker.md",
+        "work/.claude/agents/consensus/quorum-manager.md",
+        "work/.claude/agents/consensus/raft-manager.md",
+        "work/.claude/agents/consensus/security-manager.md",
+        "work/.claude/agents/core/",
+        "work/.claude/agents/core/planner.md",
+        "work/.claude/agents/sparc/",
+        "work/.claude/agents/sparc/architecture.md",
+        "work/.claude/agents/sparc/pseudocode.md",
+        "work/.claude/agents/sparc/refinement.md",
+        "work/.claude/agents/sparc/specification.md",
+        "work/.claude/agents/swarm/",
+        "work/.claude/agents/swarm/adaptive-coordinator.md",
+        "work/.claude/agents/swarm/hierarchical-coordinator.md",
+        "work/.claude/agents/swarm/mesh-coordinator.md",
+        "work/.claude/agents/testing/",
+        "work/.claude/agents/testing/production-validator.md",
+        "work/.claude/agents/testing/tdd-london-swarm.md",
+        "work/.claude/commands/"
+      ]
+    }
+  ],
+  "residual_processes": [
+    "    1     0     1 Ssl        00:01 node /spike/experiments/mcp-trap/run-contained-ruflo.mjs"
+  ]
+}

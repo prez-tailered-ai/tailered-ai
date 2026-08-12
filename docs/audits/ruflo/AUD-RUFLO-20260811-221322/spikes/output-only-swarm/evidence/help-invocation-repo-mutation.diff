@@ -1,0 +1,16 @@
+4a5
+> 7b1da7b29fa243901a666c825a653f7c10d0e44aa95a671ceb89d47ae9e68abc  ./.claude-flow/harness-active-policy.json
+8a10
+> 1b6494788566fd720fadf045b77e0d011be75a1f5dca36050d5a126301dba4b7  ./.claude-flow/policy/state.json
+9a12
+> 0b8ad646c4959a4515bab9787993f826610556966f1a70ae5b3c806503f01ed4  ./.claude/.proven-config-version
+176c179
+< dda7000136c5850aff87aa47fe76e1aae0bf5d8add93dff4cfec75603d0174a5  ./.claude/helpers/.helpers-version
+---
+> 148bfe7d89c4bd56f6cac6b2ff25d9c9cde785ae4d397d04b0dba3f64a20a216  ./.claude/helpers/.helpers-version
+209c212
+< df68f5905e4f5cfd8b3920237e52f1ad6dc51148fcc1bb6fd5be656eac0f7cad  ./.claude/helpers/statusline.cjs
+---
+> 0457fe53f8cd2c56458ff178392536a5868efd1a573665fa43bc01d2d95ca677  ./.claude/helpers/statusline.cjs
+219a223
+> f975a4dde97496f082235a139b90d39412f30db541ad1b881cd83c9cfe91fa7f  ./.claude/proven-config.json

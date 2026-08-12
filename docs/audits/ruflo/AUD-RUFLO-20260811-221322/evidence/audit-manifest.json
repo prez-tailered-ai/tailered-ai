@@ -1,0 +1,244 @@
+{
+  "audit_id": "AUD-RUFLO-20260811-221322",
+  "title": "Full-scope Ruflo qualification for the Tailered AI agent platform",
+  "master_specification": "gh-audit-ruflo.md (audit prompt, 2026-08-11)",
+  "started_utc": "2026-08-11T22:13:22Z",
+  "coordinator": "AUD-L0",
+  "precedence": [
+    "AGENTS.md (operating law)",
+    "docs/v1-contract.md (executable v1 scope)",
+    "docs/platform-brief.md (product intent)",
+    "docs/full-system-blueprint.md (trajectory)",
+    "docs/blueprint-execution.md (active capabilities)",
+    "executable source and tests",
+    "this audit prompt (cannot override the repository constitution)"
+  ],
+  "frozen_baselines": {
+    "tailered": {
+      "repo": "prez-tailered-ai/tailered-ai",
+      "sha": "6172653e0aca0981d0abaf4ad8e9d587667737e9",
+      "branch_at_start": "main",
+      "origin_main_at_start": "6172653e0aca0981d0abaf4ad8e9d587667737e9",
+      "matches_spec_reference_sha": true,
+      "worktree_clean_at_start": true,
+      "audit_branch": "audit/ruflo-qualification-20260811",
+      "audit_worktree": "/tmp/aud-ruflo-20260811/tailered-ai-audit"
+    },
+    "ruflo": {
+      "github_repo": "ruvnet/ruflo",
+      "stable_release": "v3.37.0",
+      "stable_sha": "6ce18b5a7fcd4939a2f72c2e3b8fdbdec660e5a9",
+      "stable_tree": "85fe469e138da391a545e87fd7874dd09ef4db21",
+      "commit_date": "2026-08-11T13:05:13-04:00",
+      "release_published": "2026-08-11T17:07:54Z",
+      "release_title": "v3.37.0 \u2014 proxy install hardening, cloud routing disclosure, tier pinning",
+      "main_sha": "6ce18b5a7fcd4939a2f72c2e3b8fdbdec660e5a9",
+      "main_delta_vs_stable": "EMPTY \u2014 tag v3.37.0 and branch main are the same commit",
+      "license": "MIT",
+      "npm_packages": {
+        "ruflo@3.37.0": {
+          "role": "wrapper",
+          "integrity": "sha512-oSEJHswwFMsMxhVDIfhR5Q/k/x5foO+cg7ZgYe5GUcK3u72RXppvFapAnMUuG+FtYcxvNTJ3JAdwtjuogbcHfQ==",
+          "shasum": "4c03c15bf4538d6deacbee37139ca4ff1ab4b3c3",
+          "local_tarball_sha256": "f2a7d5ad6969a817c06a61daed68a770c7ad4a5068a1ed31cf6650dead74759c",
+          "file_count": 526,
+          "engines": {
+            "node": ">=20.0.0"
+          },
+          "dependencies": {
+            "@claude-flow/cli": "^3.33.0"
+          },
+          "lifecycle_scripts": [
+            "prepublishOnly"
+          ]
+        },
+        "@claude-flow/cli@3.37.0": {
+          "role": "implementation",
+          "integrity": "sha512-AdpAehqNVodqrB1oy4ljvlu6FBZTe3T6+KorgP2dsnaqn1KfJdHUaZoYYU4WtRxbpHzVDL+m04hTe/m3Cs6TOQ==",
+          "shasum": "559be6ba258c5bbc9c5e219bc6a50968aab82900",
+          "local_tarball_sha256": "59a386240941dcf20332d742673c3a245574bc5c6926fc5f71ebbb000d90d70e",
+          "file_count": 1507,
+          "engines": null,
+          "lifecycle_scripts": [
+            "postinstall",
+            "prepublishOnly"
+          ],
+          "bin": [
+            "cli",
+            "claude-flow",
+            "claude-flow-mcp"
+          ]
+        }
+      },
+      "github_source_archive_sha256": "50c0187f5df72b7226eff46608558bf2b92f62fd1b76fdcfbcd63fc39efd1f4c",
+      "npm_publish_times": {
+        "3.35.0": "2026-08-10T14:20:16.494Z",
+        "3.36.0": "2026-08-10T17:41:22.850Z",
+        "3.37.0": "2026-08-11T17:07:03.277Z"
+      }
+    }
+  },
+  "resolved_dependency_drift": {
+    "note": "Installing the PINNED ruflo@3.37.0 resolves floating dependency versions; the pin does not pin the implementation or the stack.",
+    "declared_vs_resolved": {
+      "@claude-flow/cli": {
+        "declared": "^3.33.0",
+        "resolved": "3.37.0"
+      },
+      "agentdb": {
+        "declared": "^3.0.0-alpha.17",
+        "resolved": "3.0.0-alpha.20"
+      },
+      "better-sqlite3": {
+        "declared": "^12.9.0 (root override pins 12.9.0 exactly)",
+        "resolved": "12.11.1"
+      },
+      "ruvector": {
+        "declared": "^0.2.27",
+        "resolved": "0.2.41"
+      },
+      "agentic-flow": {
+        "declared": "^3.0.0-alpha.1",
+        "resolved": "3.0.0-alpha.2"
+      },
+      "@napi-rs/keyring": {
+        "declared": "1.3.0",
+        "resolved": "1.3.0"
+      }
+    },
+    "total_packages_in_lockfile": 785
+  },
+  "install_matrix": {
+    "runner": "docker run --rm node:24 (Node v24.19.0, npm 11.17.0), disposable, no host HOME mounted",
+    "variants": [
+      {
+        "name": "install-noscripts",
+        "flags": "--ignore-scripts",
+        "exit": 0,
+        "wall_seconds": 79,
+        "size": "1.5G",
+        "files": 48674,
+        "cli_functional": true
+      },
+      {
+        "name": "install-default",
+        "flags": "(none)",
+        "exit": 0,
+        "wall_seconds": 534,
+        "size": "1.5G",
+        "files": 50012
+      },
+      {
+        "name": "install-nooptional",
+        "flags": "--omit=optional",
+        "exit": 0,
+        "wall_seconds": 74,
+        "size": "124M",
+        "files": 11956,
+        "absent_packages": [
+          "better-sqlite3",
+          "ruvector",
+          "agentic-flow",
+          "@napi-rs/keyring",
+          "@huggingface/transformers"
+        ],
+        "present_packages": [
+          "ruflo",
+          "@claude-flow/cli",
+          "agentdb"
+        ]
+      }
+    ]
+  },
+  "isolation_model": {
+    "all_ruflo_execution": "inside `docker run --rm` containers",
+    "host_home_mounted_into_containers": false,
+    "credential_paths_mounted": "none",
+    "mounts_restricted_to": "/tmp/aud-ruflo-20260811/**",
+    "consequence": "Ruflo had no write path to host global configuration at any time"
+  },
+  "host_mutation_check": {
+    "~/.claude/settings.json": {
+      "before": "73920b1d5e5c4f3ba427d40f78333684cce272258ce5f90fde5049ef71088adf",
+      "after": "unchanged",
+      "verdict": "UNCHANGED"
+    },
+    "~/.claude/skills": {
+      "verdict": "UNCHANGED"
+    },
+    "~/.claude.json": {
+      "before": "33885ce8aa29e982ab877f1a5623f78adc8e571271060dc0dd9b1437a8097e6e",
+      "after": "bc5f9b287ace085f043431d19a908d7bf3519f172fd36ae58e9e7d5341f60032",
+      "verdict": "CHANGED \u2014 NOT attributable to Ruflo",
+      "attribution_evidence": [
+        "file contains zero occurrences of 'ruflo' or 'claude-flow' across 74475 bytes",
+        "keys are Claude Code session/cache state (projects, cachedGrowthBookFeatures, announcementImpressions)",
+        "no container in this audit mounted the host home directory, so no Ruflo write path existed"
+      ],
+      "attributed_to": "the interactive Claude Code session conducting this audit"
+    }
+  },
+  "environment_limitations": [
+    "Node 24 available only via Docker (host is Node v22.22.0)",
+    "no GitHub push permission on prez-tailered-ai/tailered-ai (pull only)",
+    "no Rust toolchain (cargo absent)",
+    "no model credentials; paid model calls forbidden \u2014 model-dependent behavior is INFERRED or UNKNOWN",
+    "8 GB RAM, ~25-34 GB free disk bounds concurrency scenarios"
+  ],
+  "prior_evidence_incorporated": {
+    "checkpoint": "~/Documents/tailered-os-research/ruflo-adoption-2026-08-11/",
+    "ruflo_version": "3.36.0",
+    "scope": "a different scope, outside this repository",
+    "carried_forward_and_reverified_against_3.37.0": [
+      "npm ruflo is a wrapper over @claude-flow/cli \u2014 CONFIRMED for 3.37.0",
+      "init prints a hook count that does not match what it writes \u2014 CONFIRMED but CHANGED: 3.36.0 fresh-init wrote ZERO hooks while printing 7; 3.37.0 writes 10 hook types / 13 entries while still printing 7",
+      "init skips an existing .mcp.json \u2014 in this audit no .mcp.json pre-existed, so one WAS created and the MCP surface IS registered"
+    ]
+  },
+  "lanes": {
+    "AUD-L0": "coordinator: charter, baseline, manifest, findings merge, risk register, scorecard, verdict, ADR",
+    "AUD-L1a": "capability inventory",
+    "AUD-L1b": "claims extraction",
+    "AUD-L2a": "source-to-package parity",
+    "AUD-L3a": "license inventory",
+    "AUD-L6a": "Tailered compatibility",
+    "AUD-L6b": "the agent platform applications",
+    "AUD-L2b": "architecture/runtime/hooks/MCP/daemon/removability",
+    "AUD-L3b": "security/privacy/egress/provenance",
+    "AUD-L4": "reliability and data integrity",
+    "AUD-L4b": "concurrency and isolation",
+    "AUD-L5": "performance and cost",
+    "AUD-L7a": "Spike A process-agent adapter",
+    "AUD-L7b": "Spikes B-E"
+  },
+  "repository_scope": {
+    "sole_first_party_repository": "prez-tailered-ai/tailered-ai",
+    "role": "source repository, audit host, integration host, agent-definition repository, deployment control plane, evidence destination, branch target, commit target, pull-request target",
+    "other_first_party_repositories_accessed": "none",
+    "only_external_repository_inspected": "ruvnet/ruflo (read-only, the system under audit)",
+    "note": "An earlier revision of the master specification directed an application analysis for a second first-party repository. The revised specification makes this repository the sole first-party scope. That analysis was removed and replaced by 12-agent-build-and-deployment-applications.md, and every artifact was swept of out-of-scope referents. See rescope_record below."
+  },
+  "rescope_record": {
+    "what_happened": "Section 23 of the earlier specification revision directed an application analysis for a second first-party repository, which lane AUD-L6b performed read-only and wrote to a separate document (since deleted).",
+    "action_taken": "That artifact was deleted. A replacement scoped solely to this repository was written as 12-agent-build-and-deployment-applications.md (lane AUD-L6c). All markdown, JSON, and JSONL evidence was swept of out-of-scope referents; per-record fields impact_dime and dime_relevance were renamed to impact_agent_platform and agent_platform_relevance, and values naming the out-of-scope repository were rewritten. Records carry a `rescoped` note where their text changed.",
+    "no_data_destroyed": "No finding, severity, evidence label, or Ruflo-facing analysis was altered by the re-scope. Only the out-of-scope referent was removed.",
+    "collateral_repaired": "Two sweep over-reaches were caught and repaired: Ruflo's own IPFS gateway hostname cloudflare-ipfs.com, and the ordinary English word 'notion'. Both are Ruflo evidence, not out-of-scope references.",
+    "findings_removed_as_out_of_scope": {
+      "count": 4,
+      "ids": [
+        "RUF-L6b-05",
+        "RUF-L6b-06",
+        "RUF-L6b-07",
+        "RUF-L6b-10"
+      ],
+      "reason": "These four lane AUD-L6b findings measured the OUT-OF-SCOPE repository itself (its file counts, its CI workflow coverage, its domain-specific capability gaps, and its plugin configuration) rather than Ruflo's behaviour. Under the sole-first-party-repository directive they are not audit evidence about Ruflo and were removed rather than rewritten.",
+      "retained_from_the_same_lane": [
+        "RUF-L6b-01",
+        "RUF-L6b-02",
+        "RUF-L6b-03",
+        "RUF-L6b-09"
+      ],
+      "retention_reason": "These four are facts about RUFLO discovered in that lane \u2014 unconditional `gh pr merge`, `gh workflow run`/`gh run cancel`, a fabricated {success:true, action:'merged'} when `gh` is absent, and helper scripts defaulting AUTO_PUSH=true \u2014 and remain valid Ruflo evidence independent of any host repository."
+    }
+  }
+}

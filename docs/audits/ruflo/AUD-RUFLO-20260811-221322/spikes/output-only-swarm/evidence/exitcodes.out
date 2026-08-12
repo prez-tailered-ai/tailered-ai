@@ -1,0 +1,39 @@
+===exit-code probe: hive-mind spawn without init===
+RUFLO_EXIT=1
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+[INFO] Spawning 1 worker agent(s)...
+[ERROR] Hive-mind not initialized. Run hive-mind/init first.
+===exit-code probe: task assign nonexistent task===
+RUFLO_EXIT=1
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+
+[ERROR] Unexpected error: TypeError: Cannot read properties of undefined (reading 'join')
+===exit-code probe: swarm stop bogus id===
+RUFLO_EXIT=0
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+[INFO] Stopping swarm totally-bogus-swarm-id...
+  Swarm state updated
+  MCP swarm stopped
+[OK] Swarm totally-bogus-swarm-id stopped
+===exit-code probe: swarm status bogus id===
+RUFLO_EXIT=0
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+{
+  "id": "zzz-not-a-swarm",
+  "topology": "none",
+  "status": "running",
+  "objective": "Add a --json flag to the Tailered dashboard CLI and document it",
+  "strategy": "development",
+  "agents": {
+    "total": 3,
+    "active": 1,
+    "idle": 2,
+    "completed": 0
+  },
+  "progress": 5,
+  "tasks": {
+    "total": 0,
+    "completed": 0,
+    "inProgress": 0,
+    "pending": 0
+  },

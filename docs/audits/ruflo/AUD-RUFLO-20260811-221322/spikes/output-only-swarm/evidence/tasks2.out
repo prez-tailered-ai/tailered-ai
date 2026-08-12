@@ -1,0 +1,150 @@
+===TASK LIST (default filter)===
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+{
+  "tasks": [
+    {
+      "taskId": "task-1786491858862-4vz4no",
+      "type": "implementation",
+      "description": "Remove the --json flag from src/dashboard.ts",
+      "status": "pending",
+      "progress": 0,
+      "priority": "normal",
+      "assignedTo": [],
+      "createdAt": "2026-08-11T23:44:18.862Z"
+    },
+    {
+      "taskId": "task-1786491858697-8qnl2o",
+      "type": "implementation",
+      "description": "Add --json flag to src/dashboard.ts",
+      "status": "pending",
+      "progress": 0,
+      "priority": "normal",
+      "assignedTo": [],
+      "createdAt": "2026-08-11T23:44:18.697Z"
+    },
+    {
+      "taskId": "task-1786491858513-5jkwob",
+      "type": "documentation",
+      "description": "Document --json flag in docs/v1-contract.md",
+      "status": "pending",
+      "progress": 0,
+      "priority": "normal",
+      "assignedTo": [],
+      "createdAt": "2026-08-11T23:44:18.513Z"
+    },
+    {
+      "taskId": "task-1786491858117-7zhg2f",
+      "type": "testing",
+      "description": "Add test for --json flag in test/dashboard.test.ts",
+      "status": "pending",
+      "progress": 0,
+      "priority": "normal",
+      "assignedTo": [],
+      "createdAt": "2026-08-11T23:44:18.117Z"
+    },
+    {
+      "taskId": "task-1786491857674-4of0nc",
+      "type": "implementation",
+      "description": "Add --json flag to src/dashboard.ts",
+      "status": "pending",
+      "progress": 0,
+      "priority": "normal",
+      "assignedTo": [],
+      "createdAt": "2026-08-11T23:44:17.674Z"
+    }
+  ],
+  "total": 5,
+  "filters": {
+    "status": "pending,running"
+  }
+}
+===TASK LIST --status pending===
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+{
+  "tasks": [
+    {
+      "taskId": "task-1786491858862-4vz4no",
+      "type": "implementation",
+      "description": "Remove the --json flag from src/dashboard.ts",
+      "status": "pending",
+      "progress": 0,
+      "priority": "normal",
+      "assignedTo": [],
+      "createdAt": "2026-08-11T23:44:18.862Z"
+    },
+    {
+      "taskId": "task-1786491858697-8qnl2o",
+      "type": "implementation",
+      "description": "Add --json flag to src/dashboard.ts",
+      "status": "pending",
+      "progress": 0,
+      "priority": "normal",
+      "assignedTo": [],
+      "createdAt": "2026-08-11T23:44:18.697Z"
+    },
+    {
+      "taskId": "task-1786491858513-5jkwob",
+      "type": "documentation",
+      "description": "Document --json flag in docs/v1-contract.md",
+      "status": "pending",
+      "progress": 0,
+      "priority": "normal",
+      "assignedTo": [],
+      "createdAt": "2026-08-11T23:44:18.513Z"
+    },
+    {
+      "taskId": "task-1786491858117-7zhg2f",
+      "type": "testing",
+      "description": "Add test for --json flag in test/dashboard.test.ts",
+      "status": "pending",
+      "progress": 0,
+      "priority": "normal",
+      "assignedTo": [],
+      "createdAt": "2026-08-11T23:44:18.117Z"
+    },
+    {
+      "taskId": "task-1786491857674-4of0nc",
+      "type": "implementation",
+      "description": "Add --json flag to src/dashboard.ts",
+      "status": "pending",
+      "progress": 0,
+      "priority": "normal",
+      "assignedTo": [],
+      "createdAt": "2026-08-11T23:44:17.674Z"
+    }
+  ],
+  "total": 5,
+  "filters": {
+    "status": "pending"
+  }
+}
+===ASSIGN t1 -> coder agent===
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+
+[OK] Task task-1786491857674-4of0nc assigned to agent-1786491716323-ul4b66
+===ASSIGN t1 AGAIN -> tester agent (double-assign same task)===
+
+[OK] Task task-1786491857674-4of0nc assigned to agent-1786491716758-xy83th
+===ASSIGN to NONEXISTENT agent===
+
+[OK] Task task-1786491858117-7zhg2f assigned to agent-does-not-exist-999
+===ASSIGN NONEXISTENT task===
+
+[ERROR] Unexpected error: TypeError: Cannot read properties of undefined (reading 'join')
+===TASK STATUS t1===
+{
+  "taskId": "task-1786491857674-4of0nc",
+  "type": "implementation",
+  "description": "Add --json flag to src/dashboard.ts",
+  "status": "in_progress",
+  "progress": 0,
+  "priority": "normal",
+  "assignedTo": [
+    "agent-1786491716758-xy83th"
+  ],
+  "tags": [],
+  "createdAt": "2026-08-11T23:44:17.674Z",
+  "startedAt": "2026-08-11T23:45:12.227Z",
+  "completedAt": null,
+  "result": null
+}

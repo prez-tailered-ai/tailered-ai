@@ -1,0 +1,23 @@
+AUD-RUFLO-20260811-221322 / lane AUD-L7a
+`ruflo init` exit status by install tree and CPU architecture.
+Each run: docker run --rm, /rf mounted read-only, fresh empty CWD, isolated HOME.
+
+install-noscripts (npm i --ignore-scripts; no native better-sqlite3), linux/arm64
+  EXIT=0
+  CWD after: .agents .claude .claude-flow .gitignore .mcp.json .swarm CLAUDE.md ruvector.db
+
+install-default (postinstall ran; native better_sqlite3.node present), linux/arm64
+  EXIT=134  (SIGABRT)
+  stderr: onnxruntime cpuid_info warning: Unknown CPU vendor. cpuinfo_vendor value: 0
+          node[8]: void node::RemoveEnvironmentCleanupHook(...) at ../src/api/hooks.cc:142
+          Assertion failed: (env) != nullptr
+          frame 3/4: Statement::~Statement() [agentdb/node_modules/better-sqlite3/build/Release/better_sqlite3.node]
+  CWD after: .claude .claude-flow .mcp.json .swarm
+             (PARTIAL: no CLAUDE.md, no ruvector.db, no .agents/, .gitignore untouched)
+
+install-default, linux/amd64 (emulated, node reports process.arch === "x64")
+  EXIT=0
+  CWD after: .agents .claude .claude-flow .gitignore .mcp.json .swarm CLAUDE.md
+             agentdb.rvf agentdb.rvf.lock
+             (note: agentdb.rvf + .lock here, ruvector.db on arm64 -- different
+              on-disk artifacts from the same command on different architectures)

@@ -1,0 +1,143 @@
+{
+  "audit_id": "AUD-RUFLO-20260811-221322",
+  "ruflo_release": "v3.37.0",
+  "ruflo_sha": "6ce18b5a7fcd4939a2f72c2e3b8fdbdec660e5a9",
+  "method": "Per-capability decision from 15-adoption-scorecard.md section 3, cross-referenced to the claims matrix and findings set. Maturity ladder: ADVERTISED-IMPLEMENTED-PACKAGED-REACHABLE-EFFECTIVE-DURABLE-GOVERNABLE.",
+  "headline": {
+    "capabilities_evaluated": 26,
+    "ADOPT": 0,
+    "ADAPT": 4,
+    "STUDY": 11,
+    "REJECT": 11
+  },
+  "claims_summary": {
+    "total": 90,
+    "source_level_maturity": {
+      "PACKAGED": 71,
+      "ADVERTISED": 15,
+      "IMPLEMENTED": 4
+    },
+    "final_resolution_note": "Final per-claim maturity and decision live in 04-claims-to-evidence-matrix.md: REFUTED 42, PACKAGED 29, REACHABLE 7, ADVERTISED 6, EFFECTIVE 5, IMPLEMENTED 1, DURABLE 0, GOVERNABLE 0; decisions REJECT 49, UNKNOWN 34, STUDY 5, ADAPT 2, ADOPT 0."
+  },
+  "findings_summary": {
+    "total": 212,
+    "by_severity": {
+      "CRITICAL": 33,
+      "HIGH": 72,
+      "MEDIUM": 66,
+      "LOW": 20,
+      "INFO": 21
+    },
+    "evidence_class_verified_or_qualified_verified": 209,
+    "evidence_class_inferred": 3,
+    "positive_findings": 11,
+    "pre_existing_host_findings": 12
+  },
+  "capabilities": [
+    {
+      "capability": "Core CLI",
+      "decision": "STUDY"
+    },
+    {
+      "capability": "MCP server + tool surface",
+      "decision": "ADAPT"
+    },
+    {
+      "capability": "Plugin discovery/loading",
+      "decision": "REJECT"
+    },
+    {
+      "capability": "Agent definitions",
+      "decision": "STUDY"
+    },
+    {
+      "capability": "Swarm coordination",
+      "decision": "STUDY"
+    },
+    {
+      "capability": "Worktree isolation",
+      "decision": "REJECT"
+    },
+    {
+      "capability": "Workflow persistence/resume",
+      "decision": "STUDY"
+    },
+    {
+      "capability": "Autopilot / background workers",
+      "decision": "REJECT"
+    },
+    {
+      "capability": "AgentDB / memory persistence",
+      "decision": "REJECT"
+    },
+    {
+      "capability": "Vector retrieval / RAG",
+      "decision": "REJECT"
+    },
+    {
+      "capability": "Cross-session memory",
+      "decision": "REJECT"
+    },
+    {
+      "capability": "Self-learning / SONA",
+      "decision": "STUDY"
+    },
+    {
+      "capability": "Model / provider routing",
+      "decision": "REJECT"
+    },
+    {
+      "capability": "Cost tracking",
+      "decision": "ADAPT"
+    },
+    {
+      "capability": "Budget enforcement",
+      "decision": "REJECT"
+    },
+    {
+      "capability": "Observability / tracing",
+      "decision": "ADAPT"
+    },
+    {
+      "capability": "Security scanning / AI defence",
+      "decision": "STUDY"
+    },
+    {
+      "capability": "Prompt-injection / PII defences",
+      "decision": "STUDY"
+    },
+    {
+      "capability": "Browser automation",
+      "decision": "STUDY"
+    },
+    {
+      "capability": "Test generation",
+      "decision": "STUDY"
+    },
+    {
+      "capability": "GitHub integration",
+      "decision": "REJECT"
+    },
+    {
+      "capability": "Federation",
+      "decision": "STUDY"
+    },
+    {
+      "capability": "MetaHarness grading",
+      "decision": "STUDY"
+    },
+    {
+      "capability": "Witness verification",
+      "decision": "REJECT"
+    },
+    {
+      "capability": "Install / upgrade",
+      "decision": "ADAPT"
+    },
+    {
+      "capability": "cleanup / uninstall",
+      "decision": "REJECT"
+    }
+  ],
+  "ceiling_note": "No capability reached DURABLE or GOVERNABLE. Zero capabilities qualified for ADOPT."
+}

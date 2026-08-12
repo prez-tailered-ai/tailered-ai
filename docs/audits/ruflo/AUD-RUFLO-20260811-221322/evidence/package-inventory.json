@@ -1,0 +1,5629 @@
+{
+  "audit_id": "AUD-RUFLO-20260811-221322",
+  "lane": "AUD-L1a",
+  "tailered_sha": "6172653e0aca0981d0abaf4ad8e9d587667737e9",
+  "ruflo_release": "v3.37.0",
+  "ruflo_sha": "6ce18b5a7fcd4939a2f72c2e3b8fdbdec660e5a9",
+  "generated": "2026-08-11T22:30:00Z",
+  "evidence_class": "VERIFIED",
+  "method": {
+    "sources": {
+      "git_clone": "/tmp/aud-ruflo-20260811/upstream/ruflo-v3.37.0",
+      "tarball_cli": "/tmp/aud-ruflo-20260811/work/extract/cli/package  (npm @claude-flow/cli@3.37.0)",
+      "tarball_ruflo": "/tmp/aud-ruflo-20260811/work/extract/ruflo/package  (npm ruflo@3.37.0)"
+    },
+    "evidence_ceiling": "PACKAGED. This lane performed no installation and no execution, so REACHABLE / EFFECTIVE / DURABLE / GOVERNABLE were not and cannot be established here.",
+    "counting_rules": {
+      "cli_commands": "keys of `commandLoaders` in dist/src/commands/index.js of the published @claude-flow/cli tarball",
+      "cli_subcommands": "elements of every `subcommands: [...]` array literal in packaged dist/src/commands/**.js, at all nesting levels, with the two spread placeholders resolved to their target array lengths",
+      "mcp_tools": "tool objects reached by walking back from each `inputSchema:` line to the `name: '...'` line at the same indentation, restricted to the arrays actually spread into registerTools() in dist/src/mcp-client.js",
+      "agents": "*.md files with YAML frontmatter containing a `name:` key",
+      "skills": "directories under .claude/skills (SKILL.md presence recorded separately)",
+      "plugins": "directories under plugins/ containing .claude-plugin/plugin.json"
+    }
+  },
+  "counts": {
+    "npm_packages_in_clone": 50,
+    "npm_workspaces_declared_root": 3,
+    "npm_workspaces_declared_v3": "glob @claude-flow/* + claude-flow",
+    "npm_package_dirs_under_v3_claude_flow": 22,
+    "root_dependencies": 19,
+    "root_optional_dependencies": 9,
+    "root_overrides": 42,
+    "cli_dependencies": 25,
+    "cli_optional_dependencies": 11,
+    "cli_peer_dependencies": 2,
+    "cli_bundled_dependencies": 3,
+    "ruflo_wrapper_dependencies": 1,
+    "ruflo_wrapper_optional_dependencies": 0,
+    "tarball_files_ruflo": 526,
+    "tarball_files_cli": 1507,
+    "cli_commands_top_level": 53,
+    "cli_subcommand_entries_all_packaged_files": 387,
+    "cli_subcommand_entries_in_loader_modules": 382,
+    "mcp_tool_definitions_packaged": 361,
+    "mcp_tools_registered": 356,
+    "mcp_tools_registered_unconditional": 333,
+    "mcp_tools_registered_conditional_browser": 23,
+    "mcp_tools_packaged_but_unregistered": 5,
+    "agents_packaged_in_cli_tarball": 89,
+    "agents_repo_root_not_packaged_in_cli_tarball": 108,
+    "agents_in_repo_plugins": 56,
+    "agents_unique_names_all_sources": 156,
+    "agents_unique_names_packaged": 81,
+    "skills_packaged_in_cli_tarball": 34,
+    "skills_packaged_with_SKILL_md": 33,
+    "skills_repo_root_not_packaged": 39,
+    "skills_in_repo_plugins": 136,
+    "slash_commands_packaged": 167,
+    "plugins_in_repo": 38,
+    "plugins_in_marketplace_manifest": 35,
+    "plugins_packaged_in_cli_tarball": 1,
+    "v3_plugin_npm_packages": 15,
+    "rust_crates": 6,
+    "rust_workspace_only_manifests": 3,
+    "wasm_binaries_in_clone": 2,
+    "wasm_binaries_in_cli_tarball": 0,
+    "wasm_binaries_in_ruflo_tarball": 1,
+    "daemon_worker_types": 9,
+    "daemon_worker_types_enabled_by_default": 7,
+    "network_listeners_in_cli_tarball": 1,
+    "sqlite_tables_created": 14,
+    "conflicts": [
+      {
+        "item": "agents",
+        "advertised": [
+          "60+ (root package.json description, upstream/ruflo-v3.37.0/package.json:9 and the published ruflo tarball package.json:3)",
+          "100+ (README.md:26)",
+          "98 (README.md:57)",
+          "164 (catalog-manifest.json shipped inside the @claude-flow/cli tarball)"
+        ],
+        "source_counted": {
+          "repo_root_.claude/agents/**.md": 108,
+          "repo_plugins/*/agents/**.md": 56,
+          "cli_package_.claude/agents/**.md": 89,
+          "unique_frontmatter_names_across_all_three": 156
+        },
+        "tarball_counted": {
+          "@claude-flow/cli tarball .claude/agents/**.md": 89,
+          "@claude-flow/cli tarball plugins/**/agents/*.md": 1,
+          "ruflo tarball": 0
+        },
+        "verified": "89 agent definition files (81 unique frontmatter names) ship in the @claude-flow/cli tarball; 1 more ships inside the single packaged plugin. The manifest figure 164 is reproducible as `git ls-files '.claude/agents/*.md' 'plugins/*/agents/*.md'` at the REPO ROOT (108 + 56) \u2014 a set that is NOT what the tarball carrying that manifest contains.",
+        "sources": [
+          "upstream/ruflo-v3.37.0/package.json:9",
+          "upstream/ruflo-v3.37.0/README.md:26",
+          "upstream/ruflo-v3.37.0/README.md:57",
+          "work/extract/cli/package/catalog-manifest.json",
+          "upstream/ruflo-v3.37.0/v3/@claude-flow/cli/scripts/generate-catalog-manifest.mjs:84"
+        ]
+      },
+      {
+        "item": "mcp_tools",
+        "advertised": [
+          "~210 (README.md:228 and README.md:256)",
+          "314 (README.md:38)",
+          "314+ (SKILL.md:3)",
+          "397 (catalog-manifest.json)"
+        ],
+        "source_counted": {
+          "tool definitions in v3/@claude-flow/cli/src/mcp-tools/*.ts + src/ruvector/coverage-tools.ts": 361
+        },
+        "tarball_counted": {
+          "tool definitions packaged": 361,
+          "registered in the live registry": 356,
+          "registered unconditionally": 333,
+          "registered only when the `agent-browser` binary is on PATH": 23,
+          "packaged but never registered": 5
+        },
+        "verified": "356 tools are registered by registerTools() in the published dist/src/mcp-client.js:118-175. 397 is reproducible but wrong: generate-catalog-manifest.mjs:41-50 counts every `name: '...'` string literal in src/mcp-tools/*.ts, which sweeps in 39 non-tool literals (JSON-schema property values, hook event names) and misses the 3 real tools defined in src/ruvector/coverage-tools.ts.",
+        "sources": [
+          "work/extract/cli/package/dist/src/mcp-client.js:118",
+          "upstream/ruflo-v3.37.0/v3/@claude-flow/cli/scripts/generate-catalog-manifest.mjs:41",
+          "upstream/ruflo-v3.37.0/README.md:38",
+          "upstream/ruflo-v3.37.0/README.md:228",
+          "upstream/ruflo-v3.37.0/SKILL.md:3"
+        ]
+      },
+      {
+        "item": "cli_commands",
+        "advertised": [
+          "26 CLI commands (README.md:38)",
+          "60+ commands (README.md:57 \u2014 refers to slash commands, not CLI verbs)"
+        ],
+        "source_counted": {
+          "commandLoaders keys in src/commands/index.ts": 53
+        },
+        "tarball_counted": {
+          "commandLoaders keys in dist/src/commands/index.js": 53,
+          "declared subcommand entries": 387
+        },
+        "verified": "53 top-level CLI commands, all packaged. Neither 26 nor 60+ matches. 167 Claude Code slash-command .md files ship under .claude/commands/, which is the closest thing to '60+ commands' and is itself 2.8x that figure.",
+        "sources": [
+          "work/extract/cli/package/dist/src/commands/index.js:15-97",
+          "upstream/ruflo-v3.37.0/README.md:38",
+          "upstream/ruflo-v3.37.0/README.md:57"
+        ]
+      },
+      {
+        "item": "plugins",
+        "advertised": [
+          "35 plugins (README.md:79)",
+          "30+ plugins (SKILL.md:3)"
+        ],
+        "source_counted": {
+          "plugins/ dirs with .claude-plugin/plugin.json": 38,
+          "names listed in .claude-plugin/marketplace.json": 35,
+          "separate npm plugin packages under v3/plugins": 15
+        },
+        "tarball_counted": {
+          "@claude-flow/cli tarball plugins/": 1
+        },
+        "verified": "38 plugin directories exist in the repo; the marketplace manifest lists 35 of them (omits ruflo-agntcy, ruflo-bbs-federation, ruflo-graph-intelligence... precisely: ruflo-agntcy, ruflo-bbs-federation, ruflo-business-pods). Exactly ONE plugin (ruflo-metaharness) is present in the published @claude-flow/cli tarball; the other 37 are not shipped by the package that `npm i ruflo` installs.",
+        "sources": [
+          "upstream/ruflo-v3.37.0/.claude-plugin/marketplace.json",
+          "work/extract/cli/package/plugins/",
+          "work/extract/cli/package/package.json:files"
+        ]
+      },
+      {
+        "item": "skills",
+        "advertised": [
+          "30 skills (README.md:57)",
+          "34 (catalog-manifest.json)"
+        ],
+        "source_counted": {
+          "v3/@claude-flow/cli/.claude/skills dirs": 34,
+          "repo root .claude/skills dirs": 39,
+          "plugins/*/skills SKILL.md": 136
+        },
+        "tarball_counted": {
+          "@claude-flow/cli tarball .claude/skills dirs": 34,
+          "of which contain SKILL.md": 33
+        },
+        "verified": "34 skill directories are packaged; 33 contain a SKILL.md. The directory `.claude/skills/dual-mode` ships three .md files (dual-collect.md, dual-coordinate.md, dual-spawn.md) and a README.md but no SKILL.md, so it is not a loadable skill. catalog-manifest's 34 counts directories, not loadable skills.",
+        "sources": [
+          "work/extract/cli/package/.claude/skills/",
+          "upstream/ruflo-v3.37.0/v3/@claude-flow/cli/scripts/generate-catalog-manifest.mjs:52"
+        ]
+      }
+    ],
+    "postgres_tables_created": 16
+  },
+  "packages": [
+    {
+      "name": "ruflo",
+      "version": "3.37.0",
+      "registry": "npm",
+      "role": "published wrapper the audit target is named after",
+      "manifest": "work/extract/ruflo/package/package.json",
+      "bin": {
+        "ruflo": "bin/ruflo.js"
+      },
+      "dependencies": {
+        "@claude-flow/cli": "^3.33.0"
+      },
+      "optionalDependencies": {},
+      "files_in_tarball": 526,
+      "note": "bin/ruflo.js (77 lines) resolves @claude-flow/cli by walking up node_modules and imports its dist. 499 of the 526 files are src/ruvocal/, a vendored fork of HuggingFace `chat-ui` v0.20.0, which bin/ruflo.js never references."
+    },
+    {
+      "name": "claude-flow",
+      "version": "3.37.0",
+      "registry": "npm",
+      "role": "umbrella package = the GitHub repo root",
+      "manifest": "upstream/ruflo-v3.37.0/package.json",
+      "bin": {
+        "claude-flow": "bin/cli.js"
+      },
+      "workspaces": [
+        "v3/@claude-flow/codex",
+        "v3/@claude-flow/plugin-agent-federation",
+        "v3/@claude-flow/security"
+      ],
+      "dependencies_count": 19,
+      "optionalDependencies_count": 9,
+      "overrides_count": 42,
+      "bundleDependencies": [
+        "@claude-flow/codex",
+        "@claude-flow/plugin-agent-federation",
+        "@claude-flow/security"
+      ]
+    },
+    {
+      "name": "@claude-flow/cli",
+      "version": "3.37.0",
+      "registry": "npm",
+      "role": "the implementation everything else delegates to",
+      "manifest": "work/extract/cli/package/package.json",
+      "bin": {
+        "cli": "bin/cli.js",
+        "claude-flow": "bin/cli.js",
+        "claude-flow-mcp": "bin/mcp-server.js"
+      },
+      "files_in_tarball": 1507,
+      "engines": "absent (npm reports engines: null) \u2014 the root claude-flow package declares node>=20 but @claude-flow/cli does not",
+      "scripts_postinstall": "node ./scripts/postinstall.cjs",
+      "dependencies_count": 25,
+      "optionalDependencies_count": 11,
+      "peerDependencies": {
+        "@metaharness/router": "^0.4.0",
+        "metaharness": "^0.4.1"
+      },
+      "bundled": [
+        {
+          "name": "@claude-flow/codex",
+          "version": "3.0.3",
+          "files": 120,
+          "bin": {
+            "claude-flow-codex": "dist/cli.js"
+          }
+        },
+        {
+          "name": "@claude-flow/plugin-agent-federation",
+          "version": "1.0.0-alpha.18",
+          "files": 130,
+          "bin": {
+            "ruflo-federation": "dist/bin.js"
+          }
+        },
+        {
+          "name": "@claude-flow/security",
+          "version": "3.0.0-alpha.14",
+          "files": 122,
+          "bin": null
+        }
+      ]
+    }
+  ],
+  "packages_in_clone_not_published_here": [
+    {
+      "name": "@claude-flow/aidefence",
+      "path": "v3/@claude-flow/aidefence"
+    },
+    {
+      "name": "@claude-flow/browser",
+      "path": "v3/@claude-flow/browser"
+    },
+    {
+      "name": "@claude-flow/claims",
+      "path": "v3/@claude-flow/claims"
+    },
+    {
+      "name": "@claude-flow/cli-core",
+      "path": "v3/@claude-flow/cli-core"
+    },
+    {
+      "name": "@claude-flow/deployment",
+      "path": "v3/@claude-flow/deployment"
+    },
+    {
+      "name": "@claude-flow/embeddings",
+      "path": "v3/@claude-flow/embeddings"
+    },
+    {
+      "name": "@claude-flow/guidance",
+      "path": "v3/@claude-flow/guidance"
+    },
+    {
+      "name": "@claude-flow/hooks",
+      "path": "v3/@claude-flow/hooks"
+    },
+    {
+      "name": "@claude-flow/integration",
+      "path": "v3/@claude-flow/integration"
+    },
+    {
+      "name": "@claude-flow/mcp",
+      "path": "v3/@claude-flow/mcp"
+    },
+    {
+      "name": "@claude-flow/memory",
+      "path": "v3/@claude-flow/memory"
+    },
+    {
+      "name": "@claude-flow/neural",
+      "path": "v3/@claude-flow/neural"
+    },
+    {
+      "name": "@claude-flow/performance",
+      "path": "v3/@claude-flow/performance"
+    },
+    {
+      "name": "@claude-flow/plugin-iot-cognitum",
+      "path": "v3/@claude-flow/plugin-iot-cognitum"
+    },
+    {
+      "name": "@claude-flow/plugins",
+      "path": "v3/@claude-flow/plugins"
+    },
+    {
+      "name": "@claude-flow/providers",
+      "path": "v3/@claude-flow/providers"
+    },
+    {
+      "name": "@claude-flow/shared",
+      "path": "v3/@claude-flow/shared"
+    },
+    {
+      "name": "@claude-flow/swarm",
+      "path": "v3/@claude-flow/swarm"
+    },
+    {
+      "name": "@claude-flow/testing",
+      "path": "v3/@claude-flow/testing"
+    },
+    {
+      "name": "@ruflo/research",
+      "path": "v3/goal_ui  (Vite/React + Supabase UI, not packaged)"
+    },
+    {
+      "name": "chat-ui",
+      "path": "ruflo/src/ruvocal  (HuggingFace chat-ui 0.20.0 fork; IS packaged inside the ruflo tarball)"
+    },
+    {
+      "name": "mcp-bridge",
+      "path": "ruflo/src/mcp-bridge  (Express server, packaged inside the ruflo tarball)"
+    },
+    {
+      "name": "publish-registry",
+      "path": "v3/@claude-flow/cli/cloud-functions/publish-registry (GCP cloud function, not packaged)"
+    },
+    {
+      "name": "guidance-kernel",
+      "path": "v3/@claude-flow/guidance/wasm-pkg (wasm-bindgen output, not packaged)"
+    }
+  ],
+  "cli_commands": [
+    {
+      "name": "init",
+      "impl": "dist/src/commands/init.js",
+      "packaged": true,
+      "load": "sync-core",
+      "declared_subcommand_entries": 5
+    },
+    {
+      "name": "start",
+      "impl": "dist/src/commands/start.js",
+      "packaged": true,
+      "load": "sync-core",
+      "declared_subcommand_entries": 3
+    },
+    {
+      "name": "status",
+      "impl": "dist/src/commands/status.js",
+      "packaged": true,
+      "load": "sync-core",
+      "declared_subcommand_entries": 3
+    },
+    {
+      "name": "task",
+      "impl": "dist/src/commands/task.js",
+      "packaged": true,
+      "load": "sync-core",
+      "declared_subcommand_entries": 6
+    },
+    {
+      "name": "session",
+      "impl": "dist/src/commands/session.js",
+      "packaged": true,
+      "load": "sync-core",
+      "declared_subcommand_entries": 7
+    },
+    {
+      "name": "agent",
+      "impl": "dist/src/commands/agent.js",
+      "packaged": true,
+      "load": "sync-core",
+      "declared_subcommand_entries": 13
+    },
+    {
+      "name": "swarm",
+      "impl": "dist/src/commands/swarm.js",
+      "packaged": true,
+      "load": "sync-core",
+      "declared_subcommand_entries": 9
+    },
+    {
+      "name": "memory",
+      "impl": "dist/src/commands/memory.js",
+      "packaged": true,
+      "load": "sync-core",
+      "declared_subcommand_entries": 17
+    },
+    {
+      "name": "mcp",
+      "impl": "dist/src/commands/mcp.js",
+      "packaged": true,
+      "load": "sync-core",
+      "declared_subcommand_entries": 9
+    },
+    {
+      "name": "config",
+      "impl": "dist/src/commands/config.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 7
+    },
+    {
+      "name": "migrate",
+      "impl": "dist/src/commands/migrate.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 5
+    },
+    {
+      "name": "hooks",
+      "impl": "dist/src/commands/hooks.js",
+      "packaged": true,
+      "load": "sync-core",
+      "declared_subcommand_entries": 40
+    },
+    {
+      "name": "workflow",
+      "impl": "dist/src/commands/workflow.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 9
+    },
+    {
+      "name": "hive-mind",
+      "impl": "dist/src/commands/hive-mind.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 11
+    },
+    {
+      "name": "process",
+      "impl": "dist/src/commands/process.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 5
+    },
+    {
+      "name": "daemon",
+      "impl": "dist/src/commands/daemon.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 11
+    },
+    {
+      "name": "version",
+      "impl": "dist/src/commands/version.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 0
+    },
+    {
+      "name": "neural",
+      "impl": "dist/src/commands/neural.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 31
+    },
+    {
+      "name": "security",
+      "impl": "dist/src/commands/security.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 9
+    },
+    {
+      "name": "performance",
+      "impl": "dist/src/commands/performance.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 5
+    },
+    {
+      "name": "providers",
+      "impl": "dist/src/commands/providers.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 5
+    },
+    {
+      "name": "plugins",
+      "impl": "dist/src/commands/plugins.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 9
+    },
+    {
+      "name": "deployment",
+      "impl": "dist/src/commands/deployment.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 7
+    },
+    {
+      "name": "claims",
+      "impl": "dist/src/commands/claims.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 6
+    },
+    {
+      "name": "policy",
+      "impl": "dist/src/commands/policy.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 0
+    },
+    {
+      "name": "embeddings",
+      "impl": "dist/src/commands/embeddings.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 15
+    },
+    {
+      "name": "completions",
+      "impl": "dist/src/commands/completions.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 4
+    },
+    {
+      "name": "doctor",
+      "impl": "dist/src/commands/doctor.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 0
+    },
+    {
+      "name": "verify",
+      "impl": "dist/src/commands/verify.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 0
+    },
+    {
+      "name": "analyze",
+      "impl": "dist/src/commands/analyze.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 11
+    },
+    {
+      "name": "route",
+      "impl": "dist/src/commands/route.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 8
+    },
+    {
+      "name": "progress",
+      "impl": "dist/src/commands/progress.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 4
+    },
+    {
+      "name": "issues",
+      "impl": "dist/src/commands/issues.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 10
+    },
+    {
+      "name": "update",
+      "impl": "dist/src/commands/update.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 5
+    },
+    {
+      "name": "ruvector",
+      "impl": "dist/src/commands/ruvector/index.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 8
+    },
+    {
+      "name": "benchmark",
+      "impl": "dist/src/commands/benchmark.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 4
+    },
+    {
+      "name": "guidance",
+      "impl": "dist/src/commands/guidance.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 6
+    },
+    {
+      "name": "appliance",
+      "impl": "dist/src/commands/appliance.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 8
+    },
+    {
+      "name": "appliance-advanced",
+      "impl": "dist/src/commands/appliance-advanced.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 0
+    },
+    {
+      "name": "transfer-store",
+      "impl": "dist/src/commands/transfer-store.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 5
+    },
+    {
+      "name": "cleanup",
+      "impl": "dist/src/commands/cleanup.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 0
+    },
+    {
+      "name": "autopilot",
+      "impl": "dist/src/commands/autopilot.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 10
+    },
+    {
+      "name": "gaia-bench",
+      "impl": "dist/src/commands/gaia-bench.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 1
+    },
+    {
+      "name": "metaharness",
+      "impl": "dist/src/commands/metaharness.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 0
+    },
+    {
+      "name": "eject",
+      "impl": "dist/src/commands/eject.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 0
+    },
+    {
+      "name": "funnel",
+      "impl": "dist/src/commands/funnel.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 9
+    },
+    {
+      "name": "settings",
+      "impl": "dist/src/commands/settings.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 7
+    },
+    {
+      "name": "auth",
+      "impl": "dist/src/commands/auth.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 3
+    },
+    {
+      "name": "proxy",
+      "impl": "dist/src/commands/proxy.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 20
+    },
+    {
+      "name": "advisor",
+      "impl": "dist/src/commands/advisor.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 3
+    },
+    {
+      "name": "spinner",
+      "impl": "dist/src/commands/spinner.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 4
+    },
+    {
+      "name": "announcements",
+      "impl": "dist/src/commands/announcements.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 4
+    },
+    {
+      "name": "transport",
+      "impl": "dist/src/commands/agntcy/transport.js",
+      "packaged": true,
+      "load": "lazy",
+      "declared_subcommand_entries": 1
+    }
+  ],
+  "mcp_tools": [
+    {
+      "name": "agent_spawn",
+      "module": "dist/src/mcp-tools/agent-tools.js",
+      "export": "agentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agent_execute",
+      "module": "dist/src/mcp-tools/agent-tools.js",
+      "export": "agentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agent_terminate",
+      "module": "dist/src/mcp-tools/agent-tools.js",
+      "export": "agentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agent_status",
+      "module": "dist/src/mcp-tools/agent-tools.js",
+      "export": "agentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agent_list",
+      "module": "dist/src/mcp-tools/agent-tools.js",
+      "export": "agentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agent_pool",
+      "module": "dist/src/mcp-tools/agent-tools.js",
+      "export": "agentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agent_health",
+      "module": "dist/src/mcp-tools/agent-tools.js",
+      "export": "agentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agent_update",
+      "module": "dist/src/mcp-tools/agent-tools.js",
+      "export": "agentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agent_logs",
+      "module": "dist/src/mcp-tools/agent-tools.js",
+      "export": "agentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "swarm_init",
+      "module": "dist/src/mcp-tools/swarm-tools.js",
+      "export": "swarmTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "swarm_pheromone_update",
+      "module": "dist/src/mcp-tools/swarm-tools.js",
+      "export": "swarmTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "swarm_pheromone_status",
+      "module": "dist/src/mcp-tools/swarm-tools.js",
+      "export": "swarmTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "swarm_status",
+      "module": "dist/src/mcp-tools/swarm-tools.js",
+      "export": "swarmTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "swarm_shutdown",
+      "module": "dist/src/mcp-tools/swarm-tools.js",
+      "export": "swarmTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "swarm_health",
+      "module": "dist/src/mcp-tools/swarm-tools.js",
+      "export": "swarmTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "memory_store",
+      "module": "dist/src/mcp-tools/memory-tools.js",
+      "export": "memoryTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "memory_retrieve",
+      "module": "dist/src/mcp-tools/memory-tools.js",
+      "export": "memoryTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "memory_search",
+      "module": "dist/src/mcp-tools/memory-tools.js",
+      "export": "memoryTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "memory_delete",
+      "module": "dist/src/mcp-tools/memory-tools.js",
+      "export": "memoryTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "memory_list",
+      "module": "dist/src/mcp-tools/memory-tools.js",
+      "export": "memoryTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "memory_stats",
+      "module": "dist/src/mcp-tools/memory-tools.js",
+      "export": "memoryTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "memory_migrate",
+      "module": "dist/src/mcp-tools/memory-tools.js",
+      "export": "memoryTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "memory_import_claude",
+      "module": "dist/src/mcp-tools/memory-tools.js",
+      "export": "memoryTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "memory_bridge_status",
+      "module": "dist/src/mcp-tools/memory-tools.js",
+      "export": "memoryTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "memory_search_unified",
+      "module": "dist/src/mcp-tools/memory-tools.js",
+      "export": "memoryTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "memory_detailed-stats",
+      "module": "dist/src/mcp-tools/memory-tools.js",
+      "export": "memoryTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "memory_cleanup",
+      "module": "dist/src/mcp-tools/memory-tools.js",
+      "export": "memoryTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "memory_compress",
+      "module": "dist/src/mcp-tools/memory-tools.js",
+      "export": "memoryTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "memory_export",
+      "module": "dist/src/mcp-tools/memory-tools.js",
+      "export": "memoryTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "memory_import",
+      "module": "dist/src/mcp-tools/memory-tools.js",
+      "export": "memoryTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "config_get",
+      "module": "dist/src/mcp-tools/config-tools.js",
+      "export": "configTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "config_set",
+      "module": "dist/src/mcp-tools/config-tools.js",
+      "export": "configTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "config_list",
+      "module": "dist/src/mcp-tools/config-tools.js",
+      "export": "configTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "config_reset",
+      "module": "dist/src/mcp-tools/config-tools.js",
+      "export": "configTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "config_export",
+      "module": "dist/src/mcp-tools/config-tools.js",
+      "export": "configTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "config_import",
+      "module": "dist/src/mcp-tools/config-tools.js",
+      "export": "configTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_pre-edit",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_post-edit",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_pre-command",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_post-command",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_route",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_metrics",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_list",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_pre-task",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_post-task",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_explain",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_pretrain",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_build-agents",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_transfer",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_session-start",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_session-end",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_session-restore",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_notify",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_init",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_intelligence",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_intelligence-reset",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_intelligence_trajectory-start",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_intelligence_trajectory-step",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_intelligence_trajectory-end",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_intelligence_pattern-store",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_intelligence_pattern-search",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_intelligence_stats",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_intelligence_learn",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_intelligence_attention",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_worker-list",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_worker-dispatch",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_worker-status",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_worker-detect",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_model-route",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_model-outcome",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_model-stats",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_model-verify",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_codemod",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_worker-cancel",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_teammate-idle",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_task-completed",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_intelligence_unified-stats",
+      "module": "dist/src/mcp-tools/hooks-tools.js",
+      "export": "hooksTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "task_create",
+      "module": "dist/src/mcp-tools/task-tools.js",
+      "export": "taskTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "task_status",
+      "module": "dist/src/mcp-tools/task-tools.js",
+      "export": "taskTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "task_list",
+      "module": "dist/src/mcp-tools/task-tools.js",
+      "export": "taskTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "task_complete",
+      "module": "dist/src/mcp-tools/task-tools.js",
+      "export": "taskTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "task_update",
+      "module": "dist/src/mcp-tools/task-tools.js",
+      "export": "taskTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "task_assign",
+      "module": "dist/src/mcp-tools/task-tools.js",
+      "export": "taskTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "task_cancel",
+      "module": "dist/src/mcp-tools/task-tools.js",
+      "export": "taskTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "task_retry",
+      "module": "dist/src/mcp-tools/task-tools.js",
+      "export": "taskTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "session_save",
+      "module": "dist/src/mcp-tools/session-tools.js",
+      "export": "sessionTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "session_restore",
+      "module": "dist/src/mcp-tools/session-tools.js",
+      "export": "sessionTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "session_list",
+      "module": "dist/src/mcp-tools/session-tools.js",
+      "export": "sessionTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "session_delete",
+      "module": "dist/src/mcp-tools/session-tools.js",
+      "export": "sessionTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "session_info",
+      "module": "dist/src/mcp-tools/session-tools.js",
+      "export": "sessionTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "session_current",
+      "module": "dist/src/mcp-tools/session-tools.js",
+      "export": "sessionTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "session_export",
+      "module": "dist/src/mcp-tools/session-tools.js",
+      "export": "sessionTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "session_import",
+      "module": "dist/src/mcp-tools/session-tools.js",
+      "export": "sessionTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hive-mind_spawn",
+      "module": "dist/src/mcp-tools/hive-mind-tools.js",
+      "export": "hiveMindTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hive-mind_init",
+      "module": "dist/src/mcp-tools/hive-mind-tools.js",
+      "export": "hiveMindTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hive-mind_status",
+      "module": "dist/src/mcp-tools/hive-mind-tools.js",
+      "export": "hiveMindTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hive-mind_join",
+      "module": "dist/src/mcp-tools/hive-mind-tools.js",
+      "export": "hiveMindTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hive-mind_leave",
+      "module": "dist/src/mcp-tools/hive-mind-tools.js",
+      "export": "hiveMindTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hive-mind_consensus",
+      "module": "dist/src/mcp-tools/hive-mind-tools.js",
+      "export": "hiveMindTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hive-mind_broadcast",
+      "module": "dist/src/mcp-tools/hive-mind-tools.js",
+      "export": "hiveMindTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hive-mind_shutdown",
+      "module": "dist/src/mcp-tools/hive-mind-tools.js",
+      "export": "hiveMindTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hive-mind_memory",
+      "module": "dist/src/mcp-tools/hive-mind-tools.js",
+      "export": "hiveMindTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hive-mind_optimize-memory",
+      "module": "dist/src/mcp-tools/hive-mind-tools.js",
+      "export": "hiveMindTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "workflow_run",
+      "module": "dist/src/mcp-tools/workflow-tools.js",
+      "export": "workflowTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "workflow_create",
+      "module": "dist/src/mcp-tools/workflow-tools.js",
+      "export": "workflowTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "workflow_execute",
+      "module": "dist/src/mcp-tools/workflow-tools.js",
+      "export": "workflowTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "workflow_status",
+      "module": "dist/src/mcp-tools/workflow-tools.js",
+      "export": "workflowTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "workflow_list",
+      "module": "dist/src/mcp-tools/workflow-tools.js",
+      "export": "workflowTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "workflow_pause",
+      "module": "dist/src/mcp-tools/workflow-tools.js",
+      "export": "workflowTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "workflow_resume",
+      "module": "dist/src/mcp-tools/workflow-tools.js",
+      "export": "workflowTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "workflow_cancel",
+      "module": "dist/src/mcp-tools/workflow-tools.js",
+      "export": "workflowTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "workflow_delete",
+      "module": "dist/src/mcp-tools/workflow-tools.js",
+      "export": "workflowTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "workflow_template",
+      "module": "dist/src/mcp-tools/workflow-tools.js",
+      "export": "workflowTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "workflow_stop",
+      "module": "dist/src/mcp-tools/workflow-tools.js",
+      "export": "workflowTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "workflow_validate",
+      "module": "dist/src/mcp-tools/workflow-tools.js",
+      "export": "workflowTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "analyze_diff",
+      "module": "dist/src/mcp-tools/analyze-tools.js",
+      "export": "analyzeTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "analyze_diff-risk",
+      "module": "dist/src/mcp-tools/analyze-tools.js",
+      "export": "analyzeTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "analyze_diff-classify",
+      "module": "dist/src/mcp-tools/analyze-tools.js",
+      "export": "analyzeTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "analyze_diff-reviewers",
+      "module": "dist/src/mcp-tools/analyze-tools.js",
+      "export": "analyzeTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "analyze_file-risk",
+      "module": "dist/src/mcp-tools/analyze-tools.js",
+      "export": "analyzeTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "analyze_diff-stats",
+      "module": "dist/src/mcp-tools/analyze-tools.js",
+      "export": "analyzeTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "progress_check",
+      "module": "dist/src/mcp-tools/progress-tools.js",
+      "export": "progressTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "progress_sync",
+      "module": "dist/src/mcp-tools/progress-tools.js",
+      "export": "progressTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "progress_summary",
+      "module": "dist/src/mcp-tools/progress-tools.js",
+      "export": "progressTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "progress_watch",
+      "module": "dist/src/mcp-tools/progress-tools.js",
+      "export": "progressTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "embeddings_init",
+      "module": "dist/src/mcp-tools/embeddings-tools.js",
+      "export": "embeddingsTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "embeddings_generate",
+      "module": "dist/src/mcp-tools/embeddings-tools.js",
+      "export": "embeddingsTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "embeddings_compare",
+      "module": "dist/src/mcp-tools/embeddings-tools.js",
+      "export": "embeddingsTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "embeddings_search",
+      "module": "dist/src/mcp-tools/embeddings-tools.js",
+      "export": "embeddingsTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "embeddings_neural",
+      "module": "dist/src/mcp-tools/embeddings-tools.js",
+      "export": "embeddingsTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "embeddings_hyperbolic",
+      "module": "dist/src/mcp-tools/embeddings-tools.js",
+      "export": "embeddingsTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "embeddings_status",
+      "module": "dist/src/mcp-tools/embeddings-tools.js",
+      "export": "embeddingsTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "embeddings_rabitq_build",
+      "module": "dist/src/mcp-tools/embeddings-tools.js",
+      "export": "embeddingsTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "embeddings_rabitq_search",
+      "module": "dist/src/mcp-tools/embeddings-tools.js",
+      "export": "embeddingsTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "embeddings_rabitq_status",
+      "module": "dist/src/mcp-tools/embeddings-tools.js",
+      "export": "embeddingsTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "claims_claim",
+      "module": "dist/src/mcp-tools/claims-tools.js",
+      "export": "claimsTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "claims_release",
+      "module": "dist/src/mcp-tools/claims-tools.js",
+      "export": "claimsTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "claims_handoff",
+      "module": "dist/src/mcp-tools/claims-tools.js",
+      "export": "claimsTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "claims_accept-handoff",
+      "module": "dist/src/mcp-tools/claims-tools.js",
+      "export": "claimsTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "claims_status",
+      "module": "dist/src/mcp-tools/claims-tools.js",
+      "export": "claimsTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "claims_list",
+      "module": "dist/src/mcp-tools/claims-tools.js",
+      "export": "claimsTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "claims_mark-stealable",
+      "module": "dist/src/mcp-tools/claims-tools.js",
+      "export": "claimsTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "claims_steal",
+      "module": "dist/src/mcp-tools/claims-tools.js",
+      "export": "claimsTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "claims_stealable",
+      "module": "dist/src/mcp-tools/claims-tools.js",
+      "export": "claimsTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "claims_load",
+      "module": "dist/src/mcp-tools/claims-tools.js",
+      "export": "claimsTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "claims_board",
+      "module": "dist/src/mcp-tools/claims-tools.js",
+      "export": "claimsTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "claims_rebalance",
+      "module": "dist/src/mcp-tools/claims-tools.js",
+      "export": "claimsTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "policy_evaluate",
+      "module": "dist/src/mcp-tools/policy-tools.js",
+      "export": "policyTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "policy_status",
+      "module": "dist/src/mcp-tools/policy-tools.js",
+      "export": "policyTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "aidefence_scan",
+      "module": "dist/src/mcp-tools/security-tools.js",
+      "export": "securityTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "aidefence_analyze",
+      "module": "dist/src/mcp-tools/security-tools.js",
+      "export": "securityTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "aidefence_stats",
+      "module": "dist/src/mcp-tools/security-tools.js",
+      "export": "securityTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "aidefence_learn",
+      "module": "dist/src/mcp-tools/security-tools.js",
+      "export": "securityTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "aidefence_is_safe",
+      "module": "dist/src/mcp-tools/security-tools.js",
+      "export": "securityTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "aidefence_has_pii",
+      "module": "dist/src/mcp-tools/security-tools.js",
+      "export": "securityTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "transfer_detect-pii",
+      "module": "dist/src/mcp-tools/transfer-tools.js",
+      "export": "transferTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "transfer_ipfs-resolve",
+      "module": "dist/src/mcp-tools/transfer-tools.js",
+      "export": "transferTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "transfer_store-search",
+      "module": "dist/src/mcp-tools/transfer-tools.js",
+      "export": "transferTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "transfer_store-info",
+      "module": "dist/src/mcp-tools/transfer-tools.js",
+      "export": "transferTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "transfer_store-download",
+      "module": "dist/src/mcp-tools/transfer-tools.js",
+      "export": "transferTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "transfer_store-featured",
+      "module": "dist/src/mcp-tools/transfer-tools.js",
+      "export": "transferTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "transfer_store-trending",
+      "module": "dist/src/mcp-tools/transfer-tools.js",
+      "export": "transferTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "transfer_plugin-search",
+      "module": "dist/src/mcp-tools/transfer-tools.js",
+      "export": "transferTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "transfer_plugin-info",
+      "module": "dist/src/mcp-tools/transfer-tools.js",
+      "export": "transferTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "transfer_plugin-featured",
+      "module": "dist/src/mcp-tools/transfer-tools.js",
+      "export": "transferTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "transfer_plugin-official",
+      "module": "dist/src/mcp-tools/transfer-tools.js",
+      "export": "transferTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "system_status",
+      "module": "dist/src/mcp-tools/system-tools.js",
+      "export": "systemTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "system_metrics",
+      "module": "dist/src/mcp-tools/system-tools.js",
+      "export": "systemTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "system_health",
+      "module": "dist/src/mcp-tools/system-tools.js",
+      "export": "systemTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "system_info",
+      "module": "dist/src/mcp-tools/system-tools.js",
+      "export": "systemTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "system_reset",
+      "module": "dist/src/mcp-tools/system-tools.js",
+      "export": "systemTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "mcp_status",
+      "module": "dist/src/mcp-tools/system-tools.js",
+      "export": "systemTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "task_summary",
+      "module": "dist/src/mcp-tools/system-tools.js",
+      "export": "systemTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "mcp_start",
+      "module": "dist/src/mcp-tools/system-tools.js",
+      "export": "systemTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "mcp_stop",
+      "module": "dist/src/mcp-tools/system-tools.js",
+      "export": "systemTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "terminal_create",
+      "module": "dist/src/mcp-tools/terminal-tools.js",
+      "export": "terminalTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "terminal_execute",
+      "module": "dist/src/mcp-tools/terminal-tools.js",
+      "export": "terminalTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "terminal_list",
+      "module": "dist/src/mcp-tools/terminal-tools.js",
+      "export": "terminalTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "terminal_close",
+      "module": "dist/src/mcp-tools/terminal-tools.js",
+      "export": "terminalTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "terminal_history",
+      "module": "dist/src/mcp-tools/terminal-tools.js",
+      "export": "terminalTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "neural_train",
+      "module": "dist/src/mcp-tools/neural-tools.js",
+      "export": "neuralTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "neural_predict",
+      "module": "dist/src/mcp-tools/neural-tools.js",
+      "export": "neuralTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "neural_patterns",
+      "module": "dist/src/mcp-tools/neural-tools.js",
+      "export": "neuralTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "neural_compress",
+      "module": "dist/src/mcp-tools/neural-tools.js",
+      "export": "neuralTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "neural_status",
+      "module": "dist/src/mcp-tools/neural-tools.js",
+      "export": "neuralTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "neural_optimize",
+      "module": "dist/src/mcp-tools/neural-tools.js",
+      "export": "neuralTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "performance_report",
+      "module": "dist/src/mcp-tools/performance-tools.js",
+      "export": "performanceTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "performance_bottleneck",
+      "module": "dist/src/mcp-tools/performance-tools.js",
+      "export": "performanceTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "performance_benchmark",
+      "module": "dist/src/mcp-tools/performance-tools.js",
+      "export": "performanceTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "performance_profile",
+      "module": "dist/src/mcp-tools/performance-tools.js",
+      "export": "performanceTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "performance_optimize",
+      "module": "dist/src/mcp-tools/performance-tools.js",
+      "export": "performanceTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "performance_metrics",
+      "module": "dist/src/mcp-tools/performance-tools.js",
+      "export": "performanceTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "github_repo_analyze",
+      "module": "dist/src/mcp-tools/github-tools.js",
+      "export": "githubTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "github_pr_manage",
+      "module": "dist/src/mcp-tools/github-tools.js",
+      "export": "githubTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "github_issue_track",
+      "module": "dist/src/mcp-tools/github-tools.js",
+      "export": "githubTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "github_workflow",
+      "module": "dist/src/mcp-tools/github-tools.js",
+      "export": "githubTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "github_metrics",
+      "module": "dist/src/mcp-tools/github-tools.js",
+      "export": "githubTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "daa_agent_create",
+      "module": "dist/src/mcp-tools/daa-tools.js",
+      "export": "daaTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "daa_agent_adapt",
+      "module": "dist/src/mcp-tools/daa-tools.js",
+      "export": "daaTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "daa_workflow_create",
+      "module": "dist/src/mcp-tools/daa-tools.js",
+      "export": "daaTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "daa_workflow_execute",
+      "module": "dist/src/mcp-tools/daa-tools.js",
+      "export": "daaTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "daa_knowledge_share",
+      "module": "dist/src/mcp-tools/daa-tools.js",
+      "export": "daaTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "daa_learning_status",
+      "module": "dist/src/mcp-tools/daa-tools.js",
+      "export": "daaTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "daa_cognitive_pattern",
+      "module": "dist/src/mcp-tools/daa-tools.js",
+      "export": "daaTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "daa_performance_metrics",
+      "module": "dist/src/mcp-tools/daa-tools.js",
+      "export": "daaTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "coordination_topology",
+      "module": "dist/src/mcp-tools/coordination-tools.js",
+      "export": "coordinationTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "coordination_load_balance",
+      "module": "dist/src/mcp-tools/coordination-tools.js",
+      "export": "coordinationTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "coordination_sync",
+      "module": "dist/src/mcp-tools/coordination-tools.js",
+      "export": "coordinationTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "coordination_node",
+      "module": "dist/src/mcp-tools/coordination-tools.js",
+      "export": "coordinationTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "coordination_consensus",
+      "module": "dist/src/mcp-tools/coordination-tools.js",
+      "export": "coordinationTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "coordination_orchestrate",
+      "module": "dist/src/mcp-tools/coordination-tools.js",
+      "export": "coordinationTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "coordination_metrics",
+      "module": "dist/src/mcp-tools/coordination-tools.js",
+      "export": "coordinationTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "browser_open",
+      "module": "dist/src/mcp-tools/browser-tools.js",
+      "export": "browserTools",
+      "registration": "conditional_agent_browser_binary"
+    },
+    {
+      "name": "browser_back",
+      "module": "dist/src/mcp-tools/browser-tools.js",
+      "export": "browserTools",
+      "registration": "conditional_agent_browser_binary"
+    },
+    {
+      "name": "browser_forward",
+      "module": "dist/src/mcp-tools/browser-tools.js",
+      "export": "browserTools",
+      "registration": "conditional_agent_browser_binary"
+    },
+    {
+      "name": "browser_reload",
+      "module": "dist/src/mcp-tools/browser-tools.js",
+      "export": "browserTools",
+      "registration": "conditional_agent_browser_binary"
+    },
+    {
+      "name": "browser_close",
+      "module": "dist/src/mcp-tools/browser-tools.js",
+      "export": "browserTools",
+      "registration": "conditional_agent_browser_binary"
+    },
+    {
+      "name": "browser_snapshot",
+      "module": "dist/src/mcp-tools/browser-tools.js",
+      "export": "browserTools",
+      "registration": "conditional_agent_browser_binary"
+    },
+    {
+      "name": "browser_screenshot",
+      "module": "dist/src/mcp-tools/browser-tools.js",
+      "export": "browserTools",
+      "registration": "conditional_agent_browser_binary"
+    },
+    {
+      "name": "browser_click",
+      "module": "dist/src/mcp-tools/browser-tools.js",
+      "export": "browserTools",
+      "registration": "conditional_agent_browser_binary"
+    },
+    {
+      "name": "browser_fill",
+      "module": "dist/src/mcp-tools/browser-tools.js",
+      "export": "browserTools",
+      "registration": "conditional_agent_browser_binary"
+    },
+    {
+      "name": "browser_type",
+      "module": "dist/src/mcp-tools/browser-tools.js",
+      "export": "browserTools",
+      "registration": "conditional_agent_browser_binary"
+    },
+    {
+      "name": "browser_press",
+      "module": "dist/src/mcp-tools/browser-tools.js",
+      "export": "browserTools",
+      "registration": "conditional_agent_browser_binary"
+    },
+    {
+      "name": "browser_hover",
+      "module": "dist/src/mcp-tools/browser-tools.js",
+      "export": "browserTools",
+      "registration": "conditional_agent_browser_binary"
+    },
+    {
+      "name": "browser_select",
+      "module": "dist/src/mcp-tools/browser-tools.js",
+      "export": "browserTools",
+      "registration": "conditional_agent_browser_binary"
+    },
+    {
+      "name": "browser_check",
+      "module": "dist/src/mcp-tools/browser-tools.js",
+      "export": "browserTools",
+      "registration": "conditional_agent_browser_binary"
+    },
+    {
+      "name": "browser_uncheck",
+      "module": "dist/src/mcp-tools/browser-tools.js",
+      "export": "browserTools",
+      "registration": "conditional_agent_browser_binary"
+    },
+    {
+      "name": "browser_scroll",
+      "module": "dist/src/mcp-tools/browser-tools.js",
+      "export": "browserTools",
+      "registration": "conditional_agent_browser_binary"
+    },
+    {
+      "name": "browser_get-text",
+      "module": "dist/src/mcp-tools/browser-tools.js",
+      "export": "browserTools",
+      "registration": "conditional_agent_browser_binary"
+    },
+    {
+      "name": "browser_get-value",
+      "module": "dist/src/mcp-tools/browser-tools.js",
+      "export": "browserTools",
+      "registration": "conditional_agent_browser_binary"
+    },
+    {
+      "name": "browser_get-title",
+      "module": "dist/src/mcp-tools/browser-tools.js",
+      "export": "browserTools",
+      "registration": "conditional_agent_browser_binary"
+    },
+    {
+      "name": "browser_get-url",
+      "module": "dist/src/mcp-tools/browser-tools.js",
+      "export": "browserTools",
+      "registration": "conditional_agent_browser_binary"
+    },
+    {
+      "name": "browser_wait",
+      "module": "dist/src/mcp-tools/browser-tools.js",
+      "export": "browserTools",
+      "registration": "conditional_agent_browser_binary"
+    },
+    {
+      "name": "browser_eval",
+      "module": "dist/src/mcp-tools/browser-tools.js",
+      "export": "browserTools",
+      "registration": "conditional_agent_browser_binary"
+    },
+    {
+      "name": "browser_session-list",
+      "module": "dist/src/mcp-tools/browser-tools.js",
+      "export": "browserTools",
+      "registration": "conditional_agent_browser_binary"
+    },
+    {
+      "name": "browser_session_record",
+      "module": "dist/src/mcp-tools/browser-session-tools.js",
+      "export": "browserSessionTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "browser_session_end",
+      "module": "dist/src/mcp-tools/browser-session-tools.js",
+      "export": "browserSessionTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "browser_session_replay",
+      "module": "dist/src/mcp-tools/browser-session-tools.js",
+      "export": "browserSessionTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "browser_template_apply",
+      "module": "dist/src/mcp-tools/browser-session-tools.js",
+      "export": "browserSessionTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "browser_cookie_use",
+      "module": "dist/src/mcp-tools/browser-session-tools.js",
+      "export": "browserSessionTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "browser_act",
+      "module": "dist/src/mcp-tools/browser-intent-tools.js",
+      "export": "browserIntentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agentdb_health",
+      "module": "dist/src/mcp-tools/agentdb-tools.js",
+      "export": "agentdbTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agentdb_controllers",
+      "module": "dist/src/mcp-tools/agentdb-tools.js",
+      "export": "agentdbTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agentdb_pattern-store",
+      "module": "dist/src/mcp-tools/agentdb-tools.js",
+      "export": "agentdbTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agentdb_pattern-search",
+      "module": "dist/src/mcp-tools/agentdb-tools.js",
+      "export": "agentdbTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agentdb_feedback",
+      "module": "dist/src/mcp-tools/agentdb-tools.js",
+      "export": "agentdbTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agentdb_causal-edge",
+      "module": "dist/src/mcp-tools/agentdb-tools.js",
+      "export": "agentdbTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agentdb_route",
+      "module": "dist/src/mcp-tools/agentdb-tools.js",
+      "export": "agentdbTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agentdb_session-start",
+      "module": "dist/src/mcp-tools/agentdb-tools.js",
+      "export": "agentdbTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agentdb_session-end",
+      "module": "dist/src/mcp-tools/agentdb-tools.js",
+      "export": "agentdbTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agentdb_hierarchical-store",
+      "module": "dist/src/mcp-tools/agentdb-tools.js",
+      "export": "agentdbTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agentdb_hierarchical-recall",
+      "module": "dist/src/mcp-tools/agentdb-tools.js",
+      "export": "agentdbTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agentdb_consolidate",
+      "module": "dist/src/mcp-tools/agentdb-tools.js",
+      "export": "agentdbTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agentdb_batch",
+      "module": "dist/src/mcp-tools/agentdb-tools.js",
+      "export": "agentdbTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agentdb_context-synthesize",
+      "module": "dist/src/mcp-tools/agentdb-tools.js",
+      "export": "agentdbTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agentdb_semantic-route",
+      "module": "dist/src/mcp-tools/agentdb-tools.js",
+      "export": "agentdbTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agentdb_hierarchical-delete",
+      "module": "dist/src/mcp-tools/agentdb-tools.js",
+      "export": "agentdbTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agentdb_causal-edge-delete",
+      "module": "dist/src/mcp-tools/agentdb-tools.js",
+      "export": "agentdbTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agentdb_causal-node-delete",
+      "module": "dist/src/mcp-tools/agentdb-tools.js",
+      "export": "agentdbTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agentdb_graph-query",
+      "module": "dist/src/mcp-tools/agentdb-tools.js",
+      "export": "agentdbTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agentdb_graph-pathfinder",
+      "module": "dist/src/mcp-tools/agentdb-tools.js",
+      "export": "agentdbTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "ruvllm_status",
+      "module": "dist/src/mcp-tools/ruvllm-tools.js",
+      "export": "ruvllmWasmTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "ruvllm_hnsw_create",
+      "module": "dist/src/mcp-tools/ruvllm-tools.js",
+      "export": "ruvllmWasmTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "ruvllm_hnsw_add",
+      "module": "dist/src/mcp-tools/ruvllm-tools.js",
+      "export": "ruvllmWasmTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "ruvllm_hnsw_route",
+      "module": "dist/src/mcp-tools/ruvllm-tools.js",
+      "export": "ruvllmWasmTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "ruvllm_sona_create",
+      "module": "dist/src/mcp-tools/ruvllm-tools.js",
+      "export": "ruvllmWasmTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "ruvllm_sona_adapt",
+      "module": "dist/src/mcp-tools/ruvllm-tools.js",
+      "export": "ruvllmWasmTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "ruvllm_microlora_create",
+      "module": "dist/src/mcp-tools/ruvllm-tools.js",
+      "export": "ruvllmWasmTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "ruvllm_microlora_adapt",
+      "module": "dist/src/mcp-tools/ruvllm-tools.js",
+      "export": "ruvllmWasmTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "ruvllm_chat_format",
+      "module": "dist/src/mcp-tools/ruvllm-tools.js",
+      "export": "ruvllmWasmTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "ruvllm_generate_config",
+      "module": "dist/src/mcp-tools/ruvllm-tools.js",
+      "export": "ruvllmWasmTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_agent_create",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_agent_prompt",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_agent_tool",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_agent_list",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_agent_terminate",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_agent_files",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_agent_export",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_gallery_list",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_gallery_search",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_gallery_create",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_agent_compose",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_agent_state",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_agent_todos",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_agent_tools",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_agent_turn_count",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_agent_is_stopped",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_agent_reset",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_gallery_load_rvf",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_gallery_configure",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_gallery_categories",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_gallery_list_by_category",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_gallery_add_custom",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_gallery_remove_custom",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_gallery_import",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_gallery_export",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_gallery_active",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "wasm_gallery_config",
+      "module": "dist/src/mcp-tools/wasm-agent-tools.js",
+      "export": "wasmAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "managed_agent_create",
+      "module": "dist/src/mcp-tools/managed-agent-tools.js",
+      "export": "managedAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "managed_agent_prompt",
+      "module": "dist/src/mcp-tools/managed-agent-tools.js",
+      "export": "managedAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "managed_agent_status",
+      "module": "dist/src/mcp-tools/managed-agent-tools.js",
+      "export": "managedAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "managed_agent_events",
+      "module": "dist/src/mcp-tools/managed-agent-tools.js",
+      "export": "managedAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "managed_agent_list",
+      "module": "dist/src/mcp-tools/managed-agent-tools.js",
+      "export": "managedAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "managed_agent_terminate",
+      "module": "dist/src/mcp-tools/managed-agent-tools.js",
+      "export": "managedAgentTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "guidance_capabilities",
+      "module": "dist/src/mcp-tools/guidance-tools.js",
+      "export": "guidanceTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "guidance_recommend",
+      "module": "dist/src/mcp-tools/guidance-tools.js",
+      "export": "guidanceTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "guidance_discover",
+      "module": "dist/src/mcp-tools/guidance-tools.js",
+      "export": "guidanceTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "guidance_workflow",
+      "module": "dist/src/mcp-tools/guidance-tools.js",
+      "export": "guidanceTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "guidance_quickref",
+      "module": "dist/src/mcp-tools/guidance-tools.js",
+      "export": "guidanceTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "guidance_brain",
+      "module": "dist/src/mcp-tools/guidance-tools.js",
+      "export": "guidanceTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "autopilot_status",
+      "module": "dist/src/mcp-tools/autopilot-tools.js",
+      "export": "autopilotTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "autopilot_enable",
+      "module": "dist/src/mcp-tools/autopilot-tools.js",
+      "export": "autopilotTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "autopilot_disable",
+      "module": "dist/src/mcp-tools/autopilot-tools.js",
+      "export": "autopilotTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "autopilot_config",
+      "module": "dist/src/mcp-tools/autopilot-tools.js",
+      "export": "autopilotTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "autopilot_reset",
+      "module": "dist/src/mcp-tools/autopilot-tools.js",
+      "export": "autopilotTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "autopilot_log",
+      "module": "dist/src/mcp-tools/autopilot-tools.js",
+      "export": "autopilotTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "autopilot_progress",
+      "module": "dist/src/mcp-tools/autopilot-tools.js",
+      "export": "autopilotTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "autopilot_learn",
+      "module": "dist/src/mcp-tools/autopilot-tools.js",
+      "export": "autopilotTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "autopilot_history",
+      "module": "dist/src/mcp-tools/autopilot-tools.js",
+      "export": "autopilotTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "autopilot_predict",
+      "module": "dist/src/mcp-tools/autopilot-tools.js",
+      "export": "autopilotTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_coverage-route",
+      "module": "dist/src/ruvector/coverage-tools.js",
+      "export": "coverageRouterTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_coverage-suggest",
+      "module": "dist/src/ruvector/coverage-tools.js",
+      "export": "coverageRouterTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "hooks_coverage-gaps",
+      "module": "dist/src/ruvector/coverage-tools.js",
+      "export": "coverageRouterTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "metaharness_score",
+      "module": "dist/src/mcp-tools/metaharness-tools.js",
+      "export": "metaharnessTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "metaharness_genome",
+      "module": "dist/src/mcp-tools/metaharness-tools.js",
+      "export": "metaharnessTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "metaharness_mcp_scan",
+      "module": "dist/src/mcp-tools/metaharness-tools.js",
+      "export": "metaharnessTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "metaharness_threat_model",
+      "module": "dist/src/mcp-tools/metaharness-tools.js",
+      "export": "metaharnessTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "metaharness_oia_audit",
+      "module": "dist/src/mcp-tools/metaharness-tools.js",
+      "export": "metaharnessTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "metaharness_audit_list",
+      "module": "dist/src/mcp-tools/metaharness-tools.js",
+      "export": "metaharnessTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "metaharness_similarity",
+      "module": "dist/src/mcp-tools/metaharness-tools.js",
+      "export": "metaharnessTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "metaharness_drift_from_history",
+      "module": "dist/src/mcp-tools/metaharness-tools.js",
+      "export": "metaharnessTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "metaharness_audit_trend",
+      "module": "dist/src/mcp-tools/metaharness-tools.js",
+      "export": "metaharnessTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "metaharness_evolve",
+      "module": "dist/src/mcp-tools/metaharness-tools.js",
+      "export": "metaharnessTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "metaharness_security_bench",
+      "module": "dist/src/mcp-tools/metaharness-tools.js",
+      "export": "metaharnessTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "metaharness_bench",
+      "module": "dist/src/mcp-tools/metaharness-tools.js",
+      "export": "metaharnessTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "metaharness_redblue",
+      "module": "dist/src/mcp-tools/metaharness-tools.js",
+      "export": "metaharnessTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "metaharness_learn",
+      "module": "dist/src/mcp-tools/metaharness-tools.js",
+      "export": "metaharnessTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "metaharness_gepa",
+      "module": "dist/src/mcp-tools/metaharness-tools.js",
+      "export": "metaharnessTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "metaharness_flywheel",
+      "module": "dist/src/mcp-tools/metaharness-tools.js",
+      "export": "metaharnessTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agenticow_branch",
+      "module": "dist/src/mcp-tools/agenticow-tools.js",
+      "export": "agenticowTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agenticow_ingest",
+      "module": "dist/src/mcp-tools/agenticow-tools.js",
+      "export": "agenticowTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agenticow_query",
+      "module": "dist/src/mcp-tools/agenticow-tools.js",
+      "export": "agenticowTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agenticow_diff",
+      "module": "dist/src/mcp-tools/agenticow-tools.js",
+      "export": "agenticowTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agenticow_lineage",
+      "module": "dist/src/mcp-tools/agenticow-tools.js",
+      "export": "agenticowTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agenticow_status",
+      "module": "dist/src/mcp-tools/agenticow-tools.js",
+      "export": "agenticowTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agenticow_checkpoint",
+      "module": "dist/src/mcp-tools/agenticow-tools.js",
+      "export": "agenticowTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agenticow_rollback",
+      "module": "dist/src/mcp-tools/agenticow-tools.js",
+      "export": "agenticowTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agenticow_promote",
+      "module": "dist/src/mcp-tools/agenticow-tools.js",
+      "export": "agenticowTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "agenticow_speculate",
+      "module": "dist/src/mcp-tools/agenticow-speculate-tools.js",
+      "export": "agenticowSpeculateTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "federation_bbs_register",
+      "module": "dist/src/mcp-tools/agentbbs-tools.js",
+      "export": "agentbbsTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "federation_bbs_publish",
+      "module": "dist/src/mcp-tools/agentbbs-tools.js",
+      "export": "agentbbsTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "federation_bbs_watch",
+      "module": "dist/src/mcp-tools/agentbbs-tools.js",
+      "export": "agentbbsTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "federation_bbs_human_join",
+      "module": "dist/src/mcp-tools/agentbbs-tools.js",
+      "export": "agentbbsTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "business_pod_validate",
+      "module": "dist/src/mcp-tools/business-pod-tools.js",
+      "export": "businessPodTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "business_pod_route_backend",
+      "module": "dist/src/mcp-tools/business-pod-tools.js",
+      "export": "businessPodTools",
+      "registration": "unconditional"
+    },
+    {
+      "name": "http_fetch",
+      "module": "dist/src/mcp-tools/http-fetch-tools.js",
+      "export": "httpFetchTools",
+      "registration": "unconditional"
+    }
+  ],
+  "mcp_tools_packaged_but_unregistered": [
+    {
+      "name": "policy_rule_upsert",
+      "module": "dist/src/mcp-tools/policy-tools.js",
+      "reason": "filtered out of registerTools()"
+    },
+    {
+      "name": "policy_budget_set",
+      "module": "dist/src/mcp-tools/policy-tools.js",
+      "reason": "filtered out of registerTools()"
+    },
+    {
+      "name": "policy_approve",
+      "module": "dist/src/mcp-tools/policy-tools.js",
+      "reason": "filtered out of registerTools()"
+    },
+    {
+      "name": "policy_revoke",
+      "module": "dist/src/mcp-tools/policy-tools.js",
+      "reason": "filtered out of registerTools()"
+    },
+    {
+      "name": "testgen_tdd_repair",
+      "module": "dist/src/mcp-tools/testgen-tools.js",
+      "reason": "defined+packaged but not in registerTools()"
+    }
+  ],
+  "agents": {
+    "packaged_in_cli_tarball": [
+      {
+        "name": "byzantine-coordinator",
+        "path": "consensus/byzantine-coordinator.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "crdt-synchronizer",
+        "path": "consensus/crdt-synchronizer.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "gossip-coordinator",
+        "path": "consensus/gossip-coordinator.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "performance-benchmarker",
+        "path": "consensus/performance-benchmarker.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "quorum-manager",
+        "path": "consensus/quorum-manager.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "raft-manager",
+        "path": "consensus/raft-manager.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "security-manager",
+        "path": "consensus/security-manager.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "adaptive-coordinator",
+        "path": "swarm/adaptive-coordinator.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "hierarchical-coordinator",
+        "path": "swarm/hierarchical-coordinator.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "mesh-coordinator",
+        "path": "swarm/mesh-coordinator.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "api-docs",
+        "path": "documentation/docs-api-openapi.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "api-docs",
+        "path": "documentation/api-docs/docs-api-openapi.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "agentic-payments",
+        "path": "payments/agentic-payments.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "consensus-coordinator",
+        "path": "sublinear/consensus-coordinator.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "matrix-optimizer",
+        "path": "sublinear/matrix-optimizer.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "pagerank-analyzer",
+        "path": "sublinear/pagerank-analyzer.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "performance-optimizer",
+        "path": "sublinear/performance-optimizer.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "trading-predictor",
+        "path": "sublinear/trading-predictor.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "cicd-engineer",
+        "path": "devops/ops-cicd-github.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "cicd-engineer",
+        "path": "devops/ci-cd/ops-cicd-github.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "planner",
+        "path": "core/planner.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "code-analyzer",
+        "path": "analysis/analyze-code-quality.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "analyst",
+        "path": "analysis/code-analyzer.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "code-analyzer",
+        "path": "analysis/code-review/analyze-code-quality.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "backend-dev",
+        "path": "development/dev-backend-api.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "backend-dev",
+        "path": "development/backend/dev-backend-api.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "Benchmark Suite",
+        "path": "optimization/benchmark-suite.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "Load Balancing Coordinator",
+        "path": "optimization/load-balancer.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "Performance Monitor",
+        "path": "optimization/performance-monitor.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "Resource Allocator",
+        "path": "optimization/resource-allocator.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "Topology Optimizer",
+        "path": "optimization/topology-optimizer.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "mobile-dev",
+        "path": "specialized/spec-mobile-react-native.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "mobile-dev",
+        "path": "specialized/mobile/spec-mobile-react-native.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "sona-learning-optimizer",
+        "path": "sona/sona-learning-optimizer.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "production-validator",
+        "path": "testing/production-validator.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "tdd-london-swarm",
+        "path": "testing/tdd-london-swarm.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "system-architect",
+        "path": "architecture/arch-system-design.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "system-architect",
+        "path": "architecture/system-design/arch-system-design.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "flow-nexus-app-store",
+        "path": "flow-nexus/app-store.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "flow-nexus-auth",
+        "path": "flow-nexus/authentication.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "flow-nexus-challenges",
+        "path": "flow-nexus/challenges.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "flow-nexus-neural",
+        "path": "flow-nexus/neural-network.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "flow-nexus-payments",
+        "path": "flow-nexus/payments.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "flow-nexus-sandbox",
+        "path": "flow-nexus/sandbox.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "flow-nexus-swarm",
+        "path": "flow-nexus/swarm.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "flow-nexus-user-tools",
+        "path": "flow-nexus/user-tools.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "flow-nexus-workflow",
+        "path": "flow-nexus/workflow.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "code-review-swarm",
+        "path": "github/code-review-swarm.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "github-modes",
+        "path": "github/github-modes.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "issue-tracker",
+        "path": "github/issue-tracker.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "multi-repo-swarm",
+        "path": "github/multi-repo-swarm.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "pr-manager",
+        "path": "github/pr-manager.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "project-board-sync",
+        "path": "github/project-board-sync.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "release-manager",
+        "path": "github/release-manager.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "release-swarm",
+        "path": "github/release-swarm.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "repo-architect",
+        "path": "github/repo-architect.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "swarm-issue",
+        "path": "github/swarm-issue.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "swarm-pr",
+        "path": "github/swarm-pr.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "sync-coordinator",
+        "path": "github/sync-coordinator.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "workflow-automation",
+        "path": "github/workflow-automation.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "aidefence-guardian",
+        "path": "v3/aidefence-guardian.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "claims-authorizer",
+        "path": "v3/claims-authorizer.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "collective-intelligence-coordinator",
+        "path": "v3/collective-intelligence-coordinator.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "ddd-domain-expert",
+        "path": "v3/ddd-domain-expert.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "injection-analyst",
+        "path": "v3/injection-analyst.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "performance-engineer",
+        "path": "v3/performance-engineer.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "pii-detector",
+        "path": "v3/pii-detector.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "reasoningbank-learner",
+        "path": "v3/reasoningbank-learner.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "security-architect-aidefence",
+        "path": "v3/security-architect-aidefence.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "security-architect",
+        "path": "v3/security-architect.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "swarm-memory-manager",
+        "path": "v3/swarm-memory-manager.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "v3-integration-architect",
+        "path": "v3/v3-integration-architect.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "smart-agent",
+        "path": "templates/automation-smart-agent.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "base-template-generator",
+        "path": "templates/base-template-generator.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "swarm-init",
+        "path": "templates/coordinator-swarm-init.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "pr-manager",
+        "path": "templates/github-pr-manager.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "sparc-coder",
+        "path": "templates/implementer-sparc-coder.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "memory-coordinator",
+        "path": "templates/memory-coordinator.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "task-orchestrator",
+        "path": "templates/orchestrator-task.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "perf-analyzer",
+        "path": "templates/performance-analyzer.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "sparc-coord",
+        "path": "templates/sparc-coordinator.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "test-long-runner",
+        "path": "custom/test-long-runner.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "ml-developer",
+        "path": "data/data-ml-model.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "ml-developer",
+        "path": "data/ml/data-ml-model.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "architecture",
+        "path": "sparc/architecture.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "pseudocode",
+        "path": "sparc/pseudocode.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "refinement",
+        "path": "sparc/refinement.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "specification",
+        "path": "sparc/specification.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      },
+      {
+        "name": "sublinear-goal-planner",
+        "path": "goal/agent.md",
+        "source": "@claude-flow/cli tarball .claude/agents"
+      }
+    ],
+    "repo_root_not_packaged": [
+      {
+        "name": "Migration Summary",
+        "path": "MIGRATION_SUMMARY.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "base-template-generator",
+        "path": "base-template-generator.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "database-specialist",
+        "path": "database-specialist.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "project-coordinator",
+        "path": "project-coordinator.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "python-specialist",
+        "path": "python-specialist.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "security-auditor",
+        "path": "security-auditor.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "typescript-specialist",
+        "path": "typescript-specialist.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "byzantine-coordinator",
+        "path": "consensus/byzantine-coordinator.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "crdt-synchronizer",
+        "path": "consensus/crdt-synchronizer.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "gossip-coordinator",
+        "path": "consensus/gossip-coordinator.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "performance-benchmarker",
+        "path": "consensus/performance-benchmarker.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "quorum-manager",
+        "path": "consensus/quorum-manager.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "raft-manager",
+        "path": "consensus/raft-manager.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "security-manager",
+        "path": "consensus/security-manager.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "adaptive-coordinator",
+        "path": "swarm/adaptive-coordinator.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "hierarchical-coordinator",
+        "path": "swarm/hierarchical-coordinator.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "mesh-coordinator",
+        "path": "swarm/mesh-coordinator.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "api-docs",
+        "path": "documentation/api-docs/docs-api-openapi.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "agentic-payments",
+        "path": "payments/agentic-payments.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "consensus-coordinator",
+        "path": "sublinear/consensus-coordinator.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "matrix-optimizer",
+        "path": "sublinear/matrix-optimizer.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "pagerank-analyzer",
+        "path": "sublinear/pagerank-analyzer.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "performance-optimizer",
+        "path": "sublinear/performance-optimizer.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "trading-predictor",
+        "path": "sublinear/trading-predictor.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "cicd-engineer",
+        "path": "devops/ci-cd/ops-cicd-github.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "coder",
+        "path": "core/coder.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "planner",
+        "path": "core/planner.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "researcher",
+        "path": "core/researcher.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "reviewer",
+        "path": "core/reviewer.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "tester",
+        "path": "core/tester.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "code-analyzer",
+        "path": "analysis/analyze-code-quality.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "analyst",
+        "path": "analysis/code-analyzer.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "code-analyzer",
+        "path": "analysis/code-review/analyze-code-quality.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "backend-dev",
+        "path": "development/dev-backend-api.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "backend-dev",
+        "path": "development/backend/dev-backend-api.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "Benchmark Suite",
+        "path": "optimization/benchmark-suite.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "Load Balancing Coordinator",
+        "path": "optimization/load-balancer.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "Performance Monitor",
+        "path": "optimization/performance-monitor.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "Resource Allocator",
+        "path": "optimization/resource-allocator.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "Topology Optimizer",
+        "path": "optimization/topology-optimizer.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "mobile-dev",
+        "path": "specialized/mobile/spec-mobile-react-native.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "sona-learning-optimizer",
+        "path": "sona/sona-learning-optimizer.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "sublinear-goal-planner",
+        "path": "reasoning/agent.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "goal-planner",
+        "path": "reasoning/goal-planner.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "production-validator",
+        "path": "testing/production-validator.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "tdd-london-swarm",
+        "path": "testing/tdd-london-swarm.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "tdd-london-swarm",
+        "path": "testing/unit/tdd-london-swarm.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "production-validator",
+        "path": "testing/validation/production-validator.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "system-architect",
+        "path": "architecture/system-design/arch-system-design.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "flow-nexus-app-store",
+        "path": "flow-nexus/app-store.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "flow-nexus-auth",
+        "path": "flow-nexus/authentication.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "flow-nexus-challenges",
+        "path": "flow-nexus/challenges.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "flow-nexus-neural",
+        "path": "flow-nexus/neural-network.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "flow-nexus-payments",
+        "path": "flow-nexus/payments.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "flow-nexus-sandbox",
+        "path": "flow-nexus/sandbox.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "flow-nexus-swarm",
+        "path": "flow-nexus/swarm.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "flow-nexus-user-tools",
+        "path": "flow-nexus/user-tools.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "flow-nexus-workflow",
+        "path": "flow-nexus/workflow.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "code-review-swarm",
+        "path": "github/code-review-swarm.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "github-modes",
+        "path": "github/github-modes.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "issue-tracker",
+        "path": "github/issue-tracker.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "multi-repo-swarm",
+        "path": "github/multi-repo-swarm.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "pr-manager",
+        "path": "github/pr-manager.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "project-board-sync",
+        "path": "github/project-board-sync.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "release-manager",
+        "path": "github/release-manager.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "release-swarm",
+        "path": "github/release-swarm.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "repo-architect",
+        "path": "github/repo-architect.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "swarm-issue",
+        "path": "github/swarm-issue.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "swarm-pr",
+        "path": "github/swarm-pr.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "sync-coordinator",
+        "path": "github/sync-coordinator.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "workflow-automation",
+        "path": "github/workflow-automation.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "database-specialist",
+        "path": "v3/database-specialist.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "project-coordinator",
+        "path": "v3/project-coordinator.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "python-specialist",
+        "path": "v3/python-specialist.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "test-architect",
+        "path": "v3/test-architect.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "typescript-specialist",
+        "path": "v3/typescript-specialist.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "v3-integration-architect",
+        "path": "v3/v3-integration-architect.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "v3-memory-specialist",
+        "path": "v3/v3-memory-specialist.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "v3-performance-engineer",
+        "path": "v3/v3-performance-engineer.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "v3-queen-coordinator",
+        "path": "v3/v3-queen-coordinator.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "v3-security-architect",
+        "path": "v3/v3-security-architect.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "collective-intelligence-coordinator",
+        "path": "hive-mind/collective-intelligence-coordinator.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "queen-coordinator",
+        "path": "hive-mind/queen-coordinator.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "scout-explorer",
+        "path": "hive-mind/scout-explorer.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "swarm-memory-manager",
+        "path": "hive-mind/swarm-memory-manager.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "worker-specialist",
+        "path": "hive-mind/worker-specialist.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "smart-agent",
+        "path": "templates/automation-smart-agent.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "swarm-init",
+        "path": "templates/coordinator-swarm-init.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "pr-manager",
+        "path": "templates/github-pr-manager.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "sparc-coder",
+        "path": "templates/implementer-sparc-coder.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "memory-coordinator",
+        "path": "templates/memory-coordinator.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "migration-planner",
+        "path": "templates/migration-plan.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "task-orchestrator",
+        "path": "templates/orchestrator-task.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "perf-analyzer",
+        "path": "templates/performance-analyzer.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "sparc-coord",
+        "path": "templates/sparc-coordinator.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "test-long-runner",
+        "path": "custom/test-long-runner.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "ml-developer",
+        "path": "data/ml/data-ml-model.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "safla-neural",
+        "path": "neural/safla-neural.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "architecture",
+        "path": "sparc/architecture.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "pseudocode",
+        "path": "sparc/pseudocode.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "refinement",
+        "path": "sparc/refinement.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "specification",
+        "path": "sparc/specification.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "codex-coordinator",
+        "path": "dual-mode/codex-coordinator.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "codex-worker",
+        "path": "dual-mode/codex-worker.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "dual-orchestrator",
+        "path": "dual-mode/dual-orchestrator.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "sublinear-goal-planner",
+        "path": "goal/agent.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "code-goal-planner",
+        "path": "goal/code-goal-planner.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      },
+      {
+        "name": "goal-planner",
+        "path": "goal/goal-planner.md",
+        "source": "repo .claude/agents (NOT in cli tarball)"
+      }
+    ],
+    "repo_plugins": [
+      {
+        "name": "adr-architect",
+        "path": "adr-architect.md",
+        "source": "plugins/ruflo-adr/agents",
+        "plugin": "ruflo-adr"
+      },
+      {
+        "name": "nested-coordinator",
+        "path": "nested-coordinator.md",
+        "source": "plugins/ruflo-agent/agents",
+        "plugin": "ruflo-agent"
+      },
+      {
+        "name": "nested-leaf",
+        "path": "nested-leaf.md",
+        "source": "plugins/ruflo-agent/agents",
+        "plugin": "ruflo-agent"
+      },
+      {
+        "name": "nested-queen-leaf",
+        "path": "nested-queen-leaf.md",
+        "source": "plugins/ruflo-agent/agents",
+        "plugin": "ruflo-agent"
+      },
+      {
+        "name": "nested-queen-researcher",
+        "path": "nested-queen-researcher.md",
+        "source": "plugins/ruflo-agent/agents",
+        "plugin": "ruflo-agent"
+      },
+      {
+        "name": "nested-queen-reviewer",
+        "path": "nested-queen-reviewer.md",
+        "source": "plugins/ruflo-agent/agents",
+        "plugin": "ruflo-agent"
+      },
+      {
+        "name": "nested-queen",
+        "path": "nested-queen.md",
+        "source": "plugins/ruflo-agent/agents",
+        "plugin": "ruflo-agent"
+      },
+      {
+        "name": "nested-researcher",
+        "path": "nested-researcher.md",
+        "source": "plugins/ruflo-agent/agents",
+        "plugin": "ruflo-agent"
+      },
+      {
+        "name": "nested-reviewer",
+        "path": "nested-reviewer.md",
+        "source": "plugins/ruflo-agent/agents",
+        "plugin": "ruflo-agent"
+      },
+      {
+        "name": "wasm-specialist",
+        "path": "wasm-specialist.md",
+        "source": "plugins/ruflo-agent/agents",
+        "plugin": "ruflo-agent"
+      },
+      {
+        "name": "agentdb-specialist",
+        "path": "agentdb-specialist.md",
+        "source": "plugins/ruflo-agentdb/agents",
+        "plugin": "ruflo-agentdb"
+      },
+      {
+        "name": "safety-specialist",
+        "path": "safety-specialist.md",
+        "source": "plugins/ruflo-aidefence/agents",
+        "plugin": "ruflo-aidefence"
+      },
+      {
+        "name": "autopilot-coordinator",
+        "path": "autopilot-coordinator.md",
+        "source": "plugins/ruflo-autopilot/agents",
+        "plugin": "ruflo-autopilot"
+      },
+      {
+        "name": "browser-agent",
+        "path": "browser-agent.md",
+        "source": "plugins/ruflo-browser/agents",
+        "plugin": "ruflo-browser"
+      },
+      {
+        "name": "coder",
+        "path": "coder.md",
+        "source": "plugins/ruflo-core/agents",
+        "plugin": "ruflo-core"
+      },
+      {
+        "name": "researcher",
+        "path": "researcher.md",
+        "source": "plugins/ruflo-core/agents",
+        "plugin": "ruflo-core"
+      },
+      {
+        "name": "reviewer",
+        "path": "reviewer.md",
+        "source": "plugins/ruflo-core/agents",
+        "plugin": "ruflo-core"
+      },
+      {
+        "name": "witness-curator",
+        "path": "witness-curator.md",
+        "source": "plugins/ruflo-core/agents",
+        "plugin": "ruflo-core"
+      },
+      {
+        "name": "cost-analyst",
+        "path": "cost-analyst.md",
+        "source": "plugins/ruflo-cost-tracker/agents",
+        "plugin": "ruflo-cost-tracker"
+      },
+      {
+        "name": "daa-specialist",
+        "path": "daa-specialist.md",
+        "source": "plugins/ruflo-daa/agents",
+        "plugin": "ruflo-daa"
+      },
+      {
+        "name": "domain-modeler",
+        "path": "domain-modeler.md",
+        "source": "plugins/ruflo-ddd/agents",
+        "plugin": "ruflo-ddd"
+      },
+      {
+        "name": "docs-writer",
+        "path": "docs-writer.md",
+        "source": "plugins/ruflo-docs/agents",
+        "plugin": "ruflo-docs"
+      },
+      {
+        "name": "federation-coordinator",
+        "path": "federation-coordinator.md",
+        "source": "plugins/ruflo-federation/agents",
+        "plugin": "ruflo-federation"
+      },
+      {
+        "name": "deep-researcher",
+        "path": "deep-researcher.md",
+        "source": "plugins/ruflo-goals/agents",
+        "plugin": "ruflo-goals"
+      },
+      {
+        "name": "dossier-investigator",
+        "path": "dossier-investigator.md",
+        "source": "plugins/ruflo-goals/agents",
+        "plugin": "ruflo-goals"
+      },
+      {
+        "name": "goal-planner",
+        "path": "goal-planner.md",
+        "source": "plugins/ruflo-goals/agents",
+        "plugin": "ruflo-goals"
+      },
+      {
+        "name": "horizon-tracker",
+        "path": "horizon-tracker.md",
+        "source": "plugins/ruflo-goals/agents",
+        "plugin": "ruflo-goals"
+      },
+      {
+        "name": "intelligence-specialist",
+        "path": "intelligence-specialist.md",
+        "source": "plugins/ruflo-intelligence/agents",
+        "plugin": "ruflo-intelligence"
+      },
+      {
+        "name": "device-coordinator",
+        "path": "device-coordinator.md",
+        "source": "plugins/ruflo-iot-cognitum/agents",
+        "plugin": "ruflo-iot-cognitum"
+      },
+      {
+        "name": "fleet-manager",
+        "path": "fleet-manager.md",
+        "source": "plugins/ruflo-iot-cognitum/agents",
+        "plugin": "ruflo-iot-cognitum"
+      },
+      {
+        "name": "telemetry-analyzer",
+        "path": "telemetry-analyzer.md",
+        "source": "plugins/ruflo-iot-cognitum/agents",
+        "plugin": "ruflo-iot-cognitum"
+      },
+      {
+        "name": "witness-auditor",
+        "path": "witness-auditor.md",
+        "source": "plugins/ruflo-iot-cognitum/agents",
+        "plugin": "ruflo-iot-cognitum"
+      },
+      {
+        "name": "git-specialist",
+        "path": "git-specialist.md",
+        "source": "plugins/ruflo-jujutsu/agents",
+        "plugin": "ruflo-jujutsu"
+      },
+      {
+        "name": "graph-navigator",
+        "path": "graph-navigator.md",
+        "source": "plugins/ruflo-knowledge-graph/agents",
+        "plugin": "ruflo-knowledge-graph"
+      },
+      {
+        "name": "loop-worker-coordinator",
+        "path": "loop-worker-coordinator.md",
+        "source": "plugins/ruflo-loop-workers/agents",
+        "plugin": "ruflo-loop-workers"
+      },
+      {
+        "name": "data-engineer",
+        "path": "data-engineer.md",
+        "source": "plugins/ruflo-market-data/agents",
+        "plugin": "ruflo-market-data"
+      },
+      {
+        "name": "metaharness-architect",
+        "path": "metaharness-architect.md",
+        "source": "plugins/ruflo-metaharness/agents",
+        "plugin": "ruflo-metaharness"
+      },
+      {
+        "name": "migration-engineer",
+        "path": "migration-engineer.md",
+        "source": "plugins/ruflo-migrations/agents",
+        "plugin": "ruflo-migrations"
+      },
+      {
+        "name": "backtest-engineer",
+        "path": "backtest-engineer.md",
+        "source": "plugins/ruflo-neural-trader/agents",
+        "plugin": "ruflo-neural-trader"
+      },
+      {
+        "name": "market-analyst",
+        "path": "market-analyst.md",
+        "source": "plugins/ruflo-neural-trader/agents",
+        "plugin": "ruflo-neural-trader"
+      },
+      {
+        "name": "risk-analyst",
+        "path": "risk-analyst.md",
+        "source": "plugins/ruflo-neural-trader/agents",
+        "plugin": "ruflo-neural-trader"
+      },
+      {
+        "name": "trading-strategist",
+        "path": "trading-strategist.md",
+        "source": "plugins/ruflo-neural-trader/agents",
+        "plugin": "ruflo-neural-trader"
+      },
+      {
+        "name": "observability-engineer",
+        "path": "observability-engineer.md",
+        "source": "plugins/ruflo-observability/agents",
+        "plugin": "ruflo-observability"
+      },
+      {
+        "name": "plugin-developer",
+        "path": "plugin-developer.md",
+        "source": "plugins/ruflo-plugin-creator/agents",
+        "plugin": "ruflo-plugin-creator"
+      },
+      {
+        "name": "memory-specialist",
+        "path": "memory-specialist.md",
+        "source": "plugins/ruflo-rag-memory/agents",
+        "plugin": "ruflo-rag-memory"
+      },
+      {
+        "name": "vector-engineer",
+        "path": "vector-engineer.md",
+        "source": "plugins/ruflo-ruvector/agents",
+        "plugin": "ruflo-ruvector"
+      },
+      {
+        "name": "llm-specialist",
+        "path": "llm-specialist.md",
+        "source": "plugins/ruflo-ruvllm/agents",
+        "plugin": "ruflo-ruvllm"
+      },
+      {
+        "name": "session-specialist",
+        "path": "session-specialist.md",
+        "source": "plugins/ruflo-rvf/agents",
+        "plugin": "ruflo-rvf"
+      },
+      {
+        "name": "security-auditor",
+        "path": "security-auditor.md",
+        "source": "plugins/ruflo-security-audit/agents",
+        "plugin": "ruflo-security-audit"
+      },
+      {
+        "name": "sparc-orchestrator",
+        "path": "sparc-orchestrator.md",
+        "source": "plugins/ruflo-sparc/agents",
+        "plugin": "ruflo-sparc"
+      },
+      {
+        "name": "architect",
+        "path": "architect.md",
+        "source": "plugins/ruflo-swarm/agents",
+        "plugin": "ruflo-swarm"
+      },
+      {
+        "name": "coordinator",
+        "path": "coordinator.md",
+        "source": "plugins/ruflo-swarm/agents",
+        "plugin": "ruflo-swarm"
+      },
+      {
+        "name": "tester",
+        "path": "tester.md",
+        "source": "plugins/ruflo-testgen/agents",
+        "plugin": "ruflo-testgen"
+      },
+      {
+        "name": "gaia-benchmark-runner",
+        "path": "gaia-benchmark-runner.md",
+        "source": "plugins/ruflo-workflows/agents",
+        "plugin": "ruflo-workflows"
+      },
+      {
+        "name": "gaia-submission-coordinator",
+        "path": "gaia-submission-coordinator.md",
+        "source": "plugins/ruflo-workflows/agents",
+        "plugin": "ruflo-workflows"
+      },
+      {
+        "name": "workflow-specialist",
+        "path": "workflow-specialist.md",
+        "source": "plugins/ruflo-workflows/agents",
+        "plugin": "ruflo-workflows"
+      }
+    ]
+  },
+  "plugins": {
+    "repo": [
+      {
+        "name": "ruflo-adr",
+        "manifest": true,
+        "skills": 5,
+        "commands": 1,
+        "agents": 1,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-agent",
+        "manifest": true,
+        "skills": 4,
+        "commands": 2,
+        "agents": 9,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-agentdb",
+        "manifest": true,
+        "skills": 2,
+        "commands": 2,
+        "agents": 1,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-agntcy",
+        "manifest": true,
+        "skills": 1,
+        "commands": 0,
+        "agents": 0,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-aidefence",
+        "manifest": true,
+        "skills": 2,
+        "commands": 1,
+        "agents": 1,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-arena",
+        "manifest": true,
+        "skills": 0,
+        "commands": 1,
+        "agents": 0,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-autopilot",
+        "manifest": true,
+        "skills": 2,
+        "commands": 2,
+        "agents": 1,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-bbs-federation",
+        "manifest": true,
+        "skills": 0,
+        "commands": 0,
+        "agents": 0,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-browser",
+        "manifest": true,
+        "skills": 10,
+        "commands": 1,
+        "agents": 1,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-business-pods",
+        "manifest": true,
+        "skills": 1,
+        "commands": 0,
+        "agents": 0,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-core",
+        "manifest": true,
+        "skills": 5,
+        "commands": 2,
+        "agents": 4,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-cost-tracker",
+        "manifest": true,
+        "skills": 20,
+        "commands": 1,
+        "agents": 1,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-daa",
+        "manifest": true,
+        "skills": 2,
+        "commands": 1,
+        "agents": 1,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-ddd",
+        "manifest": true,
+        "skills": 3,
+        "commands": 1,
+        "agents": 1,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-docs",
+        "manifest": true,
+        "skills": 2,
+        "commands": 1,
+        "agents": 1,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-federation",
+        "manifest": true,
+        "skills": 3,
+        "commands": 1,
+        "agents": 1,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-goals",
+        "manifest": true,
+        "skills": 5,
+        "commands": 1,
+        "agents": 4,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-graph-intelligence",
+        "manifest": true,
+        "skills": 0,
+        "commands": 0,
+        "agents": 0,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-intelligence",
+        "manifest": true,
+        "skills": 3,
+        "commands": 2,
+        "agents": 1,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-iot-cognitum",
+        "manifest": true,
+        "skills": 5,
+        "commands": 1,
+        "agents": 4,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-jujutsu",
+        "manifest": true,
+        "skills": 2,
+        "commands": 1,
+        "agents": 1,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-knowledge-graph",
+        "manifest": true,
+        "skills": 2,
+        "commands": 1,
+        "agents": 1,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-loop-workers",
+        "manifest": true,
+        "skills": 2,
+        "commands": 2,
+        "agents": 1,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-market-data",
+        "manifest": true,
+        "skills": 2,
+        "commands": 1,
+        "agents": 1,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-metaharness",
+        "manifest": true,
+        "skills": 13,
+        "commands": 1,
+        "agents": 1,
+        "packaged_in_cli_tarball": true
+      },
+      {
+        "name": "ruflo-migrations",
+        "manifest": true,
+        "skills": 2,
+        "commands": 1,
+        "agents": 1,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-neural-trader",
+        "manifest": true,
+        "skills": 9,
+        "commands": 1,
+        "agents": 4,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-observability",
+        "manifest": true,
+        "skills": 2,
+        "commands": 1,
+        "agents": 1,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-plugin-creator",
+        "manifest": true,
+        "skills": 2,
+        "commands": 1,
+        "agents": 1,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-rag-memory",
+        "manifest": true,
+        "skills": 2,
+        "commands": 2,
+        "agents": 1,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-ruvector",
+        "manifest": true,
+        "skills": 4,
+        "commands": 1,
+        "agents": 1,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-ruvllm",
+        "manifest": true,
+        "skills": 2,
+        "commands": 1,
+        "agents": 1,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-rvf",
+        "manifest": true,
+        "skills": 2,
+        "commands": 1,
+        "agents": 1,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-security-audit",
+        "manifest": true,
+        "skills": 2,
+        "commands": 1,
+        "agents": 1,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-sparc",
+        "manifest": true,
+        "skills": 3,
+        "commands": 1,
+        "agents": 1,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-swarm",
+        "manifest": true,
+        "skills": 2,
+        "commands": 2,
+        "agents": 2,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-testgen",
+        "manifest": true,
+        "skills": 3,
+        "commands": 1,
+        "agents": 1,
+        "packaged_in_cli_tarball": false
+      },
+      {
+        "name": "ruflo-workflows",
+        "manifest": true,
+        "skills": 5,
+        "commands": 8,
+        "agents": 3,
+        "packaged_in_cli_tarball": false
+      }
+    ],
+    "marketplace_manifest": [
+      "ruflo-core",
+      "ruflo-swarm",
+      "ruflo-loop-workers",
+      "ruflo-security-audit",
+      "ruflo-rag-memory",
+      "ruflo-testgen",
+      "ruflo-docs",
+      "ruflo-autopilot",
+      "ruflo-intelligence",
+      "ruflo-agentdb",
+      "ruflo-aidefence",
+      "ruflo-browser",
+      "ruflo-jujutsu",
+      "ruflo-agent",
+      "ruflo-workflows",
+      "ruflo-daa",
+      "ruflo-ruvllm",
+      "ruflo-rvf",
+      "ruflo-plugin-creator",
+      "ruflo-goals",
+      "ruflo-adr",
+      "ruflo-cost-tracker",
+      "ruflo-ddd",
+      "ruflo-federation",
+      "ruflo-graph-intelligence",
+      "ruflo-iot-cognitum",
+      "ruflo-knowledge-graph",
+      "ruflo-market-data",
+      "ruflo-migrations",
+      "ruflo-neural-trader",
+      "ruflo-observability",
+      "ruflo-ruvector",
+      "ruflo-sparc",
+      "ruflo-metaharness",
+      "ruflo-arena"
+    ],
+    "in_repo_but_absent_from_marketplace": [
+      "ruflo-agntcy",
+      "ruflo-bbs-federation",
+      "ruflo-business-pods"
+    ],
+    "v3_plugin_npm_packages": [
+      "agentic-qe",
+      "code-intelligence",
+      "cognitive-kernel",
+      "financial-risk",
+      "gastown-bridge",
+      "healthcare-clinical",
+      "hyperbolic-reasoning",
+      "legal-contracts",
+      "neural-coordination",
+      "perf-optimizer",
+      "prime-radiant",
+      "quantum-optimizer",
+      "ruvector-upstream",
+      "teammate-plugin",
+      "test-intelligence"
+    ],
+    "packaged_in_cli_tarball": [
+      "ruflo-metaharness"
+    ]
+  },
+  "skills": {
+    "packaged_in_cli_tarball": [
+      {
+        "name": "agentdb-advanced",
+        "skill_md": true
+      },
+      {
+        "name": "agentdb-learning",
+        "skill_md": true
+      },
+      {
+        "name": "agentdb-memory-patterns",
+        "skill_md": true
+      },
+      {
+        "name": "agentdb-optimization",
+        "skill_md": true
+      },
+      {
+        "name": "agentdb-vector-search",
+        "skill_md": true
+      },
+      {
+        "name": "browser",
+        "skill_md": true
+      },
+      {
+        "name": "dual-mode",
+        "skill_md": false
+      },
+      {
+        "name": "flow-nexus-neural",
+        "skill_md": true
+      },
+      {
+        "name": "flow-nexus-platform",
+        "skill_md": true
+      },
+      {
+        "name": "flow-nexus-swarm",
+        "skill_md": true
+      },
+      {
+        "name": "github-code-review",
+        "skill_md": true
+      },
+      {
+        "name": "github-multi-repo",
+        "skill_md": true
+      },
+      {
+        "name": "github-project-management",
+        "skill_md": true
+      },
+      {
+        "name": "github-release-management",
+        "skill_md": true
+      },
+      {
+        "name": "github-workflow-automation",
+        "skill_md": true
+      },
+      {
+        "name": "hooks-automation",
+        "skill_md": true
+      },
+      {
+        "name": "pair-programming",
+        "skill_md": true
+      },
+      {
+        "name": "reasoningbank-agentdb",
+        "skill_md": true
+      },
+      {
+        "name": "reasoningbank-intelligence",
+        "skill_md": true
+      },
+      {
+        "name": "skill-builder",
+        "skill_md": true
+      },
+      {
+        "name": "sparc-methodology",
+        "skill_md": true
+      },
+      {
+        "name": "stream-chain",
+        "skill_md": true
+      },
+      {
+        "name": "swarm-advanced",
+        "skill_md": true
+      },
+      {
+        "name": "swarm-orchestration",
+        "skill_md": true
+      },
+      {
+        "name": "v3-cli-modernization",
+        "skill_md": true
+      },
+      {
+        "name": "v3-core-implementation",
+        "skill_md": true
+      },
+      {
+        "name": "v3-ddd-architecture",
+        "skill_md": true
+      },
+      {
+        "name": "v3-integration-deep",
+        "skill_md": true
+      },
+      {
+        "name": "v3-mcp-optimization",
+        "skill_md": true
+      },
+      {
+        "name": "v3-memory-unification",
+        "skill_md": true
+      },
+      {
+        "name": "v3-performance-optimization",
+        "skill_md": true
+      },
+      {
+        "name": "v3-security-overhaul",
+        "skill_md": true
+      },
+      {
+        "name": "v3-swarm-coordination",
+        "skill_md": true
+      },
+      {
+        "name": "verification-quality",
+        "skill_md": true
+      }
+    ],
+    "repo_root_not_packaged": [
+      {
+        "name": "agentdb-advanced",
+        "skill_md": true
+      },
+      {
+        "name": "agentdb-learning",
+        "skill_md": true
+      },
+      {
+        "name": "agentdb-memory-patterns",
+        "skill_md": true
+      },
+      {
+        "name": "agentdb-optimization",
+        "skill_md": true
+      },
+      {
+        "name": "agentdb-vector-search",
+        "skill_md": true
+      },
+      {
+        "name": "agentic-jujutsu",
+        "skill_md": true
+      },
+      {
+        "name": "browser",
+        "skill_md": true
+      },
+      {
+        "name": "dual-mode",
+        "skill_md": false
+      },
+      {
+        "name": "flow-nexus-neural",
+        "skill_md": true
+      },
+      {
+        "name": "flow-nexus-platform",
+        "skill_md": true
+      },
+      {
+        "name": "flow-nexus-swarm",
+        "skill_md": true
+      },
+      {
+        "name": "github-code-review",
+        "skill_md": true
+      },
+      {
+        "name": "github-multi-repo",
+        "skill_md": true
+      },
+      {
+        "name": "github-project-management",
+        "skill_md": true
+      },
+      {
+        "name": "github-release-management",
+        "skill_md": true
+      },
+      {
+        "name": "github-workflow-automation",
+        "skill_md": true
+      },
+      {
+        "name": "hive-mind-advanced",
+        "skill_md": true
+      },
+      {
+        "name": "hooks-automation",
+        "skill_md": true
+      },
+      {
+        "name": "pair-programming",
+        "skill_md": true
+      },
+      {
+        "name": "performance-analysis",
+        "skill_md": true
+      },
+      {
+        "name": "reasoningbank-agentdb",
+        "skill_md": true
+      },
+      {
+        "name": "reasoningbank-intelligence",
+        "skill_md": true
+      },
+      {
+        "name": "skill-builder",
+        "skill_md": true
+      },
+      {
+        "name": "sparc-methodology",
+        "skill_md": true
+      },
+      {
+        "name": "stream-chain",
+        "skill_md": true
+      },
+      {
+        "name": "swarm-advanced",
+        "skill_md": true
+      },
+      {
+        "name": "swarm-orchestration",
+        "skill_md": true
+      },
+      {
+        "name": "v3-cli-modernization",
+        "skill_md": true
+      },
+      {
+        "name": "v3-core-implementation",
+        "skill_md": true
+      },
+      {
+        "name": "v3-ddd-architecture",
+        "skill_md": true
+      },
+      {
+        "name": "v3-integration-deep",
+        "skill_md": true
+      },
+      {
+        "name": "v3-mcp-optimization",
+        "skill_md": true
+      },
+      {
+        "name": "v3-memory-unification",
+        "skill_md": true
+      },
+      {
+        "name": "v3-performance-optimization",
+        "skill_md": true
+      },
+      {
+        "name": "v3-security-overhaul",
+        "skill_md": true
+      },
+      {
+        "name": "v3-swarm-coordination",
+        "skill_md": true
+      },
+      {
+        "name": "verification-quality",
+        "skill_md": true
+      },
+      {
+        "name": "worker-benchmarks",
+        "skill_md": true
+      },
+      {
+        "name": "worker-integration",
+        "skill_md": true
+      }
+    ]
+  },
+  "hooks": [
+    {
+      "name": "PreToolUse (matcher Bash)",
+      "kind": "claude-code-hook",
+      "handler": "node .claude/helpers/hook-handler.cjs pre-bash",
+      "timeout_ms": 5000,
+      "declared_in": "work/extract/cli/package/.claude/settings.json:8-20",
+      "generator": "work/extract/cli/package/dist/src/init/settings-generator.js:9",
+      "packaged": true
+    },
+    {
+      "name": "PostToolUse (matcher Write|Edit|MultiEdit)",
+      "kind": "claude-code-hook",
+      "handler": "hook-handler.cjs post-edit",
+      "timeout_ms": 10000,
+      "declared_in": "work/extract/cli/package/.claude/settings.json:22",
+      "packaged": true
+    },
+    {
+      "name": "UserPromptSubmit",
+      "kind": "claude-code-hook",
+      "handler": "hook-handler.cjs route",
+      "timeout_ms": 10000,
+      "declared_in": "work/extract/cli/package/.claude/settings.json:36",
+      "packaged": true
+    },
+    {
+      "name": "SessionStart (startup|resume)",
+      "kind": "claude-code-hook",
+      "handler": "hook-handler.cjs session-restore + auto-memory-hook.mjs import",
+      "timeout_ms": 15000,
+      "declared_in": "work/extract/cli/package/.claude/settings.json:48",
+      "packaged": true
+    },
+    {
+      "name": "SessionEnd",
+      "kind": "claude-code-hook",
+      "handler": "hook-handler.cjs session-end",
+      "timeout_ms": 10000,
+      "declared_in": "work/extract/cli/package/.claude/settings.json:70",
+      "packaged": true
+    },
+    {
+      "name": "SubagentStart",
+      "kind": "claude-code-hook",
+      "handler": "hook-handler.cjs status",
+      "timeout_ms": 3000,
+      "declared_in": "work/extract/cli/package/.claude/settings.json:83",
+      "packaged": true
+    },
+    {
+      "name": "Stop",
+      "kind": "claude-code-hook",
+      "handler": "auto-memory-hook.mjs sync",
+      "timeout_ms": 10000,
+      "declared_in": "work/extract/cli/package/.claude/settings.json:96",
+      "packaged": true
+    },
+    {
+      "name": "statusLine",
+      "kind": "claude-code-statusline",
+      "handler": "node .claude/helpers/statusline.cjs",
+      "refresh_ms": 5000,
+      "declared_in": "work/extract/cli/package/.claude/settings.json:109",
+      "packaged": true
+    },
+    {
+      "name": "hooks_* MCP tools",
+      "kind": "mcp-tool-family",
+      "count": 41,
+      "impl": "work/extract/cli/package/dist/src/mcp-tools/hooks-tools.js",
+      "packaged": true
+    },
+    {
+      "name": "`ruflo hooks` CLI command",
+      "kind": "cli",
+      "declared_subcommand_entries": 42,
+      "impl": "work/extract/cli/package/dist/src/commands/hooks.js",
+      "packaged": true
+    },
+    {
+      "name": ".claude/helpers/*",
+      "kind": "hook-support-scripts",
+      "count": 42,
+      "impl": "work/extract/cli/package/.claude/helpers/",
+      "packaged": true,
+      "note": "hook-handler.cjs is 595 lines and dispatches on argv[2]; helper set includes auto-commit.sh, security-scanner.sh, learning-service.mjs, swarm-comms.sh, worker-manager.sh, github-safe.js"
+    },
+    {
+      "name": "packaged .claude/settings.json is NOT valid JSON",
+      "kind": "defect",
+      "impl": "work/extract/cli/package/.claude/settings.json:14",
+      "detail": "Unescaped double quotes inside the hook `command` strings (`\"command\": \"node \"$CLAUDE_PROJECT_DIR/...\"`). json.load fails at line 14 col 31. Byte-identical (sha256 c98b2255ef17...) to upstream/ruflo-v3.37.0/v3/@claude-flow/cli/.claude/settings.json. The repo-root .claude/settings.json IS valid. `ruflo init` generates settings programmatically (dist/src/init/settings-generator.js), so whether this file is ever parsed at runtime is a REACHABLE question this lane cannot answer.",
+      "packaged": true
+    }
+  ],
+  "daemons": [
+    {
+      "type": "map",
+      "interval_ms": 900000,
+      "priority": "normal",
+      "enabled_default": true,
+      "description": "Codebase mapping"
+    },
+    {
+      "type": "audit",
+      "interval_ms": 600000,
+      "priority": "critical",
+      "enabled_default": true,
+      "description": "Security analysis"
+    },
+    {
+      "type": "optimize",
+      "interval_ms": 900000,
+      "priority": "high",
+      "enabled_default": true,
+      "description": "Performance optimization"
+    },
+    {
+      "type": "consolidate",
+      "interval_ms": 1800000,
+      "priority": "low",
+      "enabled_default": true,
+      "description": "Memory distillation (ADR-174)"
+    },
+    {
+      "type": "testgaps",
+      "interval_ms": 1200000,
+      "priority": "normal",
+      "enabled_default": true,
+      "description": "Test coverage analysis"
+    },
+    {
+      "type": "backup",
+      "interval_ms": 86400000,
+      "priority": "low",
+      "enabled_default": true,
+      "description": "Nightly memory DB backup"
+    },
+    {
+      "type": "harness",
+      "interval_ms": 21600000,
+      "priority": "low",
+      "enabled_default": true,
+      "description": "Self-optimizing harness loop (opt-in RUFLO_HARNESS_LOOP)"
+    },
+    {
+      "type": "predict",
+      "interval_ms": 600000,
+      "priority": "low",
+      "enabled_default": false,
+      "description": "Predictive preloading"
+    },
+    {
+      "type": "document",
+      "interval_ms": 3600000,
+      "priority": "low",
+      "enabled_default": false,
+      "description": "Auto-documentation"
+    }
+  ],
+  "daemons_meta": {
+    "impl": "work/extract/cli/package/dist/src/services/worker-daemon.js:30-40",
+    "packaged": true,
+    "autostart": {
+      "impl": "work/extract/cli/package/dist/src/services/daemon-autostart.js",
+      "invoked_from": "work/extract/cli/package/dist/src/index.js:215",
+      "config_key": "claudeFlow.daemon.autoStart = true in the packaged .claude/settings.json"
+    },
+    "worker_type_ultralearn": {
+      "note": "the packaged .claude/settings.json lists a worker `ultralearn` that is NOT in DEFAULT_WORKERS but IS handled in the dispatch switch",
+      "settings": "work/extract/cli/package/.claude/settings.json (claudeFlow.daemon.workers)",
+      "dispatch": "work/extract/cli/package/dist/src/services/worker-daemon.js:1329"
+    },
+    "cli_surface": "`ruflo daemon` (11 declared subcommand entries), impl work/extract/cli/package/dist/src/commands/daemon.js",
+    "supporting_services": {
+      "count": 49,
+      "path": "work/extract/cli/package/dist/src/services/",
+      "examples": [
+        "worker-daemon.js",
+        "worker-queue.js",
+        "bounded-worker-pool.js",
+        "container-worker-pool.js",
+        "headless-worker-executor.js",
+        "repo-supervisor.js",
+        "workspace-lease.js",
+        "harness-flywheel-runtime.js"
+      ]
+    }
+  },
+  "databases": [
+    {
+      "engine": "SQLite (better-sqlite3 optional dep; sql.js fallback)",
+      "default_paths": [
+        ".swarm/memory.db",
+        ".claude-flow/memory.db",
+        "data/memory/memory.db",
+        ".cache/embeddings.db"
+      ],
+      "tables": [
+        "memory_entries",
+        "patterns",
+        "pattern_history",
+        "trajectories",
+        "trajectory_steps",
+        "migration_state",
+        "sessions",
+        "vector_indexes",
+        "graph_edges",
+        "metadata"
+      ],
+      "schema_impl": "work/extract/cli/package/dist/src/memory/memory-initializer.js:228-535",
+      "packaged": true
+    },
+    {
+      "engine": "SQLite (distillation)",
+      "tables": [
+        "episode_embeddings",
+        "distill_state"
+      ],
+      "schema_impl": "work/extract/cli/package/dist/src/services/memory-distillation.js:138-146",
+      "packaged": true
+    },
+    {
+      "engine": "SQLite (AgentBBS business-pod budget)",
+      "tables": [
+        "bbs_budget_rooms",
+        "bbs_budget_reservations"
+      ],
+      "schema_impl": "work/extract/cli/package/dist/src/business-pods/bbs-budget-tracker.js:51-58",
+      "packaged": true
+    },
+    {
+      "engine": "PostgreSQL + RuVector extension (docker image ruvnet/ruvector-postgres:latest, emitted by `ruflo ruvector setup`)",
+      "schema": "claude_flow",
+      "tables": [
+        "embeddings",
+        "patterns",
+        "agents",
+        "trajectories",
+        "memory_entries",
+        "hyperbolic_embeddings",
+        "graph_nodes",
+        "graph_edges"
+      ],
+      "schema_impl": "work/extract/cli/package/dist/src/commands/ruvector/setup.js:115-203",
+      "packaged": true
+    },
+    {
+      "engine": "PostgreSQL (ruvector init/migrate DDL)",
+      "tables": [
+        "embeddings",
+        "attention_patterns",
+        "gnn_edges",
+        "hyperbolic_embeddings",
+        "migrations",
+        "metadata",
+        "embedding_stats",
+        "query_cache",
+        "batch_jobs",
+        "neural_patterns"
+      ],
+      "schema_impl": [
+        "work/extract/cli/package/dist/src/commands/ruvector/init.js:279-341",
+        "work/extract/cli/package/dist/src/commands/ruvector/migrate.js:39-108"
+      ],
+      "packaged": true
+    },
+    {
+      "engine": "AgentDB / RVF vector files (.rvf)",
+      "default_paths": [
+        "agentdb.rvf",
+        "ruflo.rvf",
+        ".swarm-cow/<base>.<agentId>.rvf",
+        ".claude-flow/..."
+      ],
+      "impl": "work/extract/cli/package/dist/src/mcp-tools/agentdb-tools.js (20 tools)",
+      "packaged": true,
+      "note": "agentdb is an OPTIONAL dependency; tools degrade rather than fail when absent"
+    }
+  ],
+  "network_listeners": [
+    {
+      "kind": "HTTP loopback server",
+      "bind": "127.0.0.1, port 0 (ephemeral)",
+      "impl": "work/extract/cli/package/dist/src/mcp-tools/browser-intent-tools.js:178,209",
+      "purpose": "local callback for the page-agent `browser_act` intent layer",
+      "packaged": true
+    }
+  ],
+  "network_listeners_note": "Only one createServer/listen call exists in the published @claude-flow/cli dist. The MCP server ships as stdio-first (DEFAULT_OPTIONS.transport='stdio', work/extract/cli/package/dist/src/mcp-server.js:35-43) and MCPServerManager reads a `port` option (default 3000) and an http request path, but the packaged dist contains no listener bound to it. The `ruflo` wrapper tarball separately ships an Express server (work/extract/ruflo/package/src/mcp-bridge/index.js, PORT env default 3001, MCP_BIND_HOST default 127.0.0.1) and an nginx Dockerfile, neither of which bin/ruflo.js references.",
+  "external_services": [
+    {
+      "host": "api.anthropic.com",
+      "use": "GAIA benchmark critic/judge LLM calls",
+      "impl": "work/extract/cli/package/dist/src/benchmarks/gaia-critic.js:40"
+    },
+    {
+      "host": "api.openai.com",
+      "use": "provider connectivity test",
+      "impl": "work/extract/cli/package/dist/src/commands/providers.js:58"
+    },
+    {
+      "host": "openrouter.ai",
+      "use": "agent execution provider + browser-intent LLM",
+      "impl": "work/extract/cli/package/dist/src/mcp-tools/agent-execute-core.js:88"
+    },
+    {
+      "host": "generativelanguage.googleapis.com",
+      "use": "Gemini provider + GAIA grounded_query",
+      "impl": "work/extract/cli/package/dist/src/benchmarks/gaia-tools/grounded_query.js:32"
+    },
+    {
+      "host": "ollama.com",
+      "use": "Ollama cloud chat completions",
+      "impl": "work/extract/cli/package/dist/src/mcp-tools/agent-execute-core.js:191"
+    },
+    {
+      "host": "huggingface.co / datasets-server.huggingface.co",
+      "use": "GAIA dataset loading",
+      "impl": "work/extract/cli/package/dist/src/benchmarks/gaia-loader.js:125-126"
+    },
+    {
+      "host": "html.duckduckgo.com",
+      "use": "GAIA web_search tool (HTML scrape of DDG Lite)",
+      "impl": "work/extract/cli/package/dist/src/benchmarks/gaia-tools/web_search.js:22"
+    },
+    {
+      "host": "registry.npmjs.org",
+      "use": "startup update check + plugin store discovery",
+      "impl": [
+        "work/extract/cli/package/dist/src/update/checker.js:35",
+        "work/extract/cli/package/dist/src/plugins/store/discovery.js:20"
+      ]
+    },
+    {
+      "host": "api.npmjs.org",
+      "use": "plugin download counts",
+      "impl": "work/extract/cli/package/dist/src/plugins/store/discovery.js:14"
+    },
+    {
+      "host": "raw.githubusercontent.com/ruvnet/ruflo/{branch}/verification.md.json",
+      "use": "`ruflo verify` witness manifest fetch; default branch is `fix/issues-may-1-3`",
+      "impl": "work/extract/cli/package/dist/src/commands/verify.js:21,139"
+    },
+    {
+      "host": "us-central1-claude-flow.cloudfunctions.net/publish-registry",
+      "use": "first-party GCP registry publish API",
+      "impl": "work/extract/cli/package/dist/src/services/registry-api.js:11"
+    },
+    {
+      "host": "funnel.ruv.io",
+      "use": "Cognitum funnel enrollment endpoint",
+      "impl": "work/extract/cli/package/dist/src/commands/funnel.js:130,189"
+    },
+    {
+      "host": "cognitum.one",
+      "use": "sponsored 'meta LLM' proxy capacity offer surfaced in the statusline/hook output",
+      "impl": [
+        "work/extract/cli/package/dist/src/init/helpers-generator.js:617",
+        "work/extract/cli/package/dist/src/proxy/release.js:6"
+      ]
+    },
+    {
+      "host": "api.pinata.cloud",
+      "use": "IPFS pinning for RVFA appliance distribution and memory export",
+      "impl": [
+        "work/extract/cli/package/dist/src/appliance/rvfa-distribution.js:21",
+        "work/extract/cli/package/dist/src/transfer/ipfs/upload.js:105"
+      ]
+    },
+    {
+      "host": "api.web3.storage",
+      "use": "IPFS upload endpoint",
+      "impl": "work/extract/cli/package/dist/src/transfer/ipfs/upload.js:44"
+    },
+    {
+      "host": "w3s.link / ipfs.io / dweb.link / gateway.pinata.cloud / cloudflare-ipfs.com",
+      "use": "IPFS retrieval gateways (default gateway w3s.link)",
+      "impl": "work/extract/cli/package/dist/src/transfer/export.js:14,108"
+    },
+    {
+      "host": "storage.googleapis.com",
+      "use": "GCS transfer storage backend",
+      "impl": "work/extract/cli/package/dist/src/transfer/storage/gcs.js:124"
+    },
+    {
+      "host": "agentbbs.local (ssh -p 2222)",
+      "use": "AgentBBS federated room join URL/command",
+      "impl": "work/extract/cli/package/dist/src/mcp-tools/agentbbs-tools.js:382-383"
+    },
+    {
+      "host": "github.com / cli.github.com",
+      "use": "documentation links and gh CLI bootstrap",
+      "impl": "multiple"
+    }
+  ],
+  "external_binaries_spawned": {
+    "note": "count of literal first arguments to exec*/spawn* in the packaged dist",
+    "binaries": {
+      "gcloud": 10,
+      "gh": 8,
+      "git": 5,
+      "npx": 4,
+      "npm": 4,
+      "systemctl": 3,
+      "ps": 3,
+      "node": 3,
+      "launchctl": 3,
+      "tasklist": 2,
+      "taskkill": 2,
+      "docker": 2,
+      "claude": 2,
+      "agent-browser": 2,
+      "python3": 1,
+      "powershell": 1
+    },
+    "impl": "work/extract/cli/package/dist/src/"
+  },
+  "rust_crates": [
+    {
+      "name": "ruflo-federation-peer",
+      "path": "upstream/ruflo-v3.37.0/v3/crates/ruflo-federation-peer/Cargo.toml",
+      "workspace_member": true,
+      "packaged_in_any_tarball": false
+    },
+    {
+      "name": "ruflo-agntcy",
+      "path": "upstream/ruflo-v3.37.0/v3/crates/ruflo-agntcy/Cargo.toml",
+      "workspace_member": true,
+      "packaged_in_any_tarball": false
+    },
+    {
+      "name": "guidance-kernel",
+      "path": "upstream/ruflo-v3.37.0/v3/@claude-flow/guidance/wasm-kernel/Cargo.toml",
+      "workspace_member": false,
+      "target": "wasm32",
+      "packaged_in_any_tarball": false
+    },
+    {
+      "name": "gastown-formula-wasm",
+      "path": "upstream/ruflo-v3.37.0/v3/plugins/gastown-bridge/wasm/gastown-formula-wasm/Cargo.toml",
+      "workspace_member": false,
+      "target": "wasm32",
+      "packaged_in_any_tarball": false
+    },
+    {
+      "name": "ruvector-gnn-wasm",
+      "path": "upstream/ruflo-v3.37.0/v3/plugins/gastown-bridge/wasm/ruvector-gnn-wasm/Cargo.toml",
+      "workspace_member": false,
+      "target": "wasm32",
+      "packaged_in_any_tarball": false
+    },
+    {
+      "name": "gastown-shared",
+      "path": "upstream/ruflo-v3.37.0/v3/plugins/gastown-bridge/wasm/shared/Cargo.toml",
+      "workspace_member": false,
+      "packaged_in_any_tarball": false
+    }
+  ],
+  "rust_workspace_manifests_without_package": [
+    "Cargo.toml (root, members = the 2 v3/crates)",
+    "v3/plugins/gastown-bridge/Cargo.toml",
+    "v3/plugins/gastown-bridge/wasm/Cargo.toml"
+  ],
+  "wasm_modules": [
+    {
+      "artifact": "guidance_kernel_bg.wasm",
+      "path": "upstream/ruflo-v3.37.0/v3/@claude-flow/guidance/wasm-pkg/guidance_kernel_bg.wasm",
+      "in_cli_tarball": false,
+      "in_ruflo_tarball": false
+    },
+    {
+      "artifact": "rvagent_wasm_bg.wasm",
+      "path": "upstream/ruflo-v3.37.0/ruflo/src/ruvocal/static/wasm/rvagent_wasm_bg.wasm",
+      "in_cli_tarball": false,
+      "in_ruflo_tarball": true,
+      "note": "ships inside the ruflo wrapper tarball as a static asset of the vendored chat-ui fork; bin/ruflo.js does not reference it"
+    }
+  ],
+  "wasm_runtime_surfaces": {
+    "note": "WASM-facing code IS packaged even though no .wasm binary is",
+    "items": [
+      {
+        "name": "wasm_agent_* MCP tools",
+        "count": 27,
+        "impl": "work/extract/cli/package/dist/src/mcp-tools/wasm-agent-tools.js",
+        "requires": "optional dep (rvagent) at runtime"
+      },
+      {
+        "name": "ruvllm WASM tools",
+        "count": 10,
+        "impl": "work/extract/cli/package/dist/src/mcp-tools/ruvllm-tools.js",
+        "requires": "optional dep @ruvector/* / ruvector"
+      },
+      {
+        "name": "ruvllm-wasm / wasm-embedder",
+        "impl": [
+          "work/extract/cli/package/dist/src/ruvector/ruvllm-wasm.js",
+          "work/extract/cli/package/dist/src/ruvector/wasm-embedder.js"
+        ]
+      },
+      {
+        "name": "agent wasm CLI subcommands",
+        "count": 4,
+        "impl": "work/extract/cli/package/dist/src/commands/agent-wasm.js:327"
+      },
+      {
+        "name": "@ruvector/rabitq-wasm",
+        "kind": "declared dependency (not optional) of both claude-flow and @claude-flow/cli",
+        "version": "0.1.0"
+      }
+    ]
+  },
+  "capability_surfaces": [
+    {
+      "capability": "MCP server (stdio)",
+      "what": "in-process tool registry exposed over JSON-RPC stdio; `tools/list` is filtered by CLAUDE_FLOW_MCP_TOOLS or `--tools`",
+      "impl": "work/extract/cli/package/dist/src/mcp-server.js:35-43,477-478 + work/extract/cli/package/dist/src/mcp-client.js:110-175",
+      "packaged": true,
+      "invocation": "`ruflo mcp start`; bin `claude-flow-mcp`; or the wrapper's non-TTY MCP fast path in work/extract/ruflo/package/bin/ruflo.js:56-62",
+      "deps": [
+        "commander",
+        "zod",
+        "ws (declared)",
+        "@claude-flow/cli-core"
+      ]
+    },
+    {
+      "capability": "Verification \u2014 signed 'witness' manifest",
+      "what": "`ruflo verify` fetches verification.md.json, re-hashes the manifest, re-derives an Ed25519 public key and checks a signature",
+      "impl": "work/extract/cli/package/dist/src/commands/verify.js:21,124,139 (source upstream/ruflo-v3.37.0/v3/@claude-flow/cli/src/commands/verify.ts:139-172)",
+      "packaged": true,
+      "invocation": "`ruflo verify [--branch|--manifest|--json]`",
+      "deps": [
+        "@noble/ed25519"
+      ],
+      "finding": "the signing seed is sha256(witness.manifest.gitCommit + ':ruflo-witness/v1') \u2014 derived entirely from public data, so the private key is reproducible by anyone and the signature carries no authenticity. Default --branch is `fix/issues-may-1-3`. The verification/ evidence directory itself is NOT in either tarball."
+    },
+    {
+      "capability": "MetaHarness",
+      "what": "static-analysis / scoring / red-team / evolution surface",
+      "impl": "work/extract/cli/package/dist/src/mcp-tools/metaharness-tools.js (16 tools) + work/extract/cli/package/dist/src/commands/metaharness.js + work/extract/cli/package/plugins/ruflo-metaharness/ (13 skills, 33 scripts)",
+      "packaged": true,
+      "invocation": "`ruflo metaharness ...`; metaharness_* MCP tools; /ruflo-metaharness slash command",
+      "deps": [
+        "OPTIONAL peerDependencies metaharness@^0.4.1 and @metaharness/router@^0.4.0",
+        "optionalDependencies @metaharness/{darwin,flywheel,radio,turn-credit}"
+      ],
+      "note": "the only plugin present in the published @claude-flow/cli tarball"
+    },
+    {
+      "capability": "Security tooling",
+      "what": "AI-defence scanning (PII, prompt injection), channel guard, MCP composition inspector, policy runtime, permissions",
+      "impl": [
+        "work/extract/cli/package/dist/src/security/{builtin-aidefence,channel-guard,injection-catalog,mcp-composition-inspector}.js",
+        "work/extract/cli/package/dist/src/mcp-tools/security-tools.js (6 tools: aidefence_scan/analyze/stats/learn/is_safe/has_pii)",
+        "work/extract/cli/package/dist/src/commands/security.js (9 subcommand entries)",
+        "work/extract/cli/package/dist/src/services/policy-runtime.js",
+        "work/extract/cli/package/dist/src/permission/"
+      ],
+      "packaged": true,
+      "deps": [
+        "bundled @claude-flow/security@3.0.0-alpha.14 (122 files)"
+      ],
+      "note": "policy_rule_upsert / policy_budget_set / policy_approve / policy_revoke are defined and packaged but deliberately filtered out of the MCP registry (work/extract/cli/package/dist/src/mcp-client.js:135)"
+    },
+    {
+      "capability": "Browser automation",
+      "what": "23 browser_* tools, 5 session tools, 1 intent tool",
+      "impl": [
+        "work/extract/cli/package/dist/src/mcp-tools/browser-tools.js",
+        "work/extract/cli/package/dist/src/mcp-tools/browser-session-tools.js",
+        "work/extract/cli/package/dist/src/mcp-tools/browser-intent-tools.js"
+      ],
+      "packaged": true,
+      "invocation": "MCP tools; ruflo-browser plugin (10 skills, NOT packaged)",
+      "deps": [
+        "external `agent-browser` binary \u2014 the 23 browser_* tools are registered only if `execFileSync('agent-browser', ['--version'])` succeeds (work/extract/cli/package/dist/src/mcp-client.js:75-88)"
+      ]
+    },
+    {
+      "capability": "Provider integrations",
+      "what": "8 declared provider rows (Anthropic, OpenAI LLM, OpenAI embedding, Google, Ollama, Transformers.js, Agentic Flow, Mock)",
+      "impl": "work/extract/cli/package/dist/src/commands/providers.js:10-19",
+      "packaged": true,
+      "invocation": "`ruflo providers list|configure|test|models|usage`",
+      "deps": [
+        "env vars ANTHROPIC_API_KEY / OPENAI_API_KEY / GOOGLE_API_KEY / OLLAMA_API_KEY / OPENROUTER_API_KEY"
+      ]
+    },
+    {
+      "capability": "Proxy / routing surface",
+      "what": "'Meta LLM Proxy \u2014 sponsored downtime capacity' installer, lifecycle, token bridge and release verifier",
+      "impl": "work/extract/cli/package/dist/src/proxy/{install,lifecycle,paths,release,token-bridge,verify}.js + work/extract/cli/package/dist/src/commands/proxy.js (13 declared subcommand entries, 8 of them from proxy-lifecycle.js)",
+      "packaged": true,
+      "invocation": "`ruflo proxy sponsor-enable --yes` etc.",
+      "deps": [
+        "cognitum.one distribution (source stated to be private: work/extract/cli/package/dist/src/proxy/release.js:6)"
+      ]
+    },
+    {
+      "capability": "Model routing / learning",
+      "what": "Q-learning router, semantic router, neural router, calibrator, trajectory recorder, model price table",
+      "impl": "work/extract/cli/package/dist/src/ruvector/ (28 modules) + work/extract/cli/package/dist/src/commands/route.js (8 subcommand entries)",
+      "packaged": true,
+      "deps": [
+        "optional ruvector / @ruvector/* native packages; agentic-flow ONNX embedder"
+      ]
+    },
+    {
+      "capability": "GitHub integration",
+      "what": "5 github_* MCP tools (repo_analyze, pr_manage, issue_track, workflow, metrics), 19 packaged github slash commands, gh-CLI shell-outs",
+      "impl": [
+        "work/extract/cli/package/dist/src/mcp-tools/github-tools.js",
+        "work/extract/cli/package/.claude/commands/github/ (19 .md)",
+        "work/extract/cli/package/.claude/helpers/github-safe.js",
+        "work/extract/cli/package/.claude/helpers/github-setup.sh"
+      ],
+      "packaged": true
+    },
+    {
+      "capability": "Workflows",
+      "what": "12 workflow_* MCP tools, `ruflo workflow` (9 subcommand entries), 6 packaged workflow slash commands",
+      "impl": [
+        "work/extract/cli/package/dist/src/mcp-tools/workflow-tools.js",
+        "work/extract/cli/package/dist/src/commands/workflow.js",
+        "work/extract/cli/package/.claude/commands/workflows/"
+      ],
+      "packaged": true,
+      "note": "upstream/ruflo-v3.37.0/.claude/workflows/ (3 files) is NOT packaged"
+    },
+    {
+      "capability": "Memory namespaces",
+      "what": "logical partitions inside the memory store",
+      "observed_defaults": [
+        "default",
+        "pattern",
+        "patterns",
+        "hierarchical",
+        "causal-edges",
+        "causal-nodes",
+        "trajectories",
+        "sessions",
+        "session",
+        "tasks",
+        "commands",
+        "agents",
+        "benchmark",
+        "pretrain",
+        "notifications",
+        "feedback",
+        "browser",
+        "hive-memory",
+        "hive-consensus",
+        "daa-agents",
+        "daa-knowledge",
+        "daa-workflows",
+        "claude-memories",
+        "agent-teams (settings.json claudeFlow.agentTeams.coordination.sharedMemoryNamespace)",
+        "cost-tracking (referenced in agent_spawn description)"
+      ],
+      "impl": "work/extract/cli/package/dist/src/memory/ + work/extract/cli/package/dist/src/mcp-tools/memory-tools.js",
+      "packaged": true
+    },
+    {
+      "capability": "On-disk state and caches",
+      "what": "directories the tool creates in the user's project",
+      "paths": [
+        ".claude-flow/ (163 literal references; subdirs data, logs, sessions, hooks, agents, workflows, metrics, security, learning, neural, memory, patterns/cache, plugins/cache, swarm)",
+        ".swarm/ (47 references; memory.db)",
+        ".swarm-cow/ (agenticow copy-on-write branches)",
+        ".ruflo/browser-sessions",
+        ".cache/embeddings.db"
+      ],
+      "impl": "work/extract/cli/package/dist/src/init/executor.js:136-149",
+      "packaged": true
+    },
+    {
+      "capability": "UIs",
+      "what": "three distinct UI surfaces, only one of which ships in the package a `ruflo` install pulls",
+      "items": [
+        {
+          "name": "Claude Code statusline",
+          "impl": "work/extract/cli/package/.claude/helpers/statusline.cjs + work/extract/cli/package/dist/src/init/statusline-generator.js",
+          "packaged_in_cli_tarball": true
+        },
+        {
+          "name": "goal_ui / @ruflo/research",
+          "impl": "upstream/ruflo-v3.37.0/v3/goal_ui (Vite + React + Supabase + Netlify config)",
+          "packaged_in_cli_tarball": false,
+          "packaged_in_ruflo_tarball": false
+        },
+        {
+          "name": "ruvocal (HuggingFace chat-ui 0.20.0 fork) + nginx + mcp-bridge Express app",
+          "impl": "work/extract/ruflo/package/src/ruvocal (499 files), src/nginx, src/mcp-bridge",
+          "packaged_in_cli_tarball": false,
+          "packaged_in_ruflo_tarball": true,
+          "note": "499 of the ruflo tarball's 526 files; carries its own Dockerfile, docker-compose, Helm chart, 10 GitHub Actions workflows and LICENSE; bin/ruflo.js never references it"
+        }
+      ]
+    },
+    {
+      "capability": "Install-time behaviour",
+      "what": "@claude-flow/cli declares a postinstall script",
+      "impl": "work/extract/cli/package/scripts/postinstall.cjs (153 lines)",
+      "packaged": true,
+      "detail": "main() walks up to 12 parent directories looking for `node_modules/agentdb` (and `node_modules/.pnpm/agentdb@*`), then copies every `dist/src/<name>/` subdirectory of each found agentdb install to `dist/<name>/`. A second function `augmentExports()` that would rewrite agentdb's package.json `exports` field is defined but is NOT called from main(). bin/preinstall.cjs is a no-op comment. Whether the upward walk reaches agentdb installs outside the dependency subtree is a REACHABLE question this lane cannot answer."
+    },
+    {
+      "capability": "Auto-update / self-modification at startup",
+      "what": "the CLI's run path performs several background actions before dispatching a command",
+      "impl": "work/extract/cli/package/dist/src/index.js:127 (policy state auto-migration), :142 (helper auto-refresh), :174 (auto-adopt 'proven config' when stale), :182 (apply harness-feedback champion), :197 (ensure daemon running), :520 (runStartupUpdateCheck({autoUpdate:true}))",
+      "packaged": true,
+      "note": "declared behaviour only; no execution was performed in this lane"
+    }
+  ]
+}

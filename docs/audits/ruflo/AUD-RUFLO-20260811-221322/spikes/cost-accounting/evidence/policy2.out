@@ -1,0 +1,46 @@
+policy-runtime exports: authorizeMcpTool,autoMigratePolicyStateIfNeeded,classifyMcpTool,evaluatePolicyRequest,issuePolicyApproval,loadPolicyState,revokePolicyApproval,setPolicyBudget,setPolicyMode,upsertPolicyRule,verifyPolicyLedger,withPolicyTransaction
+node:internal/modules/package_json_reader:301
+  throw new ERR_MODULE_NOT_FOUND(packageName, fileURLToPath(base), null);
+        ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find package '@claude-flow/security' imported from /repo/[eval1]
+    at Object.getPackageJSONURL (node:internal/modules/package_json_reader:301:9)
+    at packageResolve (node:internal/modules/esm/resolve:768:81)
+    at moduleResolve (node:internal/modules/esm/resolve:859:18)
+    at defaultResolve (node:internal/modules/esm/resolve:992:11)
+=== policy budget set id:tailered-cap action:model.call maxCostUsd:5 periodMs:3600000 ===
+[ERROR] policy administration requires an interactive local terminal
+RUFLO_EXIT=1
+=== policy status ===
+{
+  "version": 1,
+  "mode": "legacy",
+  "migratedFrom": "pre-ADR-324; capabilities=.swarm/memory.db",
+  "rules": 0,
+  "budgets": 0,
+  "approvals": 0,
+  "receipts": 27,
+  "ledger": {
+    "valid": true,
+    "length": 27
+  }
+}
+RUFLO_EXIT=0
+=== policy evaluate identity:id:agent-1 identity:type:agent action:type:model.call action:resource:claude-opus-4 context:{costUsd:9.99} ===
+[ERROR] evaluate must be valid JSON
+RUFLO_EXIT=1
+=== policy status ===
+{
+  "version": 1,
+  "mode": "legacy",
+  "migratedFrom": "pre-ADR-324; capabilities=.swarm/memory.db",
+  "rules": 0,
+  "budgets": 0,
+  "approvals": 0,
+  "receipts": 27,
+  "ledger": {
+    "valid": true,
+    "length": 27
+  }
+}
+RUFLO_EXIT=0

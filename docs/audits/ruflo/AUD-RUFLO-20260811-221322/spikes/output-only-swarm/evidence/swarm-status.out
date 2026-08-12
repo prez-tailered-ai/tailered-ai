@@ -1,0 +1,36 @@
+[INFO] Started Ruflo background daemon for /repo (stop: ruflo daemon stop)
+
+Swarm Status: no-active-swarm
+
+Overall Progress: [##--------------------------------------] 5.0%
+
+Agents
++-----------+-------+
+| Status    | Count |
++-----------+-------+
+| Active    |     0 |
+| Idle      |     0 |
+| Completed |     0 |
+| Total     |     0 |
++-----------+-------+
+
+Tasks
++-------------+-------+
+| Status      | Count |
++-------------+-------+
+| Completed   |     0 |
+| In Progress |     0 |
+| Pending     |     0 |
+| Total       |     0 |
++-------------+-------+
+
+Performance Metrics
+  - Tokens Used: unknown
+  - Avg Response Time: no data
+  - Success Rate: no data
+  - Elapsed Time: 23s
+
+Coordination
+  - Consensus Rounds: 0
+  - Messages Sent: 0
+  - Conflicts Resolved: 0

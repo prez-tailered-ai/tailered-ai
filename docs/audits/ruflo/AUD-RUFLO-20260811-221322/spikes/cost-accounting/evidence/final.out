@@ -1,0 +1,51 @@
+BEFORE: 13
+16-way concurrency PERSISTED: 16 of 16
+jobs with ERROR: 0
+=== hooks pre-task (telemetry surface) ===
+[INFO] Starting task: task-mspbjuxk
+{
+  "taskId": "task-mspbjuxk",
+  "description": "add json flag to dashboard",
+  "suggestedAgents": [
+    {
+      "type": "coder",
+      "confidence": 0.7,
+      "reason": "Primary agent for coder tasks based on learned patterns"
+    },
+    {
+      "type": "researcher",
+      "confidence": 0.6499999999999999,
+      "reason": "Alternative agent with researcher capabilities"
+    },
+    {
+      "type": "tester",
+      "confidence": 0.6,
+      "reason": "Alternative agent with tester capabilities"
+    }
+  ],
+  "complexity": "low",
+  "estimatedDuration": "10-30 min",
+  "risks": [],
+  "recommendations": [
+    "Use coder as primary agent",
+    "Consider using swarm coordination"
+  ],
+  "timestamp": "2026-08-11T23:56:12.299Z"
+}
+=== status --format json (top-level telemetry) ===
+onnxruntime cpuid_info warning: Unknown CPU vendor. cpuinfo_vendor value: 0
+
+  #  node[334]: void node::RemoveEnvironmentCleanupHook(v8::Isolate*, CleanupHook, void*) at ../src/api/hooks.cc:142
+  #  Assertion failed: (env) != nullptr
+
+----- Native stack trace -----
+
+ 1: 0x8f2290 node::Assert(node::AssertionInfo const&) [node]
+ 2: 0x7f1f74 node::RemoveEnvironmentCleanupHook(v8::Isolate*, void (*)(void*), void*) [node]
+ 3: 0xffff62e1f89c Statement::~Statement() [/rf/node_modules/agentdb/node_modules/better-sqlite3/build/Release/better_sqlite3.node]
+ 4: 0xffff62e1f988 Statement::~Statement() [/rf/node_modules/agentdb/node_modules/better-sqlite3/build/Release/better_sqlite3.node]
+ 5: 0xdc40a4  [node]
+ 6: 0xe6ba7c  [node]
+ 7: 0xe6c814  [node]
+ 8: 0xe70534  [node]
+ 9: 0x1858a14  [node]

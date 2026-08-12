@@ -1,0 +1,38 @@
+{
+  "case1": {
+    "timeout_ms": 800,
+    "events": [
+      {
+        "event": "exit",
+        "code": 0,
+        "at": 276
+      },
+      {
+        "event": "close",
+        "code": 0,
+        "at": 3133
+      }
+    ]
+  },
+  "case2_control": {
+    "timeout_ms": 800,
+    "events": [
+      {
+        "event": "error",
+        "name": "AbortError",
+        "at": 804
+      },
+      {
+        "event": "exit",
+        "code": null,
+        "sig": "SIGTERM",
+        "at": 808
+      },
+      {
+        "event": "close",
+        "at": 808
+      }
+    ]
+  },
+  "node_version": "v24.19.0"
+}
