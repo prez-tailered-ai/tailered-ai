@@ -1,0 +1,84 @@
+{
+  "harness": "p0b-concurrency",
+  "repo_dir": "/work",
+  "repo_head": "",
+  "n": 2,
+  "wall_ms": 2620,
+  "generated_at": "2026-08-12T08:54:29.290Z",
+  "ship_runs": [
+    {
+      "index": 1,
+      "exit_code": 0,
+      "signal": null,
+      "stdout": "{\n  \"status\": \"VERIFIED\",\n  \"receipt\": {\n    \"runId\": \"RUN-20260812085426713-bb180a54\",\n    \"outcome\": \"shipped\",\n    \"costUsd\": 0.004,\n    \"tokensByTier\": {\n      \"frontier\": 0,\n      \"mid\": 450,\n      \"cheap\": 150\n    },\n    \"wallTimeMs\": 2453,\n    \"previewUrl\": \"file:///tmp/p0b-conc-3bt4cp/company/product/index.html\",\n    \"evalId\": \"EVAL-000002\",\n    \"gateLabelId\": \"LABEL-000002\",\n    \"adrId\": \"ADR-003\"\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "index": 2,
+      "exit_code": 0,
+      "signal": null,
+      "stdout": "{\n  \"status\": \"VERIFIED\",\n  \"receipt\": {\n    \"runId\": \"RUN-20260812085427264-7b7a201c\",\n    \"outcome\": \"shipped\",\n    \"costUsd\": 0.004,\n    \"tokensByTier\": {\n      \"frontier\": 0,\n      \"mid\": 450,\n      \"cheap\": 150\n    },\n    \"wallTimeMs\": 1807,\n    \"previewUrl\": \"file:///tmp/p0b-conc-3bt4cp/company/product/index.html\",\n    \"evalId\": \"EVAL-000001\",\n    \"gateLabelId\": \"LABEL-000001\",\n    \"adrId\": \"ADR-002\"\n  }\n}\n",
+      "stderr": ""
+    }
+  ],
+  "ledger": {
+    "route_rows": 8,
+    "eval_rows": 2,
+    "label_rows": 2,
+    "torn_lines": 0,
+    "duplicate_route_ids": 0,
+    "duplicate_call_ids": 0,
+    "duplicate_eval_ids": 0,
+    "duplicate_label_ids": 0,
+    "route_ids": [
+      "ROUTE-000001",
+      "ROUTE-000002",
+      "ROUTE-000003",
+      "ROUTE-000004",
+      "ROUTE-000005",
+      "ROUTE-000006",
+      "ROUTE-000007",
+      "ROUTE-000008"
+    ],
+    "eval_ids": [
+      "EVAL-000001",
+      "EVAL-000002"
+    ]
+  },
+  "exactly_once": {
+    "launched_runs": 2,
+    "runs_that_announced_a_run_id": 2,
+    "runs_with_no_receipt_at_all": 0,
+    "runs_with_route_logs": 2,
+    "runs_with_terminal_eval": 2,
+    "started_runs_with_no_terminal_eval": []
+  },
+  "adrs": {
+    "before": 2,
+    "after": 4,
+    "modified_accepted_adrs": []
+  },
+  "validate": {
+    "exit_code": 0,
+    "stdout_tail": "{\n  \"status\": \"VERIFIED\",\n  \"root\": \"/tmp/p0b-conc-3bt4cp/company\",\n  \"valid\": true,\n  \"decisions\": 4,\n  \"evals\": 2,\n  \"labels\": 2,\n  \"routes\": 8,\n  \"calls\": 8,\n  \"contexts\": 4\n}\n",
+    "stderr_tail": ""
+  },
+  "company_dir": "(removed)",
+  "identifier_contention": {
+    "collision_halts": [],
+    "collision_halt_count": 0,
+    "runs_that_shipped": 2
+  },
+  "verdict": {
+    "A1_exactly_n_terminal_evals": true,
+    "A2_zero_duplicate_ids": true,
+    "A3_validate_exit_zero": true,
+    "A4_no_accepted_adr_modified": true,
+    "no_started_run_lost": true,
+    "no_torn_lines": true,
+    "no_identifier_collision_halts": true,
+    "every_run_shipped": true,
+    "all_clean": true
+  },
+  "defect_reproduced": false
+}

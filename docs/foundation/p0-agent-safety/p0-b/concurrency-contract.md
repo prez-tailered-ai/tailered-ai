@@ -44,7 +44,7 @@ reason, and re-running the acceptance matrix — not an edit to this file.
 
 | Rule | Statement |
 | --- | --- |
-| F1 | Identifier allocation, uniqueness verification, append, and durable settlement occur inside **one** critical section. |
+| F1 | Identifier allocation and its durable persistence occur inside one critical section. The append that consumes the identifier occurs inside a critical section that **re-verifies uniqueness**. See amendment A-01. |
 | F2 | An exact retry — every byte and every causal reference identical — is an idempotent no-op. A conflicting retry raises a typed integrity error. Never a duplicate row. |
 | F3 | Accepted ADRs are immutable. Creation stays `wx`; an existing id is an `AppendOnlyViolationError`. |
 | F4 | Run-start evidence is durable **before** the first possible spend. Call-start evidence is durable **before** agent invocation. |
@@ -74,6 +74,50 @@ reason, and re-running the acceptance matrix — not an edit to this file.
 P0-B artifact describes any path as power-loss durable.** Closing this would require directory
 `fsync`s in `src/files.ts` plus per-filesystem evidence; both are out of scope and recorded as
 residual risk.
+
+---
+
+## 1.6 Amendments
+
+Freezing is only meaningful if changing it is visible. Every amendment records what changed, why,
+and what it cost.
+
+### A-01 — F1 split into allocation and append. **Needs PREZ ratification.**
+
+**Raised:** step `P0B-10`, during integration
+**Status:** implemented as stated in §1.3 F1; flagged for founder review
+
+**The contradiction.** As originally frozen, F1 required identifier allocation, uniqueness
+verification, and append to happen inside *one* critical section. F4 requires call-start evidence
+to be durable *before* agent invocation. A route log's identifier must therefore exist **before**
+the agent call, and its row cannot be appended until **after** the agent responds, because the row
+carries the usage the call produced.
+
+**F1 and F4 cannot both hold literally.** Satisfying F1 as written would mean holding the
+repository-wide lock across the agent invocation — a network call of unbounded duration — which
+would serialise every concurrent run and defeat the concurrency the acceptance matrix exists to
+demonstrate. Satisfying F4 by allocating after the response would leave an invoked agent with no
+durable record, which is the attribution failure R4 forbids.
+
+**Resolution.** The safety property F1 was protecting is *"two writers must never derive the same
+identifier from the same state."* That is preserved by durability rather than by lock duration:
+
+- S1 persists the increment **before** the identifier is returned, so a reserved identifier is
+  taken from the moment it is issued;
+- S8 folds identifiers reserved by started-but-unfinished runs into the canonical maxima;
+- the append re-verifies uniqueness inside its own critical section, and re-reads after the
+  `append:after-uniqueness` barrier — a second reader finding a late row would prove mutual
+  exclusion had been violated, so the check is an assertion, not a substitute for the lock.
+
+**What this costs.** The window between allocation and append is now bounded by the agent call
+rather than by the lock. Nothing else may take that identifier during the window, but a crash
+inside it leaves a reserved-and-unconsumed identifier — a gap. Gaps are legal under S2; this
+amendment makes them ordinary rather than exceptional.
+
+**Why it is flagged rather than merely recorded.** It changes a frozen semantic. The rule was
+that changing one requires a new step, a recorded reason, and re-running the acceptance matrix.
+The first two are satisfied here; the third happens at P0B-17. PREZ should confirm the resolution
+before the branch merges.
 
 ---
 

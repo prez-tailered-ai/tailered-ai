@@ -208,6 +208,15 @@ export function newRunId(date = new Date()): string {
   return `RUN-${timestamp}-${randomUUID().slice(0, 8)}`;
 }
 
+/**
+ * Exported for the lock-scoped ADR path in `src/ledger.ts`, which allocates the identifier
+ * from the durable allocator instead of from a directory listing. Same rules, one
+ * implementation — two copies of ADR validation would drift.
+ */
+export function validateAdrForWrite(adr: ADR): void {
+  validateAdr(adr);
+}
+
 function validateAdr(adr: ADR): void {
   if (!/^ADR-\d{3,}$/u.test(adr.id)) {
     throw new ValidationError(`Invalid ADR id: ${adr.id}`);
@@ -225,7 +234,7 @@ function validateAdr(adr: ADR): void {
   }
 }
 
-function renderAdr(adr: ADR): string {
+export function renderAdr(adr: ADR): string {
   const metadata = JSON.stringify({
     id: adr.id,
     status: adr.status,

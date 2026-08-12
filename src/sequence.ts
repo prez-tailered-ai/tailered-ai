@@ -208,8 +208,34 @@ async function readReservedIdentifiers(root: string): Promise<Record<SequenceFam
     ]);
     reserved.EVAL = highest([reserved.EVAL, parseSequenceNumber(record.eval_id, "EVAL")]);
     reserved.LABEL = highest([reserved.LABEL, parseSequenceNumber(record.label_id, "LABEL")]);
+
+    // Per-call start records carry the route/call pair reserved before the agent was invoked.
+    // Amendment A-01 leaves that pair reserved-but-unconsumed for the duration of the call, so
+    // these files are what make the reservation visible to a rebuild.
+    reserved.ROUTE_CALL = highest([
+      reserved.ROUTE_CALL,
+      await highestCallReservation(resolve(runsRoot, runDirectory, "calls")),
+    ]);
   }
   return reserved;
+}
+
+/** Highest ROUTE/CALL number reserved by any `<call-id>.started.json` in a run's calls directory. */
+async function highestCallReservation(callsDirectory: string): Promise<number> {
+  let entries: string[];
+  try {
+    entries = await readdir(callsDirectory);
+  } catch (error) {
+    if (isNodeError(error) && error.code === "ENOENT") return 0;
+    throw error;
+  }
+  let seen = 0;
+  for (const entry of entries) {
+    const match = /^(CALL-\d{3,})\.started\.json$/u.exec(entry);
+    if (!match?.[1]) continue;
+    seen = highest([seen, parseSequenceNumber(match[1], "CALL")]);
+  }
+  return seen;
 }
 
 /**
