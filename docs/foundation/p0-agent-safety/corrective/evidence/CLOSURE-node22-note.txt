@@ -1,0 +1,11 @@
+# Node 22 attempt — NOT the authoritative run
+# package.json declares engines.node >= 24; this attempt used v22.22.0 (npm 10.9.4),
+# which npm does not enforce by default. It passed 38/38 with the TAP reporter, but a
+# result from below the declared engine floor is not the inherited baseline, so it is
+# recorded here and excluded from the closure evidence. The authoritative run is
+# CLOSURE-verification.txt on v24.11.1.
+
+# tests 38
+# pass 38
+# fail 0
+# skipped 0
