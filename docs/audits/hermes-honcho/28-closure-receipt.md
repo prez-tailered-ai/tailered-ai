@@ -1,5 +1,11 @@
 # 28 — Audit closure receipt
 
+> **Post-closure update (2026-08-12).** Written before the P0-B merge, this receipt lists
+> R-01 as OPEN and P0-B as not yet established. Both have since resolved: PR #7 merged
+> (`81bdfd7a`) and **R-01 is CLOSED_VERIFIED** — see
+> [`29-post-closure-remediation-receipt.md`](29-post-closure-remediation-receipt.md).
+> Everything below is unedited and correct as of its own date.
+
 **The Hermes-Honcho audit is CLOSED as an evidence product.**
 
 Founder decision: **ACCEPT WITH ERRATUM**. Recorded here, and enacted by

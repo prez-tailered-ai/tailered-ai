@@ -2,30 +2,40 @@
   "program": "agent-platform-foundation",
   "repository": "prez-tailered-ai/tailered-ai",
   "repository_exclusivity": "This program applies only to prez-tailered-ai/tailered-ai. No other first-party repository is a target, a dependency, or an implementation task.",
-  "ruflo_disposition": "REJECTED \u2014 read-only external reference. Not installed, not a dependency.",
+  "ruflo_disposition": "REJECTED — read-only external reference. Not installed, not a dependency.",
   "scope": "P0-B",
-  "technical_status": "COMPLETE_PENDING_FINAL_MERGE_GATE",
-  "human_gate": "NEEDS_PREZ \u2014 P0-B FINAL MERGE. Review and merge the draft pull request; no other action is authorized.",
-  "next_scope": "ADR-004",
+  "technical_status": "COMPLETE_MERGED",
+  "human_gate": "NEEDS_PREZ — next-scope authorization. P0-B is merged and ADR-004 is accepted; no further scope is authorized by any existing document.",
+  "next_scope": "NONE_AUTHORIZED — PROCESS-ISOLATION requires its own PREZ-approved implementation gate per ADR-004",
   "frozen_base_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c",
   "p0_a_merge_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c",
   "ruflo_audit_merge_sha": "e6a3bbf",
-  "branch": "fix/p0-b-ledger-concurrency",
+  "branch": "fix/p0-b-ledger-concurrency (merged to main via PR #7)",
   "scopes": {
     "P0-A": {
       "status": "MERGED",
-      "merge_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c"
+      "merge_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c",
+      "corrective_closure_merge_sha": "978fbcc31577f6378b8dca4564ceafa6473f1c5e"
     },
     "P0-B": {
-      "status": "COMPLETE_PENDING_MERGE",
+      "status": "MERGED",
       "branch": "fix/p0-b-ledger-concurrency",
-      "composed_foundation": "origin/main 38e08bfb4b92966c275e778fe6b861a5763b0d86 merged via 4594ce995666d41849fe2466661e2a2eac1c10b8"
+      "composed_foundation": "origin/main 38e08bfb4b92966c275e778fe6b861a5763b0d86 merged via 4594ce995666d41849fe2466661e2a2eac1c10b8",
+      "pull_request": 7,
+      "head_sha": "c803bfad357384a5e6fbcbd3fe1a0263180ea38a",
+      "implementation_sha": "f2dfed8943856a1f86fa88fe940a9a4bc231eb85",
+      "merge_sha": "81bdfd7a0d70e2b3bdd2c70dfadb1f581df2f3e4",
+      "merged_at": "2026-08-12T11:23:23Z",
+      "merged_by": "prez-tailered-ai"
     },
     "ADR-004": {
-      "status": "BLOCKED_ON_P0B_MERGE"
+      "status": "ACCEPTED",
+      "pull_request": 6,
+      "merge_sha": "482bc04ac9222f40e86cf2d8fa5185914155648f",
+      "decision": "decisions/ADR-004.md"
     },
     "PROCESS-ISOLATION": {
-      "status": "BLOCKED_ON_ADR004_ACCEPTANCE"
+      "status": "NOT_AUTHORIZED — requires its own approved implementation gate (ADR-004); NEEDS_PREZ"
     }
   },
   "inherited_evidence": {
@@ -34,9 +44,16 @@
     "ledger": "docs/foundation/p0-agent-safety/execution-ledger.jsonl"
   },
   "foundation_rule": "Per PR #5: 60adb63e is permanently invalid as a P0-B base; 978fbcc3 or any later main containing it is the minimum valid foundation. Satisfied by merge commit 4594ce99 (origin/main 38e08bfb merged into the branch).",
-  "intermediate_design_gate": "APPROVED \u2014 A-01 and A-02 ratified by PREZ 2026-08-12 (gate-ledger.jsonl GATE-P0B-DESIGN-A01/A02). The earlier NEEDS_PREZ event stands in the program ledger, not overwritten.",
-  "next_step": "PREZ merge review",
-  "final_merge_gate": "REACHED \u2014 awaiting PREZ",
-  "adr_numbering": "ADR-004 belongs to the Hermes-Honcho decision (PR #6, merged 482bc04a). The Ruflo decision uses the semantic handoff name RUFLO-DECISION-ADR; next_adr_id: RESOLVE_FROM_MAIN_AFTER_P0B_MERGE.",
-  "requirements_summary": "R1-R8 VERIFIED (8/8), A1-A7 VERIFIED (7/7) per docs/foundation/p0-agent-safety/p0-b/requirements-status.json; machine-derived, never hand-counted"
+  "intermediate_design_gate": "APPROVED — A-01 and A-02 ratified by PREZ 2026-08-12 (gate-ledger.jsonl GATE-P0B-DESIGN-A01/A02). The earlier NEEDS_PREZ event stands in the program ledger, not overwritten.",
+  "next_step": "None authorized. Post-closure reconciliation receipt: docs/audits/hermes-honcho/29-post-closure-remediation-receipt.md",
+  "final_merge_gate": "PASSED — PR #7 merged as 81bdfd7a0d70e2b3bdd2c70dfadb1f581df2f3e4 at 2026-08-12T11:23:23Z by prez-tailered-ai; required check verify success on head c803bfad and on the merge commit",
+  "adr_numbering": "ADR-004 belongs to the Hermes-Honcho decision (PR #6, merged 482bc04a). The Ruflo decision uses the semantic handoff name RUFLO-DECISION-ADR; next_adr_id: ADR-005 (resolved from main — decisions/ADR-000..ADR-004 present).",
+  "requirements_summary": "R1-R8 VERIFIED (8/8), A1-A7 VERIFIED (7/7) per docs/foundation/p0-agent-safety/p0-b/requirements-status.json; machine-derived, never hand-counted",
+  "reconciliation": {
+    "date": "2026-08-12",
+    "session": "Hermes-Honcho audit closure and P0-B reconciliation",
+    "receipt": "docs/audits/hermes-honcho/29-post-closure-remediation-receipt.md",
+    "r01_status": "CLOSED_VERIFIED",
+    "note": "This file is a derived status index. Pre-merge values it previously carried (COMPLETE_PENDING_FINAL_MERGE_GATE, BLOCKED_ON_P0B_MERGE) are preserved in git history at c803bfad and superseded here by live GitHub state."
+  }
 }

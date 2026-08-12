@@ -1,0 +1,20 @@
+# npm run validate on main 81bdfd7a, Node v24.11.1, exit 0
+
+> @tailered-ai/core@0.1.0 validate
+> npm run build && node dist/src/cli.js validate --repo .
+
+
+> @tailered-ai/core@0.1.0 build
+> tsc -p tsconfig.json
+
+{
+  "status": "VERIFIED",
+  "root": "<verify-worktree>",
+  "valid": true,
+  "decisions": 5,
+  "evals": 0,
+  "labels": 0,
+  "routes": 0,
+  "calls": 0,
+  "contexts": 0
+}

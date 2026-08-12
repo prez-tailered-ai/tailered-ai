@@ -55,6 +55,7 @@ mutation of any kind.
 | 26 | [procedure-outcome-architecture](26-procedure-outcome-architecture.md) | The strategic finding |
 | 27 | [erratum](27-erratum.md) | **Append-only corrections** to TA-003, TA-004, and the POC-A scope statement |
 | 28 | [closure-receipt](28-closure-receipt.md) | Founder acceptance, and what closes versus what stays open |
+| 29 | [post-closure-remediation-receipt](29-post-closure-remediation-receipt.md) | **R-01 → CLOSED_VERIFIED**: P0-B merged (`81bdfd7a`), R1–R8 8/8, A1–A7 7/7, crash matrix 7+2/9 |
 | — | [`tooling/`](tooling/) | Citation resolver + regression tests |
 
 **Closure note.** Artifacts `27` and `28` were added at closure, after the audit's own
@@ -62,6 +63,13 @@ completion gates were met. They correct evidence and record the founder decision
 no verdict, no disposition, and no finding about either upstream system. Artifacts 00-26 are
 unedited except for two inserted erratum notices, which add pointers and leave every original
 statement in place.
+
+**Post-closure note (2026-08-12).** Artifact `29` was appended after the P0-B remediation
+merged (PR #7, `81bdfd7a`). It supersedes only the current status of risk R-01
+(OPEN → CLOSED_VERIFIED) and adds three dated pointer notices — in `20`, `25`, and `28` —
+above unedited original text. Its verification evidence is retained as
+`closure-evidence/RECON-*.txt`. No verdict, disposition, finding, or upstream statement
+changes.
 
 **Numbering note.** `13` is intentionally absent: an earlier artifact at that number covered
 a wider programme scope and was superseded by `12`, which is Tailered-only. Numbers are
@@ -72,7 +80,7 @@ it.
 
 | Measure | Value |
 |---|---|
-| Artifacts | 25 markdown + 2 tooling files, **+2 closure artifacts (27, 28)** |
+| Artifacts | 25 markdown + 2 tooling files, **+2 closure artifacts (27, 28)**, +1 post-closure receipt (29) |
 | Total lines / words | 8,173 / ~127,700 |
 | Canonical findings (upstream) | **294** |
 | Severity split | 6 CRITICAL · 58 HIGH · 117 MEDIUM · 65 LOW · 3 HARDENING · 94 INFORMATIONAL |

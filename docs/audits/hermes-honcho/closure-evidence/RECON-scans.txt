@@ -1,0 +1,17 @@
+# Integrity scans over main 81bdfd7a — reconciliation session 2026-08-12
+# All scans run in the disposable verification worktree; tracked files only.
+
+JSON parse: every tracked .json parses (includes requirements-status.json, evidence-index.json, program-status.json, historical-receipts.json)
+JSONL parse: every tracked .jsonl parses; 0 malformed lines
+  docs/foundation/p0-agent-safety/execution-ledger.jsonl: 38 events, 38/38 event ids unique
+  docs/foundation/agent-platform-foundation/program-ledger.jsonl: 132 events, all valid JSON, 114/132 event ids unique
+    -> FND-P0-B-P0B-04-A1-START/FINISH x6 and ...-A2-START/FINISH x5 reuse ids across retained retry rows
+       (process ledger only; the product ledgers under test recorded 0 duplicate identifiers in every clean run)
+  docs/foundation/agent-platform-foundation/gate-ledger.jsonl: 2 events, both valid (GATE-P0B-DESIGN-A01/A02, APPROVED, actor PREZ)
+NUL-byte scan: clean over 500 tracked files
+Secret scan (ghp_/github_pat_/sk-/AKIA/private-key patterns): no live credential; only quoted fixtures in the Ruflo corpus
+  (ghp_aaa..., AKIAIOSFODNN7EXAMPLE - documented example literals, different audit, out of this scope)
+Machine-path scan under docs/foundation/: 1 hit, p0-b/concurrent-session-overlap.md line 19
+  -> disclosed by P0-B itself as residual risk 6 (report.md, "Committed overlap register names a local worktree path - deliberate")
+Runtime dependencies: 0 (package.json "dependencies" empty; devDependencies 2; npm ci added 4 packages, unchanged since pre-P0-B)
+GitHub deployments API: 0 deployments, 0 environments ever created on prez-tailered-ai/tailered-ai
