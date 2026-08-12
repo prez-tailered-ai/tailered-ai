@@ -1,0 +1,126 @@
+
+> @tailered-ai/core@0.1.0 test
+> npm run build && node --test dist/test/*.test.js
+
+
+> @tailered-ai/core@0.1.0 build
+> tsc -p tsconfig.json
+
+TAP version 13
+# Subtest: reserve enforces an exclusive five-dollar boundary before spending
+ok 1 - reserve enforces an exclusive five-dollar boundary before spending
+  ---
+  duration_ms: 1.689291
+  type: 'test'
+  ...
+# Subtest: settlement releases unused reservation and records actuals
+ok 2 - settlement releases unused reservation and records actuals
+  ---
+  duration_ms: 0.953709
+  type: 'test'
+  ...
+# Subtest: an agent cannot settle above its hard reservation ceiling
+ok 3 - an agent cannot settle above its hard reservation ceiling
+  ---
+  duration_ms: 4.644042
+  type: 'test'
+  ...
+# Subtest: mint creates and validates the complete company repository
+ok 4 - mint creates and validates the complete company repository
+  ---
+  duration_ms: 10.417333
+  type: 'test'
+  ...
+# Subtest: supersession appends a new ADR and derives old status at render time
+ok 5 - supersession appends a new ADR and derives old status at render time
+  ---
+  duration_ms: 5.888916
+  type: 'test'
+  ...
+# Subtest: charter interview refuses list fragments
+ok 6 - charter interview refuses list fragments
+  ---
+  duration_ms: 0.208417
+  type: 'test'
+  ...
+# Subtest: company config preserves the v1 bounds and central model aliases
+ok 7 - company config preserves the v1 bounds and central model aliases
+  ---
+  duration_ms: 1.007416
+  type: 'test'
+  ...
+# Subtest: company config cannot widen a contracted v1 bound
+ok 8 - company config cannot widen a contracted v1 bound
+  ---
+  duration_ms: 0.2155
+  type: 'test'
+  ...
+# Subtest: router is stateless and escalates only the third codegen attempt
+ok 9 - router is stateless and escalates only the third codegen attempt
+  ---
+  duration_ms: 0.435459
+  type: 'test'
+  ...
+# Subtest: router maps task kinds to the contract tiers
+ok 10 - router maps task kinds to the contract tiers
+  ---
+  duration_ms: 0.101833
+  type: 'test'
+  ...
+# Subtest: router model identity comes only from the supplied registry
+ok 11 - router model identity comes only from the supplied registry
+  ---
+  duration_ms: 0.133458
+  type: 'test'
+  ...
+# Subtest: gating demo ships with approve, zero edits, and complete accounting
+ok 12 - gating demo ships with approve, zero edits, and complete accounting
+  ---
+  duration_ms: 323.202709
+  type: 'test'
+  ...
+# Subtest: attempt exhaustion writes one high-value terminal eval without a gate label
+ok 13 - attempt exhaustion writes one high-value terminal eval without a gate label
+  ---
+  duration_ms: 216.176584
+  type: 'test'
+  ...
+# Subtest: budget refusal happens before agent invocation and still writes a terminal eval
+ok 14 - budget refusal happens before agent invocation and still writes a terminal eval
+  ---
+  duration_ms: 24.417959
+  type: 'test'
+  ...
+# Subtest: accounting violations preserve the measured call before halting
+ok 15 - accounting violations preserve the measured call before halting
+  ---
+  duration_ms: 21.833417
+  type: 'test'
+  ...
+# Subtest: a repo registry string swap changes every runtime model request
+ok 16 - a repo registry string swap changes every runtime model request
+  ---
+  duration_ms: 188.069917
+  type: 'test'
+  ...
+# Subtest: rejection captures both the preference label and terminal eval
+ok 17 - rejection captures both the preference label and terminal eval
+  ---
+  duration_ms: 124.563541
+  type: 'test'
+  ...
+# Subtest: edit is valid platform behavior but fails the gating DoD assertion
+ok 18 - edit is valid platform behavior but fails the gating DoD assertion
+  ---
+  duration_ms: 408.569875
+  type: 'test'
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1413.213208

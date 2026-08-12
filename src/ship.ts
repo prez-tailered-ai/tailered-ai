@@ -42,11 +42,15 @@ import {
 } from "./errors.js";
 import {
   hashDirectory,
+  resolveContainedWritePath,
   resolveRepoPath,
   writeAtomic,
 } from "./files.js";
 import { CompanyLedger } from "./ledger.js";
 import { createRouteLog, route } from "./router.js";
+
+/** The single capability root agents and gates may write. */
+const PRODUCT_ROOT = "product";
 
 export interface HumanGate {
   decide(input: {
@@ -554,17 +558,31 @@ async function runCheck(root: string, check: AcceptanceTest): Promise<CheckResul
   });
 }
 
+/**
+ * Applies externally supplied file writes — agent code generation, critique
+ * repair, and founder gate edits all arrive here.
+ *
+ * Every destination is proven to lie beneath the canonical `product/` subtree
+ * before anything is written. A string prefix test is not sufficient:
+ * `product/../decisions/ADR-000.md` satisfies it while resolving onto an
+ * accepted, immutable decision.
+ */
 async function applyProductFiles(root: string, files: FileWrite[]): Promise<void> {
+  const resolved: Array<{ target: string; content: string }> = [];
   for (const file of files) {
-    if (!file.path.startsWith("product/")) {
-      throw new ValidationError(
-        `Agent and gate writes are restricted to product/: ${file.path}`,
-      );
-    }
     if (Buffer.byteLength(file.content) > 5_000_000) {
       throw new ValidationError(`File exceeds the 5 MB v1 limit: ${file.path}`);
     }
-    await writeAtomic(resolveRepoPath(root, file.path), file.content);
+    resolved.push({
+      target: await resolveContainedWritePath(root, PRODUCT_ROOT, file.path),
+      content: file.content,
+    });
+  }
+
+  // Every destination is contained before the first byte is written, so a
+  // rejected batch cannot leave a partially applied artifact behind.
+  for (const write of resolved) {
+    await writeAtomic(write.target, write.content);
   }
 }
 
