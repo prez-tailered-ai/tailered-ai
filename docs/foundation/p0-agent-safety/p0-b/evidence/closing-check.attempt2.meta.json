@@ -1,0 +1,30 @@
+{
+  "event_id": "FND-P0-B-P0B-19-A2-FINISH",
+  "scope": "P0-B",
+  "step_id": "P0B-19",
+  "attempt": 2,
+  "command": [
+    "docker",
+    "run",
+    "--rm",
+    "-v",
+    "/tmp/p0b-20260812/tailered-ai:/work",
+    "-w",
+    "/work",
+    "node:24",
+    "npm run check"
+  ],
+  "cwd": ".",
+  "started_at": "2026-08-12T11:04:37.791Z",
+  "finished_at": "2026-08-12T11:04:39.921Z",
+  "duration_ms": 2122,
+  "exit_code": 1,
+  "signal": null,
+  "spawn_error": null,
+  "allow_failure": false,
+  "status": "FAIL",
+  "stdout_bytes": 0,
+  "stderr_bytes": 734,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "3e1128e00c793ac1d549942933dea9557594a2a487256571d90a783819c2e9d6"
+}

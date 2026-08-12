@@ -1,4 +1,5 @@
-import { access, readFile } from "node:fs/promises";
+import { access, readFile, readdir } from "node:fs/promises";
+import { createHash } from "node:crypto";
 import { resolve } from "node:path";
 import { readAdrs } from "./company.js";
 import { loadCompanyConfig } from "./config.js";
@@ -11,8 +12,12 @@ import {
   type RunOutcome,
 } from "./contracts.js";
 import { ValidationError } from "./errors.js";
-import { resolveRepoPath } from "./files.js";
-import { CompanyLedger } from "./ledger.js";
+import { isNodeError, readJsonLines, resolveRepoPath } from "./files.js";
+import { canonicalRecordJson } from "./ledger.js";
+import { assessCompanyLock } from "./lock.js";
+import { QUARANTINE_RELATIVE_DIR } from "./recover.js";
+import { inspectSequence, SequenceStateError } from "./sequence.js";
+import type { ADR } from "./contracts.js";
 
 const REQUIRED_PATHS = [
   "AGENTS.md",
@@ -65,13 +70,26 @@ export async function validateCompany(root: string): Promise<ValidationReport> {
     errors.push(error instanceof Error ? error.message : String(error));
   }
 
-  const ledger = new CompanyLedger(root);
-  const [adrs, evals, labels, routes] = await Promise.all([
-    readAdrs(root),
-    ledger.evals(),
-    ledger.labels(),
-    ledger.routes(),
-  ]);
+  // Torn-JSONL handling (P0B-15): a torn line must name its exact file and line, and one
+  // corrupt file must not hide the state of the others. Each ledger is read independently;
+  // a torn file contributes its error and an empty row set, and validation continues.
+  const readLedgerCollecting = async <T>(relativePath: string): Promise<T[]> => {
+    try {
+      return await readJsonLines<T>(resolve(root, relativePath));
+    } catch (error) {
+      errors.push(error instanceof Error ? error.message : String(error));
+      return [];
+    }
+  };
+  let adrs: Awaited<ReturnType<typeof readAdrs>> = [];
+  try {
+    adrs = await readAdrs(root);
+  } catch (error) {
+    errors.push(`decisions/ are unreadable: ${error instanceof Error ? error.message : String(error)}`);
+  }
+  const evals = await readLedgerCollecting<EvalRow>("evals/ledger.jsonl");
+  const labels = await readLedgerCollecting<GateLabel>("labels/ledger.jsonl");
+  const routes = await readLedgerCollecting<RouteLog>("evals/routes.jsonl");
   const adrIds = new Set(adrs.map((adr) => adr.id));
   const labelIds = new Set(labels.map((label) => label.id));
   const routeIds = new Set(routes.map((routeLog) => routeLog.id));
@@ -79,6 +97,7 @@ export async function validateCompany(root: string): Promise<ValidationReport> {
   const contextRefs = new Set<string>();
   const runIds = new Set<string>();
 
+  validateUnique(adrs, (adr) => adr.id, "ADR", errors);
   validateUnique(labels, (row) => row.id, "gate label", errors);
   validateUnique(routes, (row) => row.id, "route log", errors);
   validateUnique(evals, (row) => row.id, "eval", errors);
@@ -92,6 +111,7 @@ export async function validateCompany(root: string): Promise<ValidationReport> {
     }
   }
 
+  validateUnique(evals, (row) => row.adr_id, "terminal-ADR reference", errors);
   for (const row of evals) {
     validateEval(row, errors);
     if (runIds.has(row.run_id)) {
@@ -100,6 +120,9 @@ export async function validateCompany(root: string): Promise<ValidationReport> {
     runIds.add(row.run_id);
     if (!adrIds.has(row.adr_id)) {
       errors.push(`${row.id} references missing ADR ${row.adr_id}.`);
+    }
+    if (!row.caused_by.includes(row.adr_id)) {
+      errors.push(`${row.id} caused_by lacks its own terminal ADR ${row.adr_id}.`);
     }
     if (row.gate_label_id && !labelIds.has(row.gate_label_id)) {
       errors.push(`${row.id} references missing gate label ${row.gate_label_id}.`);
@@ -142,6 +165,9 @@ export async function validateCompany(root: string): Promise<ValidationReport> {
     contextRefs.add(routeLog.context.snapshot_ref);
     await validateRouteArtifacts(root, routeLog, errors);
   }
+
+  await validateRunState(root, adrs, evals, labels, errors);
+  await validateInfrastructureState(root, errors);
 
   if (errors.length > 0) {
     throw new ValidationError(errors.join("\n"));
@@ -322,5 +348,264 @@ function validateUnique<T>(
       errors.push(`Duplicate ${kind} id: ${id}`);
     }
     seen.add(id);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// P0B-15: run-state validation. Observes only; never repairs. Every condition
+// below maps to one entry in the extended-validation contract.
+// ---------------------------------------------------------------------------
+
+interface IntentShape {
+  schema_version?: number;
+  run_id?: string;
+  spec_id?: string;
+  adr?: ADR;
+  eval?: EvalRow;
+  payload_sha256?: { adr?: string; eval?: string };
+  caused_by?: string[];
+}
+
+interface MarkerShape {
+  schema_version?: number;
+  run_id?: string;
+  eval_id?: string;
+  adr_id?: string;
+  gate_label_id?: string;
+  outcome?: string;
+  caused_by?: string[];
+}
+
+async function readOptionalJson<T>(
+  path: string,
+): Promise<{ kind: "absent" } | { kind: "unreadable"; reason: string } | { kind: "ok"; value: T }> {
+  let raw: string;
+  try {
+    raw = await readFile(path, "utf8");
+  } catch (error) {
+    if (isNodeError(error) && error.code === "ENOENT") return { kind: "absent" };
+    return { kind: "unreadable", reason: error instanceof Error ? error.message : String(error) };
+  }
+  try {
+    return { kind: "ok", value: JSON.parse(raw) as T };
+  } catch (error) {
+    return { kind: "unreadable", reason: error instanceof Error ? error.message : String(error) };
+  }
+}
+
+async function validateRunState(
+  root: string,
+  adrs: Awaited<ReturnType<typeof readAdrs>>,
+  evals: EvalRow[],
+  labels: GateLabel[],
+  errors: string[],
+): Promise<void> {
+  const adrIds = new Set(adrs.map((adr) => adr.id));
+  const labelIds = new Set(labels.map((label) => label.id));
+  const runsRoot = resolve(root, "evals/runs");
+  let runDirs: string[] = [];
+  try {
+    runDirs = (await readdir(runsRoot, { withFileTypes: true }))
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => entry.name);
+  } catch (error) {
+    if (!isNodeError(error) || error.code !== "ENOENT") {
+      errors.push(`evals/runs is unreadable: ${error instanceof Error ? error.message : String(error)}`);
+    }
+    return;
+  }
+
+  for (const runId of runDirs) {
+    const runDir = resolve(runsRoot, runId);
+    const terminal = evals.find((row) => row.run_id === runId);
+    const started = await readOptionalJson<Record<string, unknown>>(resolve(runDir, "started.json"));
+    const intent = await readOptionalJson<IntentShape>(resolve(runDir, "finalization-intent.json"));
+    const marker = await readOptionalJson<MarkerShape>(resolve(runDir, "finalized.json"));
+
+    if (started.kind === "unreadable") {
+      errors.push(`evals/runs/${runId}/started.json is unreadable: ${started.reason}`);
+    }
+    if (started.kind === "ok" && terminal === undefined) {
+      errors.push(
+        `Unmatched run start: ${runId} has a durable start record and no terminal eval. ` +
+          `The run was interrupted; run \`tailered recover\`.`,
+      );
+    }
+    if (started.kind === "ok" && !Array.isArray(started.value.caused_by)) {
+      errors.push(`evals/runs/${runId}/started.json has no caused_by edge.`);
+    }
+
+    // Unmatched call starts are an error only while the run itself is unresolved: a recovered
+    // run legitimately carries interrupted call-start records, named in its terminal blocker.
+    if (terminal === undefined) {
+      let callStarts: string[] = [];
+      try {
+        callStarts = (await readdir(resolve(runDir, "calls"))).filter((name) =>
+          /\.started\.json$/u.test(name),
+        );
+      } catch (error) {
+        if (!isNodeError(error) || error.code !== "ENOENT") throw error;
+      }
+      for (const name of callStarts) {
+        errors.push(
+          `Unmatched call start: evals/runs/${runId}/calls/${name} has no completed route ` +
+            `log and the run has no terminal eval.`,
+        );
+      }
+    }
+
+    if (intent.kind === "unreadable") {
+      errors.push(`evals/runs/${runId}/finalization-intent.json is unreadable: ${intent.reason}`);
+    }
+    if (intent.kind === "ok") {
+      if (intent.value.schema_version !== 2) {
+        errors.push(
+          `evals/runs/${runId}/finalization-intent.json has unknown schema version ` +
+            `${String(intent.value.schema_version)}.`,
+        );
+      } else {
+        const adr = intent.value.adr;
+        const intended = intent.value.eval;
+        if (adr === undefined || intended === undefined) {
+          errors.push(`evals/runs/${runId} intent lacks its complete payloads.`);
+        } else {
+          const adrHash = createHash("sha256").update(canonicalRecordJson(adr)).digest("hex");
+          const evalHash = createHash("sha256").update(canonicalRecordJson(intended)).digest("hex");
+          if (intent.value.payload_sha256?.adr !== adrHash) {
+            errors.push(`evals/runs/${runId} intent ADR payload hash does not match its payload.`);
+          }
+          if (intent.value.payload_sha256?.eval !== evalHash) {
+            errors.push(`evals/runs/${runId} intent eval payload hash does not match its payload.`);
+          }
+          if (intended.adr_id !== adr.id) {
+            errors.push(`evals/runs/${runId} intended eval does not reference its own terminal ADR.`);
+          }
+          if (terminal !== undefined && canonicalRecordJson(terminal) !== canonicalRecordJson(intended)) {
+            errors.push(`${terminal.id} disagrees with the recorded finalization intent for ${runId}.`);
+          }
+        }
+        if (!Array.isArray(intent.value.caused_by) || intent.value.caused_by.length === 0) {
+          errors.push(`evals/runs/${runId}/finalization-intent.json has no caused_by edge.`);
+        }
+      }
+      if (marker.kind === "absent") {
+        errors.push(
+          `Unresolved finalization intent: ${runId} recorded an intent and no finalized marker. ` +
+            `Run \`tailered recover\`.`,
+        );
+      }
+    }
+
+    if (marker.kind === "unreadable") {
+      errors.push(`evals/runs/${runId}/finalized.json is unreadable: ${marker.reason}`);
+    }
+    if (marker.kind === "ok") {
+      const m = marker.value;
+      if (terminal === undefined || m.eval_id !== terminal.id) {
+        errors.push(`Finalized marker for ${runId} names eval ${String(m.eval_id)}, which does not exist for the run.`);
+      } else {
+        if (m.adr_id !== terminal.adr_id) {
+          errors.push(`Finalized marker for ${runId} disagrees with the terminal row's ADR.`);
+        }
+        if (m.outcome !== terminal.outcome) {
+          errors.push(`Finalized marker for ${runId} disagrees with the terminal row's outcome.`);
+        }
+      }
+      if (m.adr_id !== undefined && !adrIds.has(m.adr_id)) {
+        errors.push(`Finalized marker for ${runId} names missing ADR ${m.adr_id}.`);
+      }
+      if (m.gate_label_id !== undefined && !labelIds.has(m.gate_label_id)) {
+        errors.push(`Finalized marker for ${runId} names missing gate label ${m.gate_label_id}.`);
+      }
+      if (!Array.isArray(m.caused_by) || m.caused_by.length === 0) {
+        errors.push(`evals/runs/${runId}/finalized.json has no caused_by edge.`);
+      }
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// P0B-15: infrastructure state - lock, allocator, incidents, quarantine.
+// ---------------------------------------------------------------------------
+
+async function validateInfrastructureState(root: string, errors: string[]): Promise<void> {
+  const lock = await assessCompanyLock(root);
+  if (lock.state === "dead") {
+    errors.push(
+      `Stale repository lock: owner pid ${lock.owner.pid} is provably dead on this host. ` +
+        `Run \`tailered recover\`.`,
+    );
+  } else if (lock.state === "foreign") {
+    errors.push(
+      `Ambiguous repository lock: held by pid ${lock.owner.pid} on foreign host ` +
+        `"${lock.owner.host}"; liveness cannot be verified.`,
+    );
+  } else if (lock.state === "corrupt") {
+    errors.push(`Unreadable repository lock ownership: ${lock.reason}`);
+  }
+
+  try {
+    const sequence = await inspectSequence(root);
+    if (sequence.state === null && sequence.bootstrapped !== null) {
+      errors.push(
+        "Allocator state is missing while its bootstrap marker exists. Identifier state was " +
+          "lost after initialization.",
+      );
+    }
+    if (sequence.state !== null && sequence.behindCanonical.length > 0) {
+      errors.push(
+        `Allocator state is behind canonical or reserved state for: ` +
+          `${sequence.behindCanonical.join(", ")}.`,
+      );
+    }
+  } catch (error) {
+    if (error instanceof SequenceStateError) {
+      errors.push(`Allocator state invalid (${error.reason}): ${error.message}`);
+    } else {
+      throw error;
+    }
+  }
+
+  try {
+    const incidents = await readJsonLines<{ kind?: string; lock_token?: string }>(
+      resolve(root, ".tailered/incidents.jsonl"),
+    );
+    const resolved = new Set(
+      incidents
+        .filter((entry) => entry.kind === "incident_resolved" && typeof entry.lock_token === "string")
+        .map((entry) => entry.lock_token as string),
+    );
+    for (const incident of incidents) {
+      if (incident.kind === "lock_release_failed" && !resolved.has(incident.lock_token ?? "")) {
+        errors.push(
+          `Unresolved integrity incident: lock release failed for token ` +
+            `${incident.lock_token ?? "(unknown)"} and no resolution record exists.`,
+        );
+      }
+    }
+  } catch (error) {
+    errors.push(
+      `.tailered/incidents.jsonl is unreadable: ${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
+
+  try {
+    const entries = await readdir(resolve(root, QUARANTINE_RELATIVE_DIR));
+    for (const name of entries) {
+      const match = /^(.+)\.json$/u.exec(name);
+      if (!match?.[1] || name.endsWith(".resolved.json")) continue;
+      const companion = `${match[1]}.resolved.json`;
+      if (!entries.includes(companion)) {
+        errors.push(
+          `Unresolved quarantine: ${QUARANTINE_RELATIVE_DIR}/${name} has no resolution record.`,
+        );
+      }
+    }
+  } catch (error) {
+    if (!isNodeError(error) || error.code !== "ENOENT") {
+      errors.push(
+        `${QUARANTINE_RELATIVE_DIR} is unreadable: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
   }
 }

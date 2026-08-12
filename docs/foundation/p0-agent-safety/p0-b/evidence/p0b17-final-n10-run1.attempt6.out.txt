@@ -1,0 +1,178 @@
+{
+  "harness": "p0b-concurrency",
+  "repo_dir": "/work",
+  "repo_head": "f2dfed8943856a1f86fa88fe940a9a4bc231eb85",
+  "node_version": "v24.19.0",
+  "n": 10,
+  "wall_ms": 4018,
+  "generated_at": "2026-08-12T11:03:53.009Z",
+  "ship_runs": [
+    {
+      "index": 1,
+      "exit_code": 0,
+      "signal": null,
+      "stdout": "{\n  \"status\": \"VERIFIED\",\n  \"receipt\": {\n    \"runId\": \"RUN-20260812110350348-f8d6fc4c\",\n    \"outcome\": \"shipped\",\n    \"costUsd\": 0.004,\n    \"tokensByTier\": {\n      \"frontier\": 0,\n      \"mid\": 450,\n      \"cheap\": 150\n    },\n    \"wallTimeMs\": 2134,\n    \"previewUrl\": \"file:///tmp/p0b-conc-cuL1Ho/company/product/index.html\",\n    \"evalId\": \"EVAL-000003\",\n    \"gateLabelId\": \"LABEL-000006\",\n    \"adrId\": \"ADR-004\"\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "index": 2,
+      "exit_code": 0,
+      "signal": null,
+      "stdout": "{\n  \"status\": \"VERIFIED\",\n  \"receipt\": {\n    \"runId\": \"RUN-20260812110349423-82650171\",\n    \"outcome\": \"shipped\",\n    \"costUsd\": 0.004,\n    \"tokensByTier\": {\n      \"frontier\": 0,\n      \"mid\": 450,\n      \"cheap\": 150\n    },\n    \"wallTimeMs\": 3217,\n    \"previewUrl\": \"file:///tmp/p0b-conc-cuL1Ho/company/product/index.html\",\n    \"evalId\": \"EVAL-000007\",\n    \"gateLabelId\": \"LABEL-000003\",\n    \"adrId\": \"ADR-008\"\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "index": 3,
+      "exit_code": 0,
+      "signal": null,
+      "stdout": "{\n  \"status\": \"VERIFIED\",\n  \"receipt\": {\n    \"runId\": \"RUN-20260812110350617-7367a5da\",\n    \"outcome\": \"shipped\",\n    \"costUsd\": 0.003,\n    \"tokensByTier\": {\n      \"frontier\": 0,\n      \"mid\": 300,\n      \"cheap\": 150\n    },\n    \"wallTimeMs\": 1741,\n    \"previewUrl\": \"file:///tmp/p0b-conc-cuL1Ho/company/product/index.html\",\n    \"evalId\": \"EVAL-000001\",\n    \"gateLabelId\": \"LABEL-000001\",\n    \"adrId\": \"ADR-002\"\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "index": 4,
+      "exit_code": 0,
+      "signal": null,
+      "stdout": "{\n  \"status\": \"VERIFIED\",\n  \"receipt\": {\n    \"runId\": \"RUN-20260812110350527-21ffc5c6\",\n    \"outcome\": \"shipped\",\n    \"costUsd\": 0.004,\n    \"tokensByTier\": {\n      \"frontier\": 0,\n      \"mid\": 450,\n      \"cheap\": 150\n    },\n    \"wallTimeMs\": 2339,\n    \"previewUrl\": \"file:///tmp/p0b-conc-cuL1Ho/company/product/index.html\",\n    \"evalId\": \"EVAL-000010\",\n    \"gateLabelId\": \"LABEL-000010\",\n    \"adrId\": \"ADR-011\"\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "index": 5,
+      "exit_code": 0,
+      "signal": null,
+      "stdout": "{\n  \"status\": \"VERIFIED\",\n  \"receipt\": {\n    \"runId\": \"RUN-20260812110350010-34b3a8af\",\n    \"outcome\": \"shipped\",\n    \"costUsd\": 0.004,\n    \"tokensByTier\": {\n      \"frontier\": 0,\n      \"mid\": 450,\n      \"cheap\": 150\n    },\n    \"wallTimeMs\": 2474,\n    \"previewUrl\": \"file:///tmp/p0b-conc-cuL1Ho/company/product/index.html\",\n    \"evalId\": \"EVAL-000004\",\n    \"gateLabelId\": \"LABEL-000007\",\n    \"adrId\": \"ADR-005\"\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "index": 6,
+      "exit_code": 0,
+      "signal": null,
+      "stdout": "{\n  \"status\": \"VERIFIED\",\n  \"receipt\": {\n    \"runId\": \"RUN-20260812110350494-279ffe5e\",\n    \"outcome\": \"shipped\",\n    \"costUsd\": 0.003,\n    \"tokensByTier\": {\n      \"frontier\": 0,\n      \"mid\": 300,\n      \"cheap\": 150\n    },\n    \"wallTimeMs\": 2135,\n    \"previewUrl\": \"file:///tmp/p0b-conc-cuL1Ho/company/product/index.html\",\n    \"evalId\": \"EVAL-000005\",\n    \"gateLabelId\": \"LABEL-000002\",\n    \"adrId\": \"ADR-006\"\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "index": 7,
+      "exit_code": 0,
+      "signal": null,
+      "stdout": "{\n  \"status\": \"VERIFIED\",\n  \"receipt\": {\n    \"runId\": \"RUN-20260812110350314-38c47e60\",\n    \"outcome\": \"shipped\",\n    \"costUsd\": 0.004,\n    \"tokensByTier\": {\n      \"frontier\": 0,\n      \"mid\": 450,\n      \"cheap\": 150\n    },\n    \"wallTimeMs\": 2466,\n    \"previewUrl\": \"file:///tmp/p0b-conc-cuL1Ho/company/product/index.html\",\n    \"evalId\": \"EVAL-000009\",\n    \"gateLabelId\": \"LABEL-000009\",\n    \"adrId\": \"ADR-010\"\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "index": 8,
+      "exit_code": 0,
+      "signal": null,
+      "stdout": "{\n  \"status\": \"VERIFIED\",\n  \"receipt\": {\n    \"runId\": \"RUN-20260812110350588-507b45ed\",\n    \"outcome\": \"shipped\",\n    \"costUsd\": 0.003,\n    \"tokensByTier\": {\n      \"frontier\": 0,\n      \"mid\": 300,\n      \"cheap\": 150\n    },\n    \"wallTimeMs\": 2149,\n    \"previewUrl\": \"file:///tmp/p0b-conc-cuL1Ho/company/product/index.html\",\n    \"evalId\": \"EVAL-000008\",\n    \"gateLabelId\": \"LABEL-000004\",\n    \"adrId\": \"ADR-009\"\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "index": 9,
+      "exit_code": 0,
+      "signal": null,
+      "stdout": "{\n  \"status\": \"VERIFIED\",\n  \"receipt\": {\n    \"runId\": \"RUN-20260812110350544-46a06f6b\",\n    \"outcome\": \"shipped\",\n    \"costUsd\": 0.004,\n    \"tokensByTier\": {\n      \"frontier\": 0,\n      \"mid\": 450,\n      \"cheap\": 150\n    },\n    \"wallTimeMs\": 2135,\n    \"previewUrl\": \"file:///tmp/p0b-conc-cuL1Ho/company/product/index.html\",\n    \"evalId\": \"EVAL-000006\",\n    \"gateLabelId\": \"LABEL-000008\",\n    \"adrId\": \"ADR-007\"\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "index": 10,
+      "exit_code": 0,
+      "signal": null,
+      "stdout": "{\n  \"status\": \"VERIFIED\",\n  \"receipt\": {\n    \"runId\": \"RUN-20260812110350586-67dab5f8\",\n    \"outcome\": \"shipped\",\n    \"costUsd\": 0.004,\n    \"tokensByTier\": {\n      \"frontier\": 0,\n      \"mid\": 450,\n      \"cheap\": 150\n    },\n    \"wallTimeMs\": 1844,\n    \"previewUrl\": \"file:///tmp/p0b-conc-cuL1Ho/company/product/index.html\",\n    \"evalId\": \"EVAL-000002\",\n    \"gateLabelId\": \"LABEL-000005\",\n    \"adrId\": \"ADR-003\"\n  }\n}\n",
+      "stderr": ""
+    }
+  ],
+  "ledger": {
+    "route_rows": 37,
+    "eval_rows": 10,
+    "label_rows": 10,
+    "torn_lines": 0,
+    "duplicate_route_ids": 0,
+    "duplicate_call_ids": 0,
+    "duplicate_eval_ids": 0,
+    "duplicate_label_ids": 0,
+    "route_ids": [
+      "ROUTE-000004",
+      "ROUTE-000001",
+      "ROUTE-000009",
+      "ROUTE-000002",
+      "ROUTE-000008",
+      "ROUTE-000003",
+      "ROUTE-000007",
+      "ROUTE-000010",
+      "ROUTE-000005",
+      "ROUTE-000006",
+      "ROUTE-000011",
+      "ROUTE-000014",
+      "ROUTE-000012",
+      "ROUTE-000016",
+      "ROUTE-000015",
+      "ROUTE-000013",
+      "ROUTE-000017",
+      "ROUTE-000019",
+      "ROUTE-000022",
+      "ROUTE-000020",
+      "ROUTE-000018",
+      "ROUTE-000021",
+      "ROUTE-000023",
+      "ROUTE-000031",
+      "ROUTE-000032",
+      "ROUTE-000030",
+      "ROUTE-000029",
+      "ROUTE-000033",
+      "ROUTE-000034",
+      "ROUTE-000024",
+      "ROUTE-000027",
+      "ROUTE-000026",
+      "ROUTE-000035",
+      "ROUTE-000025",
+      "ROUTE-000028",
+      "ROUTE-000036",
+      "ROUTE-000037"
+    ],
+    "eval_ids": [
+      "EVAL-000001",
+      "EVAL-000002",
+      "EVAL-000003",
+      "EVAL-000004",
+      "EVAL-000005",
+      "EVAL-000006",
+      "EVAL-000007",
+      "EVAL-000008",
+      "EVAL-000009",
+      "EVAL-000010"
+    ]
+  },
+  "exactly_once": {
+    "launched_runs": 10,
+    "runs_that_announced_a_run_id": 10,
+    "runs_with_no_receipt_at_all": 0,
+    "runs_with_route_logs": 10,
+    "runs_with_terminal_eval": 10,
+    "started_runs_with_no_terminal_eval": []
+  },
+  "adrs": {
+    "before": 2,
+    "after": 12,
+    "modified_accepted_adrs": []
+  },
+  "validate": {
+    "exit_code": 0,
+    "stdout_tail": "{\n  \"status\": \"VERIFIED\",\n  \"root\": \"/tmp/p0b-conc-cuL1Ho/company\",\n  \"valid\": true,\n  \"decisions\": 12,\n  \"evals\": 10,\n  \"labels\": 10,\n  \"routes\": 37,\n  \"calls\": 37,\n  \"contexts\": 17\n}\n",
+    "stderr_tail": ""
+  },
+  "company_dir": "(removed)",
+  "identifier_contention": {
+    "collision_halts": [],
+    "collision_halt_count": 0,
+    "runs_that_shipped": 10
+  },
+  "verdict": {
+    "A1_exactly_n_terminal_evals": true,
+    "A2_zero_duplicate_ids": true,
+    "A3_validate_exit_zero": true,
+    "A4_no_accepted_adr_modified": true,
+    "no_started_run_lost": true,
+    "no_torn_lines": true,
+    "no_identifier_collision_halts": true,
+    "every_run_shipped": true,
+    "all_clean": true
+  },
+  "defect_reproduced": false
+}

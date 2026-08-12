@@ -1,0 +1,179 @@
+{
+  "generated_by": "docs/foundation/p0-agent-safety/p0-b/evidence/hardening-negative-control.mjs",
+  "control_verdict": "CONTROL_HEALTHY",
+  "control_healthy": true,
+  "control_note": "Every mutant verdict below is meaningful ONLY if the control compiled and passed. An unhealthy control means the harness measured its own environment, not the code.",
+  "mutants": 8,
+  "caught": 8,
+  "caught_at_compile": 0,
+  "partially_caught": 0,
+  "not_caught": 0,
+  "invalid": 0,
+  "every_property_is_load_bearing": true,
+  "results": [
+    {
+      "id": "MUT-000-baseline-unmutated",
+      "property": "control: the unmutated tree compiles and every hardening test passes",
+      "verdict": "CONTROL_HEALTHY",
+      "test_exit_code": 0,
+      "test_signal": null,
+      "expected_failures": [],
+      "observed_failures": [],
+      "expected_but_passing": []
+    },
+    {
+      "id": "MUT-A1-swallow-release-failure",
+      "property": "A: a failed release must fail the operation",
+      "verdict": "CAUGHT",
+      "test_exit_code": 1,
+      "test_signal": null,
+      "expected_failures": [
+        "successful work plus a FAILED release fails the whole operation",
+        "failed work plus a failed release retains BOTH errors"
+      ],
+      "observed_failures": [
+        "lock: successful work plus a FAILED release fails the whole operation",
+        "lock: failed work plus a failed release retains BOTH errors",
+        "lock: a release failure is recorded as a durable integrity incident",
+        "lock: an incident distinguishes a failed release from a failed operation",
+        "lock: successful work plus a FAILED release fails the whole operation",
+        "lock: failed work plus a failed release retains BOTH errors",
+        "lock: a release failure is recorded as a durable integrity incident",
+        "lock: an incident distinguishes a failed release from a failed operation"
+      ],
+      "expected_but_passing": []
+    },
+    {
+      "id": "MUT-A2-release-without-ownership-proof",
+      "property": "A: release requires readable owner metadata and an exact token match",
+      "verdict": "CAUGHT",
+      "test_exit_code": 1,
+      "test_signal": null,
+      "expected_failures": [
+        "releasing when the owner file is MISSING is refused",
+        "releasing when the owner file is MALFORMED is refused",
+        "successful work plus a FAILED release fails the whole operation",
+        "failed work plus a failed release retains BOTH errors",
+        "a release failure is recorded as a durable integrity incident",
+        "an incident distinguishes a failed release from a failed operation"
+      ],
+      "observed_failures": [
+        "lock: releasing when the owner file is MISSING is refused, not assumed successful",
+        "lock: releasing when the owner file is MALFORMED is refused",
+        "lock: successful work plus a FAILED release fails the whole operation",
+        "lock: failed work plus a failed release retains BOTH errors",
+        "lock: a release failure is recorded as a durable integrity incident",
+        "lock: an incident distinguishes a failed release from a failed operation",
+        "lock: releasing when the owner file is MISSING is refused, not assumed successful",
+        "lock: releasing when the owner file is MALFORMED is refused",
+        "lock: successful work plus a FAILED release fails the whole operation",
+        "lock: failed work plus a failed release retains BOTH errors",
+        "lock: a release failure is recorded as a durable integrity incident",
+        "lock: an incident distinguishes a failed release from a failed operation"
+      ],
+      "expected_but_passing": []
+    },
+    {
+      "id": "MUT-B1-allocator-state-fails-open",
+      "property": "B: unreadable or malformed allocator state must fail closed",
+      "verdict": "CAUGHT",
+      "test_exit_code": 1,
+      "test_signal": null,
+      "expected_failures": [
+        "malformed sequence JSON is refused",
+        "an unreadable sequence file is refused",
+        "a schema-version mismatch is refused",
+        "an impossible counter is refused"
+      ],
+      "observed_failures": [
+        "allocator: malformed sequence JSON is refused, not treated as an empty allocator",
+        "allocator: an unreadable sequence file is refused",
+        "allocator: a schema-version mismatch is refused",
+        "allocator: an impossible counter is refused",
+        "allocator: malformed sequence JSON is refused, not treated as an empty allocator",
+        "allocator: an unreadable sequence file is refused",
+        "allocator: a schema-version mismatch is refused",
+        "allocator: an impossible counter is refused"
+      ],
+      "expected_but_passing": []
+    },
+    {
+      "id": "MUT-B4-bootstrap-marker-fails-open",
+      "property": "B: an unreadable bootstrap marker must fail closed",
+      "verdict": "CAUGHT",
+      "test_exit_code": 1,
+      "test_signal": null,
+      "expected_failures": [
+        "an unreadable bootstrap marker is refused"
+      ],
+      "observed_failures": [
+        "allocator: an unreadable bootstrap marker is refused",
+        "allocator: an unreadable bootstrap marker is refused"
+      ],
+      "expected_but_passing": []
+    },
+    {
+      "id": "MUT-B2-adr-read-failure-becomes-empty",
+      "property": "B: an ADR read failure must propagate, never become an empty ADR set",
+      "verdict": "CAUGHT",
+      "test_exit_code": 1,
+      "test_signal": null,
+      "expected_failures": [
+        "a malformed ADR is refused rather than read as an empty ADR set"
+      ],
+      "observed_failures": [
+        "allocator: a malformed ADR is refused rather than read as an empty ADR set",
+        "allocator: a malformed ADR is refused rather than read as an empty ADR set"
+      ],
+      "expected_but_passing": []
+    },
+    {
+      "id": "MUT-B3-silent-rebuild-after-state-loss",
+      "property": "B: allocator state lost after bootstrap must be an integrity failure",
+      "verdict": "CAUGHT",
+      "test_exit_code": 1,
+      "test_signal": null,
+      "expected_failures": [
+        "state lost AFTER bootstrap is an integrity failure"
+      ],
+      "observed_failures": [
+        "allocator: state lost AFTER bootstrap is an integrity failure, not an automatic rebuild",
+        "allocator: state lost AFTER bootstrap is an integrity failure, not an automatic rebuild"
+      ],
+      "expected_but_passing": []
+    },
+    {
+      "id": "MUT-C1-allocation-without-lock-proof",
+      "property": "C: allocation must prove the lock is still held",
+      "verdict": "CAUGHT",
+      "test_exit_code": 1,
+      "test_signal": null,
+      "expected_failures": [
+        "a handle whose lock was released cannot allocate",
+        "a forged handle for a lock that was never taken cannot allocate"
+      ],
+      "observed_failures": [
+        "allocator: a handle whose lock was released cannot allocate",
+        "allocator: a forged handle for a lock that was never taken cannot allocate",
+        "allocator: a handle whose lock was released cannot allocate",
+        "allocator: a forged handle for a lock that was never taken cannot allocate"
+      ],
+      "expected_but_passing": []
+    },
+    {
+      "id": "MUT-D1-route-and-call-counters-diverge",
+      "property": "D: one reservation covers both halves of the ROUTE/CALL pair",
+      "verdict": "CAUGHT",
+      "test_exit_code": 1,
+      "test_signal": null,
+      "expected_failures": [
+        "legacy rows whose ROUTE and CALL numbers disagree resolve to the higher"
+      ],
+      "observed_failures": [
+        "allocator: legacy rows whose ROUTE and CALL numbers disagree resolve to the higher",
+        "allocator: legacy rows whose ROUTE and CALL numbers disagree resolve to the higher"
+      ],
+      "expected_but_passing": []
+    }
+  ]
+}

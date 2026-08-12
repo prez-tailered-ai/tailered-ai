@@ -4,7 +4,6 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import test from "node:test";
 import {
-  appendAdr,
   mintCompany,
   readAdrs,
   validateWrittenProse,
@@ -30,16 +29,21 @@ test("mint creates and validates the complete company repository", async () => {
 
 test("supersession appends a new ADR and derives old status at render time", async () => {
   const root = await makeCompany();
-  const replacement = await appendAdr(root, {
+  // The unlocked allocating `appendAdr` was removed (P0-B Phase 1.3). This test supersedes
+  // with an explicit identifier through `writeAdr`, which is what minting itself uses; the
+  // allocator-backed path is covered by the ledger transaction tests.
+  const replacement = {
+    id: "ADR-002",
     title: "Replace the minting decision",
     context: "The previous repository decision needs a typed replacement.",
     decision: "Supersede ADR-001 without editing its file.",
     alternatives_rejected: ["Modify ADR-001 in place."],
     consequences: ["Dashboard rendering derives the superseded status."],
-    status: "accepted",
+    status: "accepted" as const,
     caused_by: ["ADR-001"],
     supersedes: "ADR-001",
-  });
+  };
+  await writeAdr(root, replacement);
   const adrs = await readAdrs(root);
   const old = adrs.find((adr) => adr.id === "ADR-001");
   const onDisk = await readFile(resolve(root, "decisions/ADR-001.md"), "utf8");

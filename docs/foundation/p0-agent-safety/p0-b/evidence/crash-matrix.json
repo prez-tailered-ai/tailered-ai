@@ -1,0 +1,333 @@
+{
+  "harness": "p0b-crash-matrix",
+  "repo_head": "f2dfed8943856a1f86fa88fe940a9a4bc231eb85",
+  "node_version": "v24.19.0",
+  "harness_sha256": "4843af3aabd017fce8713085397efa3cd2a99913b86715886f7986398a11a976",
+  "generated_at": "2026-08-12T11:03:18.068Z",
+  "assurance": {
+    "verified": "tested process-crash and SIGKILL recovery",
+    "not_verified": "sudden power loss, kernel panic, or storage-device loss"
+  },
+  "points": [
+    {
+      "point": "allocate:after-read",
+      "verdict": "PASS",
+      "child_pid": 14,
+      "sentinel_authenticated": true,
+      "pre_kill_state": {
+        "started": true,
+        "intent": false,
+        "finalized": false,
+        "call_starts": 0,
+        "eval_rows_for_run": 0,
+        "lock_present": true
+      },
+      "kill": {
+        "signal": "SIGKILL",
+        "exit_code": null,
+        "proven_dead_esrch": true
+      },
+      "pre_recovery_validate_exit": 1,
+      "pre_recovery_validate_names_state": [
+        "Unmatched run start: RUN-20260812000000000-cf3b34b3 has a durable start record and no terminal eval. The run was interrupted; run `tailered recover`.",
+        "Stale repository lock: owner pid 14 is provably dead on this host. Run `tailered recover`."
+      ],
+      "recovery_exit": 0,
+      "recovery_actions": [
+        "RUN-20260812000000000-cf3b34b3:RECOVERED"
+      ],
+      "recovery_stderr_head": "",
+      "post_recovery_validate_exit": 0,
+      "post_recovery_state": {
+        "started": true,
+        "intent": true,
+        "finalized": true,
+        "call_starts": 0,
+        "eval_rows_for_run": 1,
+        "lock_present": false
+      },
+      "terminal_rows_for_run": 1,
+      "outcome": "halted_attempts",
+      "conservative_cost_usd": 0,
+      "blocker_excerpt": "Run interrupted before finalization and completed by tailered recover. 0 completed call(s) settled at recorded usage; 0 interrupted call(s) settled conservative",
+      "references_own_adr": true
+    },
+    {
+      "point": "agent:during-invocation",
+      "verdict": "PASS",
+      "child_pid": 58,
+      "sentinel_authenticated": true,
+      "pre_kill_state": {
+        "started": true,
+        "intent": false,
+        "finalized": false,
+        "call_starts": 1,
+        "eval_rows_for_run": 0,
+        "lock_present": false
+      },
+      "kill": {
+        "signal": "SIGKILL",
+        "exit_code": null,
+        "proven_dead_esrch": true
+      },
+      "pre_recovery_validate_exit": 1,
+      "pre_recovery_validate_names_state": [
+        "Unmatched run start: RUN-20260812000000000-51143c49 has a durable start record and no terminal eval. The run was interrupted; run `tailered recover`.",
+        "Unmatched call start: evals/runs/RUN-20260812000000000-51143c49/calls/CALL-000001.started.json has no completed route log and the run has no terminal eval."
+      ],
+      "recovery_exit": 0,
+      "recovery_actions": [
+        "RUN-20260812000000000-51143c49:RECOVERED"
+      ],
+      "recovery_stderr_head": "",
+      "post_recovery_validate_exit": 0,
+      "post_recovery_state": {
+        "started": true,
+        "intent": true,
+        "finalized": true,
+        "call_starts": 1,
+        "eval_rows_for_run": 1,
+        "lock_present": false
+      },
+      "terminal_rows_for_run": 1,
+      "outcome": "halted_attempts",
+      "conservative_cost_usd": 0.08,
+      "blocker_excerpt": "Run interrupted before finalization and completed by tailered recover. 0 completed call(s) settled at recorded usage; 1 interrupted call(s) settled conservative",
+      "references_own_adr": true
+    },
+    {
+      "point": "append:after-uniqueness",
+      "verdict": "PASS",
+      "child_pid": 102,
+      "sentinel_authenticated": true,
+      "pre_kill_state": {
+        "started": true,
+        "intent": false,
+        "finalized": false,
+        "call_starts": 1,
+        "eval_rows_for_run": 0,
+        "lock_present": true
+      },
+      "kill": {
+        "signal": "SIGKILL",
+        "exit_code": null,
+        "proven_dead_esrch": true
+      },
+      "pre_recovery_validate_exit": 1,
+      "pre_recovery_validate_names_state": [
+        "Unmatched run start: RUN-20260812000000000-47a2d6a0 has a durable start record and no terminal eval. The run was interrupted; run `tailered recover`.",
+        "Unmatched call start: evals/runs/RUN-20260812000000000-47a2d6a0/calls/CALL-000001.started.json has no completed route log and the run has no terminal eval.",
+        "Stale repository lock: owner pid 102 is provably dead on this host. Run `tailered recover`."
+      ],
+      "recovery_exit": 0,
+      "recovery_actions": [
+        "RUN-20260812000000000-47a2d6a0:RECOVERED"
+      ],
+      "recovery_stderr_head": "",
+      "post_recovery_validate_exit": 0,
+      "post_recovery_state": {
+        "started": true,
+        "intent": true,
+        "finalized": true,
+        "call_starts": 1,
+        "eval_rows_for_run": 1,
+        "lock_present": false
+      },
+      "terminal_rows_for_run": 1,
+      "outcome": "halted_attempts",
+      "conservative_cost_usd": 0.08,
+      "blocker_excerpt": "Run interrupted before finalization and completed by tailered recover. 0 completed call(s) settled at recorded usage; 1 interrupted call(s) settled conservative",
+      "references_own_adr": true
+    },
+    {
+      "point": "finalize:before-intent",
+      "verdict": "PASS",
+      "child_pid": 146,
+      "sentinel_authenticated": true,
+      "pre_kill_state": {
+        "started": true,
+        "intent": false,
+        "finalized": false,
+        "call_starts": 4,
+        "eval_rows_for_run": 0,
+        "lock_present": true
+      },
+      "kill": {
+        "signal": "SIGKILL",
+        "exit_code": null,
+        "proven_dead_esrch": true
+      },
+      "pre_recovery_validate_exit": 1,
+      "pre_recovery_validate_names_state": [
+        "LABEL-000001 has no terminal eval for RUN-20260812000000000-244673f5.",
+        "ROUTE-000001 has no terminal eval for RUN-20260812000000000-244673f5.",
+        "ROUTE-000002 has no terminal eval for RUN-20260812000000000-244673f5.",
+        "ROUTE-000003 has no terminal eval for RUN-20260812000000000-244673f5."
+      ],
+      "recovery_exit": 0,
+      "recovery_actions": [
+        "RUN-20260812000000000-244673f5:RECOVERED"
+      ],
+      "recovery_stderr_head": "",
+      "post_recovery_validate_exit": 0,
+      "post_recovery_state": {
+        "started": true,
+        "intent": true,
+        "finalized": true,
+        "call_starts": 4,
+        "eval_rows_for_run": 1,
+        "lock_present": false
+      },
+      "terminal_rows_for_run": 1,
+      "outcome": "halted_attempts",
+      "conservative_cost_usd": 0.068,
+      "blocker_excerpt": "Run interrupted before finalization and completed by tailered recover. 4 completed call(s) settled at recorded usage; 0 interrupted call(s) settled conservative",
+      "references_own_adr": true
+    },
+    {
+      "point": "adr:before-create",
+      "verdict": "PASS",
+      "child_pid": 258,
+      "sentinel_authenticated": true,
+      "pre_kill_state": {
+        "started": true,
+        "intent": true,
+        "finalized": false,
+        "call_starts": 4,
+        "eval_rows_for_run": 0,
+        "lock_present": true
+      },
+      "kill": {
+        "signal": "SIGKILL",
+        "exit_code": null,
+        "proven_dead_esrch": true
+      },
+      "pre_recovery_validate_exit": 1,
+      "pre_recovery_validate_names_state": [
+        "LABEL-000001 has no terminal eval for RUN-20260812000000000-2467e2a1.",
+        "ROUTE-000001 has no terminal eval for RUN-20260812000000000-2467e2a1.",
+        "ROUTE-000002 has no terminal eval for RUN-20260812000000000-2467e2a1.",
+        "ROUTE-000003 has no terminal eval for RUN-20260812000000000-2467e2a1."
+      ],
+      "recovery_exit": 0,
+      "recovery_actions": [
+        "RUN-20260812000000000-2467e2a1:RECOVERED"
+      ],
+      "recovery_stderr_head": "",
+      "post_recovery_validate_exit": 0,
+      "post_recovery_state": {
+        "started": true,
+        "intent": true,
+        "finalized": true,
+        "call_starts": 4,
+        "eval_rows_for_run": 1,
+        "lock_present": false
+      },
+      "terminal_rows_for_run": 1,
+      "outcome": "shipped",
+      "conservative_cost_usd": 0.068,
+      "blocker_excerpt": null,
+      "references_own_adr": true
+    },
+    {
+      "point": "finalize:before-terminal-eval",
+      "verdict": "PASS",
+      "child_pid": 370,
+      "sentinel_authenticated": true,
+      "pre_kill_state": {
+        "started": true,
+        "intent": true,
+        "finalized": false,
+        "call_starts": 4,
+        "eval_rows_for_run": 0,
+        "lock_present": true
+      },
+      "kill": {
+        "signal": "SIGKILL",
+        "exit_code": null,
+        "proven_dead_esrch": true
+      },
+      "pre_recovery_validate_exit": 1,
+      "pre_recovery_validate_names_state": [
+        "LABEL-000001 has no terminal eval for RUN-20260812000000000-d7ca5aad.",
+        "ROUTE-000001 has no terminal eval for RUN-20260812000000000-d7ca5aad.",
+        "ROUTE-000002 has no terminal eval for RUN-20260812000000000-d7ca5aad.",
+        "ROUTE-000003 has no terminal eval for RUN-20260812000000000-d7ca5aad."
+      ],
+      "recovery_exit": 0,
+      "recovery_actions": [
+        "RUN-20260812000000000-d7ca5aad:RECOVERED"
+      ],
+      "recovery_stderr_head": "",
+      "post_recovery_validate_exit": 0,
+      "post_recovery_state": {
+        "started": true,
+        "intent": true,
+        "finalized": true,
+        "call_starts": 4,
+        "eval_rows_for_run": 1,
+        "lock_present": false
+      },
+      "terminal_rows_for_run": 1,
+      "outcome": "shipped",
+      "conservative_cost_usd": 0.068,
+      "blocker_excerpt": null,
+      "references_own_adr": true
+    },
+    {
+      "point": "finalize:before-marker",
+      "verdict": "PASS",
+      "child_pid": 482,
+      "sentinel_authenticated": true,
+      "pre_kill_state": {
+        "started": true,
+        "intent": true,
+        "finalized": false,
+        "call_starts": 4,
+        "eval_rows_for_run": 1,
+        "lock_present": true
+      },
+      "kill": {
+        "signal": "SIGKILL",
+        "exit_code": null,
+        "proven_dead_esrch": true
+      },
+      "pre_recovery_validate_exit": 1,
+      "pre_recovery_validate_names_state": [
+        "Unresolved finalization intent: RUN-20260812000000000-a4a5643d recorded an intent and no finalized marker. Run `tailered recover`.",
+        "Stale repository lock: owner pid 482 is provably dead on this host. Run `tailered recover`."
+      ],
+      "recovery_exit": 0,
+      "recovery_actions": [
+        "RUN-20260812000000000-a4a5643d:RECOVERED"
+      ],
+      "recovery_stderr_head": "",
+      "post_recovery_validate_exit": 0,
+      "post_recovery_state": {
+        "started": true,
+        "intent": true,
+        "finalized": true,
+        "call_starts": 4,
+        "eval_rows_for_run": 1,
+        "lock_present": false
+      },
+      "terminal_rows_for_run": 1,
+      "outcome": "shipped",
+      "conservative_cost_usd": 0.068,
+      "blocker_excerpt": null,
+      "references_own_adr": true
+    },
+    {
+      "point": "control:no-kill",
+      "verdict": "PASS",
+      "child_exit": 0,
+      "validate_exit": 0
+    },
+    {
+      "point": "control:broken-recovery",
+      "verdict": "PASS",
+      "detail": "broken recover exit 0; post validate exit 1"
+    }
+  ],
+  "all_points_pass": true
+}

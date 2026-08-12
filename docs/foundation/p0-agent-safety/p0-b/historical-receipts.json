@@ -1,0 +1,43 @@
+{
+  "$comment": "Explicit after-the-fact receipts for program steps whose contemporaneous ledger events were not written. These are NOT fabricated step_started/step_finished pairs: the execution-event schema's two-event rule is reserved for events recorded at execution time, so gaps are documented here instead, with the distinction made unmissable by recorded_after_execution: true. Sources are the artifacts the steps actually produced.",
+  "schema_version": 1,
+  "receipts": [
+    {
+      "step_id": "P0B-01",
+      "objective": "Verify main contains the P0-A merge; containment tests pass; baseline validation green, before any concurrency work",
+      "original_execution_time": "2026-08-12, before the df195c5 checkpoint (exact time not contemporaneously recorded)",
+      "recorded_at": "2026-08-12T11:30:00Z",
+      "recorded_after_execution": true,
+      "evidence_sources": [
+        "docs/foundation/p0-agent-safety/p0-b/CHECKPOINT.md (claims P0B-01 PASS with the checks named)",
+        "commit df195c5ce36061e46b758da92a6be64621ba5a4e branched from 60adb63e, which git proves is the P0-A merge",
+        "evidence/baseline-* (the P0B-04 freeze that immediately followed)"
+      ],
+      "caveat": "No contemporaneous step_started/step_finished pair exists for this step. The claim rests on the checkpoint document plus the git topology, not on a ledger event."
+    },
+    {
+      "step_id": "P0B-02",
+      "objective": "Create the isolated worktree and branch fix/p0-b-ledger-concurrency from the frozen base",
+      "original_execution_time": "2026-08-12, before the df195c5 checkpoint (exact time not contemporaneously recorded)",
+      "recorded_at": "2026-08-12T11:30:00Z",
+      "recorded_after_execution": true,
+      "evidence_sources": [
+        "the branch itself: fix/p0-b-ledger-concurrency with first commit df195c5 on base 60adb63e",
+        "git worktree list showing /private/tmp/p0b-20260812/tailered-ai"
+      ],
+      "caveat": "No contemporaneous ledger event exists. The branch topology is the evidence."
+    },
+    {
+      "step_id": "P0B-05",
+      "objective": "A6 red proof: reproduce the defect against pre-fix commit 6172653e at N in {2,3,10}",
+      "original_execution_time": "2026-08-12T07:30:13Z to 07:30:16Z (generated_at inside the artifacts)",
+      "recorded_at": "2026-08-12T11:30:00Z",
+      "recorded_after_execution": true,
+      "evidence_sources": [
+        "evidence/A6-prefix-n2.json, A6-prefix-n3.json, A6-prefix-n10.json (committed in df195c5)",
+        "CHECKPOINT.md section 4"
+      ],
+      "caveat": "The artifacts carry timestamps but record repo_head as an empty string; the binding to 6172653e is external (file naming, CHECKPOINT.md, and commit membership). The in-process RED test in test/barrier.test.ts independently reproduces the same defect deterministically."
+    }
+  ]
+}

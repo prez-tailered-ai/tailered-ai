@@ -1,0 +1,28 @@
+
+> @tailered-ai/core@0.1.0 demo
+> npm run build && node dist/src/cli.js demo
+
+
+> @tailered-ai/core@0.1.0 build
+> tsc -p tsconfig.json
+
+{
+  "status": "VERIFIED",
+  "target": "/tmp/tailered-v1-demo-HYTDxP",
+  "receipt": {
+    "runId": "RUN-20260812100104350-9fed444d",
+    "outcome": "shipped",
+    "costUsd": 0.068,
+    "tokensByTier": {
+      "frontier": 0,
+      "mid": 4527,
+      "cheap": 1057
+    },
+    "wallTimeMs": 236,
+    "previewUrl": "file:///tmp/tailered-v1-demo-HYTDxP/product/index.html",
+    "evalId": "EVAL-000001",
+    "gateLabelId": "LABEL-000001",
+    "adrId": "ADR-002"
+  },
+  "dashboard": "/tmp/tailered-v1-demo-HYTDxP/dashboard.html"
+}

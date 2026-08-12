@@ -1,0 +1,139 @@
+{
+  "$comment": "The single machine-readable source for R1-R8 and A1-A7 status. Every prose summary count MUST be derived from this file, never hand-counted: the 2026-08-12 status report stated 'four of eight requirements and five of seven criteria verified' while its own table showed neither number. Statuses: VERIFIED | PARTIAL | IMPLEMENTED_NOT_PROVEN | NOT_STARTED | BLOCKED | NEEDS_PREZ.",
+  "schema_version": 1,
+  "branch": "fix/p0-b-ledger-concurrency",
+  "evaluated_at_head": "f2dfed8943856a1f86fa88fe940a9a4bc231eb85 (implementation head; the evidence-closure commit on top is documentation-only)",
+  "final_note": "FINAL statuses. The concurrency matrix (N=2,3,10 with N=10 three times), the seven-point SIGKILL crash matrix with both controls, and the closing regression all ran against this head and are internally bound to it via repo_head.",
+  "requirements": {
+    "R1": {
+      "title": "Concurrency-safe identifiers; read-then-write over an unlocked append prohibited",
+      "status": "VERIFIED",
+      "evidence": [
+        "test/lock.test.ts (18)",
+        "test/sequence.test.ts (22)",
+        "test/barrier.test.ts RED+GREEN",
+        "evidence/p0b17-final-* (5 clean runs, head-bound)",
+        "evidence/hardening-negative-control.json 8/8"
+      ]
+    },
+    "R2": {
+      "title": "Exactly one terminal EvalRow per started run",
+      "status": "VERIFIED",
+      "evidence": [
+        "A-02 ratified: exactly-one is a guarantee of the system INCLUDING recovery; at-most-one enforced unconditionally by #appendUnique on run_id",
+        "evidence/crash-matrix.json: 7/7 points end with exactly one terminal row for the run",
+        "test/ledger.test.ts + test/ship-failures.test.ts failure families"
+      ]
+    },
+    "R3": {
+      "title": "Idempotent writes; duplicate detection independent of an invalidatable read",
+      "status": "VERIFIED",
+      "evidence": [
+        "test/ledger.test.ts route exact/conflict + reserved-ADR exact/conflict",
+        "test/ship-failures.test.ts label + eval exact/conflict",
+        "append-time re-verification under the lock (append:after-uniqueness re-read)"
+      ]
+    },
+    "R4": {
+      "title": "Crash-safe finalization; partial state attributable to a run_id",
+      "status": "VERIFIED",
+      "evidence": [
+        "evidence/crash-matrix.json: pre-recovery validate nonzero at all 7 points, recovery completes, post-recovery validate 0",
+        "test/recover.test.ts (10)",
+        "start/call-start/intent/marker records"
+      ]
+    },
+    "R5": {
+      "title": "Atomic or recoverable ledger mutation; torn lines detectable by validate",
+      "status": "VERIFIED",
+      "evidence": [
+        "appendJsonLine O_APPEND+fsync (src/files.ts)",
+        "torn-line fixture names exact file and line and validation continues across files",
+        "recover replay for interrupted finalization"
+      ]
+    },
+    "R6": {
+      "title": "Deterministic contention tests",
+      "status": "VERIFIED",
+      "evidence": [
+        "all six barrier points exercised: allocation+append by unit tests, all four finalization boundaries by real SIGKILL trials with sentinel proof"
+      ]
+    },
+    "R7": {
+      "title": "validate exits 0 after N concurrent runs, N in {2,3,10}, zero duplicate ids, ADRs unique and unmodified",
+      "status": "VERIFIED",
+      "evidence": [
+        "evidence/p0b17-final-n{2,3}.json + p0b17-final-n10-run{1,2,3}.json, all_clean true, validate exit 0, repo_head bound"
+      ]
+    },
+    "R8": {
+      "title": "Abandoned-worker recovery; ownership distinguishes in-progress from abandoned",
+      "status": "VERIFIED",
+      "evidence": [
+        "test/recover.test.ts: live-owner refusal, dead-owner reclaim, foreign/corrupt quarantine",
+        "evidence/crash-matrix.json: dead-owner locks reclaimed at in-lock kill points",
+        "quarantine records with claimant identity and timestamps"
+      ]
+    }
+  },
+  "acceptance": {
+    "A1": {
+      "title": "N concurrent runs -> exactly N terminal EvalRows",
+      "status": "VERIFIED",
+      "evidence": [
+        "p0b17-final-*: exactly N terminal rows at N=2,3,10x3"
+      ]
+    },
+    "A2": {
+      "title": "Zero duplicate ledger identifiers",
+      "status": "VERIFIED",
+      "evidence": [
+        "p0b17-final-*: zero duplicate route/call/eval/label ids"
+      ]
+    },
+    "A3": {
+      "title": "validate exits 0, read directly",
+      "status": "VERIFIED",
+      "evidence": [
+        "p0b17-final-*: validate exit 0 read directly"
+      ]
+    },
+    "A4": {
+      "title": "Every ADR unique; no accepted ADR modified",
+      "status": "VERIFIED",
+      "evidence": [
+        "p0b17-final-*: modified_accepted_adrs [] in all 5 runs"
+      ]
+    },
+    "A5": {
+      "title": "Killed mid-run -> detectable, attributable, recoverable",
+      "status": "VERIFIED",
+      "evidence": [
+        "evidence/crash-matrix.json: 7/7 SIGKILL points detectable (pre-validate nonzero), attributable (run_id-bound records), recoverable (post-validate 0); no-kill + broken-recovery controls PASS"
+      ]
+    },
+    "A6": {
+      "title": "The contention test fails on the pre-fix code",
+      "status": "VERIFIED",
+      "evidence": [
+        "A6-prefix-n{2,3,10}.json red on 6172653e",
+        "test/barrier.test.ts RED deterministic"
+      ]
+    },
+    "A7": {
+      "title": "Existing behavior unchanged",
+      "status": "VERIFIED",
+      "evidence": [
+        "closing regression: 142/142 tests incl. 20 P0-A containment, validate 0, demo costUsd 0.068, npm audit 0 vulnerabilities, threat matrix 17/17 executable PASS"
+      ]
+    }
+  },
+  "derived_counts": {
+    "requirements": {
+      "VERIFIED": 8
+    },
+    "acceptance": {
+      "VERIFIED": 7
+    }
+  }
+}
