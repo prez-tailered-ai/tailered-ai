@@ -1,0 +1,11 @@
+✖ injected deliberate failure for repair-loop scenario F2 (0.612667ms)
+ℹ tests 143
+ℹ suites 0
+ℹ pass 142
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1966.46
+✖ failing tests:
+✖ injected deliberate failure for repair-loop scenario F2 (0.612667ms)

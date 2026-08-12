@@ -1,0 +1,268 @@
+{
+ "run_id": "HH-WORKFLOW-20260812T130507Z",
+ "generated_at": "2026-08-12T13:25:23Z",
+ "frozen_main": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+ "note": "Hashes recorded at retention; the index lists itself without a hash (SELF).",
+ "artifact_count": 24,
+ "artifacts": [
+  {
+   "path": "00-master-report.md",
+   "bytes": 6903,
+   "sha256": "c4c0cb6fbf3f886f7ad7f993625c7095c445b02b6c83cb6b263ddb745d177a93",
+   "source_step": "P0-P6",
+   "tested_sha": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+   "evidence_type": "report",
+   "validity": "VALID",
+   "status": "RETAINED",
+   "caveat": null
+  },
+  {
+   "path": "01-scope-and-method.md",
+   "bytes": 3203,
+   "sha256": "cd5264e1bffae9a97a84bee307047ef2c83897585b5524a0130d88c309224b6c",
+   "source_step": "P0-P6",
+   "tested_sha": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+   "evidence_type": "report",
+   "validity": "VALID",
+   "status": "RETAINED",
+   "caveat": null
+  },
+  {
+   "path": "02-task-dag.md",
+   "bytes": 3722,
+   "sha256": "5fa7423c5c66e19ca8c2f7b70579cb08a3c499679d8a7cb035250265180f4ec7",
+   "source_step": "P0-P6",
+   "tested_sha": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+   "evidence_type": "report",
+   "validity": "VALID",
+   "status": "RETAINED",
+   "caveat": null
+  },
+  {
+   "path": "03-benchmark-plan.md",
+   "bytes": 2262,
+   "sha256": "fb496f0eee92f752beb2b79a66518a269ab9c8abcd1b153c982926e4c94a906f",
+   "source_step": "P0-P6",
+   "tested_sha": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+   "evidence_type": "report",
+   "validity": "VALID",
+   "status": "RETAINED",
+   "caveat": null
+  },
+  {
+   "path": "04-benchmark-results.md",
+   "bytes": 4287,
+   "sha256": "d4fd047f3ea694f8a728a8af7e59405df87bc8acefa7a4e19abfb3a4596747a9",
+   "source_step": "P0-P6",
+   "tested_sha": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+   "evidence_type": "report",
+   "validity": "VALID",
+   "status": "RETAINED",
+   "caveat": null
+  },
+  {
+   "path": "05-subagent-topology.md",
+   "bytes": 2494,
+   "sha256": "b5e0039b93add0bdee4b2d182f8860dae063897cd408a7dca563ea488878228b",
+   "source_step": "P0-P6",
+   "tested_sha": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+   "evidence_type": "report",
+   "validity": "VALID",
+   "status": "RETAINED",
+   "caveat": null
+  },
+  {
+   "path": "06-concurrency-report.md",
+   "bytes": 3277,
+   "sha256": "8e7b64b3becf2ce99fe61323230c9a781fda942e182b0ae20b4df052e376aa52",
+   "source_step": "P0-P6",
+   "tested_sha": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+   "evidence_type": "report",
+   "validity": "VALID",
+   "status": "RETAINED",
+   "caveat": null
+  },
+  {
+   "path": "07-token-context-report.md",
+   "bytes": 2669,
+   "sha256": "e7912a882e4078857d5f38b3fdc36f7b33c00cea6bf76946db569de4341feabe",
+   "source_step": "P0-P6",
+   "tested_sha": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+   "evidence_type": "report",
+   "validity": "VALID",
+   "status": "RETAINED",
+   "caveat": null
+  },
+  {
+   "path": "08-loop-engineering-report.md",
+   "bytes": 2757,
+   "sha256": "2f642c8bad25fee499deeff25461b56fc6e0a9c41eccf9983af30400ed2217bb",
+   "source_step": "P0-P6",
+   "tested_sha": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+   "evidence_type": "report",
+   "validity": "VALID",
+   "status": "RETAINED",
+   "caveat": null
+  },
+  {
+   "path": "09-github-lifecycle-report.md",
+   "bytes": 3844,
+   "sha256": "d9955d9ee2703231460311fc0350e36c18d4cf1b24dad165c141cbcb5e760e27",
+   "source_step": "P0-P6",
+   "tested_sha": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+   "evidence_type": "report",
+   "validity": "VALID",
+   "status": "RETAINED",
+   "caveat": null
+  },
+  {
+   "path": "10-automation-readiness.md",
+   "bytes": 4788,
+   "sha256": "743962c3f8fe043d21c0643d1b516561aebb129abf3c57fbe17296f7fd9515f0",
+   "source_step": "P0-P6",
+   "tested_sha": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+   "evidence_type": "report",
+   "validity": "VALID",
+   "status": "RETAINED",
+   "caveat": null
+  },
+  {
+   "path": "11-risk-register.md",
+   "bytes": 2367,
+   "sha256": "0e427eaa0baae641bcb3d0479ea4e04b8400d1bffd3701d82b14d8095f9d6b25",
+   "source_step": "P0-P6",
+   "tested_sha": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+   "evidence_type": "report",
+   "validity": "VALID",
+   "status": "RETAINED",
+   "caveat": null
+  },
+  {
+   "path": "12-terminal-ledger.md",
+   "bytes": 2209,
+   "sha256": "3ffd6ea3f70de744ae7a3e025cb45e2f47b509ce2aa7c7e7424c205169b9c1d6",
+   "source_step": "P0-P6",
+   "tested_sha": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+   "evidence_type": "report",
+   "validity": "VALID",
+   "status": "RETAINED",
+   "caveat": null
+  },
+  {
+   "path": "evidence-index.json",
+   "bytes": null,
+   "sha256": "SELF",
+   "note": "a file cannot contain its own digest"
+  },
+  {
+   "path": "execution-ledger.jsonl",
+   "bytes": 16396,
+   "sha256": "46fb70cffab47aa9f3277799c2a3fc9c0d9c602cc6e42ab356dfd2c4b33a500e",
+   "source_step": "P0-P6",
+   "tested_sha": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+   "evidence_type": "machine",
+   "validity": "VALID",
+   "status": "RETAINED",
+   "caveat": null
+  },
+  {
+   "path": "metrics.json",
+   "bytes": 25511,
+   "sha256": "a61df4a5c86dd61ea32729ccea81584e31cbfff50b2cd41fde1b83120fe7d164",
+   "source_step": "P0-P6",
+   "tested_sha": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+   "evidence_type": "machine",
+   "validity": "VALID",
+   "status": "RETAINED",
+   "caveat": null
+  },
+  {
+   "path": "evidence/f2-attempt1-red.out.summary.txt",
+   "bytes": 281,
+   "sha256": "6049b2df51dae4c1b20ad03d14634ec8170c97c295c47bff9a34eb922f6752a2",
+   "source_step": "P0-P6",
+   "tested_sha": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+   "evidence_type": "machine",
+   "validity": "VALID",
+   "status": "RETAINED",
+   "caveat": null
+  },
+  {
+   "path": "evidence/f2-attempt2-green.out.summary.txt",
+   "bytes": 285,
+   "sha256": "36aea6556176d2fe379f512a6f4be5baad4a3586dede2d3e2952a693d51a9c98",
+   "source_step": "P0-P6",
+   "tested_sha": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+   "evidence_type": "machine",
+   "validity": "VALID",
+   "status": "RETAINED",
+   "caveat": null
+  },
+  {
+   "path": "evidence/g-run2b-broken.out.summary.txt",
+   "bytes": 3346,
+   "sha256": "bfa0a899e066a65c0860e6e0941a650d5e63afc8b1ca6d5449e20d28095feeac",
+   "source_step": "P0-P6",
+   "tested_sha": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+   "evidence_type": "machine",
+   "validity": "VALID",
+   "status": "RETAINED",
+   "caveat": null
+  },
+  {
+   "path": "evidence/g-run3b-restored.out.summary.txt",
+   "bytes": 120,
+   "sha256": "c484b49f78c0446e3588d1c03028e50fe94e87e90ae45c2cabd70fb3681ee46e",
+   "source_step": "P0-P6",
+   "tested_sha": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+   "evidence_type": "machine",
+   "validity": "VALID",
+   "status": "RETAINED",
+   "caveat": null
+  },
+  {
+   "path": "evidence/history-prs.json",
+   "bytes": 1778,
+   "sha256": "7b0c52fe5fe88b2d528a491ddc8ec7ffa7dd89de961a5c96fef55fb2d49d2d5a",
+   "source_step": "P0-P6",
+   "tested_sha": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+   "evidence_type": "machine",
+   "validity": "VALID",
+   "status": "RETAINED",
+   "caveat": null
+  },
+  {
+   "path": "evidence/packet-answer-key.json",
+   "bytes": 989,
+   "sha256": "523ade58192d81dec9d3b53ab85a6e1345349754053ea53b81bcd38d47e661e3",
+   "source_step": "P0-P6",
+   "tested_sha": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+   "evidence_type": "machine",
+   "validity": "VALID",
+   "status": "RETAINED",
+   "caveat": null
+  },
+  {
+   "path": "evidence/scen-harness.log",
+   "bytes": 1280,
+   "sha256": "d792bf420bc99156b6521d7ee372eda961445a7f73d0d7e895475c6f0fe8607f",
+   "source_step": "P0-P6",
+   "tested_sha": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+   "evidence_type": "machine",
+   "validity": "VALID",
+   "status": "RETAINED",
+   "caveat": null
+  },
+  {
+   "path": "evidence/scenG-F2.log",
+   "bytes": 1098,
+   "sha256": "a571a156129bc6324657e5ddc04d3e3bf839383c114339bd64ecf8c5e416fc60",
+   "source_step": "P0-P6",
+   "tested_sha": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+   "evidence_type": "machine",
+   "validity": "VALID",
+   "status": "RETAINED",
+   "caveat": null
+  }
+ ]
+}

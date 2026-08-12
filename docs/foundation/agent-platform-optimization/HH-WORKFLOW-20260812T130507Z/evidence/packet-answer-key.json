@@ -1,0 +1,53 @@
+{
+ "frozen_at": "2026-08-12T13:05:07Z",
+ "frozen_main": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+ "key": {
+  "q1": "0d55aa9e6fb774903355d8aea2ad40162cde0104",
+  "q2": {
+   "r_verified": 8,
+   "a_verified": 7,
+   "source_path": "docs/foundation/p0-agent-safety/p0-b/requirements-status.json"
+  },
+  "q3": {
+   "kill_points": 7,
+   "controls": 2,
+   "all_points_pass": true
+  },
+  "q4": {
+   "events": 41,
+   "last_event_id": "HH-RECON-EV-003"
+  },
+  "q5": {
+   "status": "accepted",
+   "caused_by": [
+    "ADR-003"
+   ]
+  },
+  "q6": {
+   "required_check": "verify",
+   "strict": true,
+   "enforce_admins": true
+  },
+  "q7": {
+   "ADOPT": 0,
+   "REPLACE": 0,
+   "ADAPT": 1,
+   "INTEROPERATE": 1,
+   "REFERENCE": 7,
+   "DEFER": 4,
+   "REJECT": 7
+  },
+  "q8": {
+   "r01_status": "CLOSED_VERIFIED",
+   "superseding_artifact": "29-post-closure-remediation-receipt.md"
+  },
+  "q9": {
+   "rows": 132,
+   "unique_ids": 114
+  },
+  "q10": {
+   "tests_pass": 142,
+   "demo_cost_usd": 0.068
+  }
+ }
+}
