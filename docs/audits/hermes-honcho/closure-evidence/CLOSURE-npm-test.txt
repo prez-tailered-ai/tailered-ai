@@ -1,0 +1,54 @@
+
+> @tailered-ai/core@0.1.0 test
+> npm run build && node --test dist/test/*.test.js
+
+
+> @tailered-ai/core@0.1.0 build
+> tsc -p tsconfig.json
+
+✔ reserve enforces an exclusive five-dollar boundary before spending (2.2455ms)
+✔ settlement releases unused reservation and records actuals (4.462625ms)
+✔ an agent cannot settle above its hard reservation ceiling (0.193208ms)
+✔ mint creates and validates the complete company repository (29.19875ms)
+✔ supersession appends a new ADR and derives old status at render time (7.577ms)
+✔ charter interview refuses list fragments (0.11925ms)
+✔ company config preserves the v1 bounds and central model aliases (2.540542ms)
+✔ company config cannot widen a contracted v1 bound (0.214208ms)
+✔ containment: legitimate product write still succeeds (346.402167ms)
+✔ containment: nested legitimate product subdirectory write still succeeds (343.231875ms)
+✔ containment: direct write to a protected path is denied (102.53275ms)
+✔ containment: in-repository traversal out of product/ is denied (128.421417ms)
+✔ containment: nested traversal out of product/ is denied (113.811542ms)
+✔ containment: traversal onto the constitution is denied (92.258917ms)
+✔ containment: escape beyond the repository root is denied (94.820917ms)
+✔ containment: absolute path is denied (66.755458ms)
+✔ containment: NUL-containing path is denied (76.612375ms)
+✔ containment: symlinked directory inside product/ cannot redirect a write (69.218583ms)
+✔ containment: symlink to the repository root cannot expose the constitution (56.446417ms)
+✔ containment: writing through an existing symlink leaf is denied fail-closed (50.317959ms)
+✔ containment: the capability root itself cannot be overwritten as a file (77.947333ms)
+✔ containment: a legitimate write still succeeds through an operator-owned parent alias (176.27ms)
+✔ containment: the capability root itself cannot be a symlink to a protected directory (55.52525ms)
+✔ containment: the capability root itself cannot be a symlink to the repository root (56.170833ms)
+✔ containment: the capability root itself cannot be a symlink out of the repository (63.151625ms)
+✔ containment: the founder gate edit path is denied a symlinked capability root (51.790542ms)
+✔ containment: the founder gate edit path shares the same boundary (158.987209ms)
+✔ containment: a denied escape still writes exactly one terminal eval (67.44725ms)
+✔ router is stateless and escalates only the third codegen attempt (0.368625ms)
+✔ router maps task kinds to the contract tiers (0.070041ms)
+✔ router model identity comes only from the supplied registry (0.452709ms)
+✔ gating demo ships with approve, zero edits, and complete accounting (394.270041ms)
+✔ attempt exhaustion writes one high-value terminal eval without a gate label (290.402ms)
+✔ budget refusal happens before agent invocation and still writes a terminal eval (29.421292ms)
+✔ accounting violations preserve the measured call before halting (52.477833ms)
+✔ a repo registry string swap changes every runtime model request (203.668667ms)
+✔ rejection captures both the preference label and terminal eval (156.60925ms)
+✔ edit is valid platform behavior but fails the gating DoD assertion (181.206709ms)
+ℹ tests 38
+ℹ suites 0
+ℹ pass 38
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2362.424916

@@ -163,6 +163,11 @@ compounds with use and cannot be rented.
 
 ## What was proven by execution rather than argued
 
+> **ERRATUM — the POC-A path-traversal row.** It proved only that the tested
+> repository-root escape payload was rejected. It did not prove containment against
+> in-repository traversal or a moved capability root. The row below is left exactly as
+> published. Correction: [`27-erratum.md`](27-erratum.md) E-03.
+
 | Proof | Result |
 |---|---|
 | Tailered baseline | 18/18 tests, `validate` VERIFIED, demo `shipped` at **$0.068 / 277 ms**, 4 packages / 0 vulnerabilities |
