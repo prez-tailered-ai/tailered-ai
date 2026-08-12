@@ -1,0 +1,24 @@
+{
+  "event_id": "FND-P0-B-P0B-03-A2-FINISH",
+  "scope": "P0-B",
+  "step_id": "P0B-03",
+  "attempt": 2,
+  "command": [
+    "node",
+    "-e",
+    "console.error(\"boom\"); process.exit(3)"
+  ],
+  "cwd": ".",
+  "started_at": "2026-08-12T07:20:06.050Z",
+  "finished_at": "2026-08-12T07:20:06.084Z",
+  "duration_ms": 33,
+  "exit_code": 3,
+  "signal": null,
+  "spawn_error": null,
+  "allow_failure": false,
+  "status": "FAIL",
+  "stdout_bytes": 0,
+  "stderr_bytes": 5,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "8d7a531d714c4bd7121bf7d639c6191ff6495a4f1132c9ae3cdd672be0168954"
+}

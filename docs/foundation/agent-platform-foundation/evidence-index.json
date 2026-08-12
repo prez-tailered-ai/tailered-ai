@@ -1,0 +1,5 @@
+{
+  "program": "agent-platform-foundation",
+  "generated_note": "Rebuilt at the close of each scope. Hashes are recorded when an artifact is retained and are never recomputed to match a changed file.",
+  "scopes": { "P0-B": { "artifacts": [] } }
+}

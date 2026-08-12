@@ -1,0 +1,49 @@
+
+> @tailered-ai/core@0.1.0 test
+> npm run build && node --test dist/test/*.test.js
+
+
+> @tailered-ai/core@0.1.0 build
+> tsc -p tsconfig.json
+
+✔ reserve enforces an exclusive five-dollar boundary before spending (0.752084ms)
+✔ settlement releases unused reservation and records actuals (0.839292ms)
+✔ an agent cannot settle above its hard reservation ceiling (0.779458ms)
+✔ mint creates and validates the complete company repository (28.356125ms)
+✔ supersession appends a new ADR and derives old status at render time (8.16ms)
+✔ charter interview refuses list fragments (0.224042ms)
+✔ company config preserves the v1 bounds and central model aliases (0.985583ms)
+✔ company config cannot widen a contracted v1 bound (0.422625ms)
+✔ containment: legitimate product write still succeeds (137.31925ms)
+✔ containment: nested legitimate product subdirectory write still succeeds (161.816375ms)
+✔ containment: direct write to a protected path is denied (85.993375ms)
+✔ containment: in-repository traversal out of product/ is denied (60.545583ms)
+✔ containment: nested traversal out of product/ is denied (74.619875ms)
+✔ containment: traversal onto the constitution is denied (75.725083ms)
+✔ containment: escape beyond the repository root is denied (57.270708ms)
+✔ containment: absolute path is denied (53.636125ms)
+✔ containment: NUL-containing path is denied (53.2885ms)
+✔ containment: symlinked directory inside product/ cannot redirect a write (46.00075ms)
+✔ containment: symlink to the repository root cannot expose the constitution (37.675125ms)
+✔ containment: writing through an existing symlink leaf is denied fail-closed (39.738292ms)
+✔ containment: the capability root itself cannot be overwritten as a file (41.823208ms)
+✔ containment: the founder gate edit path shares the same boundary (93.860334ms)
+✔ containment: a denied escape still writes exactly one terminal eval (60.750125ms)
+✔ router is stateless and escalates only the third codegen attempt (0.998708ms)
+✔ router maps task kinds to the contract tiers (0.143083ms)
+✔ router model identity comes only from the supplied registry (1.358166ms)
+✔ gating demo ships with approve, zero edits, and complete accounting (269.902208ms)
+✔ attempt exhaustion writes one high-value terminal eval without a gate label (154.351958ms)
+✔ budget refusal happens before agent invocation and still writes a terminal eval (33.135292ms)
+✔ accounting violations preserve the measured call before halting (48.076792ms)
+✔ a repo registry string swap changes every runtime model request (98.498083ms)
+✔ rejection captures both the preference label and terminal eval (73.091375ms)
+✔ edit is valid platform behavior but fails the gating DoD assertion (104.110708ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 33
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1186.812292

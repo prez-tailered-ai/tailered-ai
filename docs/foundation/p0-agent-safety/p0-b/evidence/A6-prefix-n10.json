@@ -1,0 +1,181 @@
+{
+  "harness": "p0b-concurrency",
+  "repo_dir": "/hist",
+  "repo_head": "",
+  "n": 10,
+  "wall_ms": 786,
+  "generated_at": "2026-08-12T07:30:16.954Z",
+  "ship_runs": [
+    {
+      "index": 1,
+      "exit_code": 2,
+      "signal": null,
+      "stdout": "{\n  \"status\": \"HALTED\",\n  \"receipt\": {\n    \"runId\": \"RUN-20260812073016362-fe1ed144\",\n    \"outcome\": \"halted_attempts\",\n    \"costUsd\": 0.001,\n    \"tokensByTier\": {\n      \"frontier\": 0,\n      \"mid\": 150,\n      \"cheap\": 0\n    },\n    \"wallTimeMs\": 144,\n    \"evalId\": \"EVAL-000001\",\n    \"adrId\": \"ADR-002\",\n    \"blocker\": \"Route log ROUTE-000001 already exists.\"\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "index": 2,
+      "exit_code": 2,
+      "signal": null,
+      "stdout": "{\n  \"status\": \"HALTED\",\n  \"receipt\": {\n    \"runId\": \"RUN-20260812073016319-fc0a800c\",\n    \"outcome\": \"halted_attempts\",\n    \"costUsd\": 0.001,\n    \"tokensByTier\": {\n      \"frontier\": 0,\n      \"mid\": 150,\n      \"cheap\": 0\n    },\n    \"wallTimeMs\": 267,\n    \"evalId\": \"EVAL-000006\",\n    \"adrId\": \"ADR-007\",\n    \"blocker\": \"Route log ROUTE-000001 already exists.\"\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "index": 3,
+      "exit_code": 2,
+      "signal": null,
+      "stdout": "{\n  \"status\": \"HALTED\",\n  \"receipt\": {\n    \"runId\": \"RUN-20260812073016328-b2e3267e\",\n    \"outcome\": \"halted_attempts\",\n    \"costUsd\": 0.001,\n    \"tokensByTier\": {\n      \"frontier\": 0,\n      \"mid\": 150,\n      \"cheap\": 0\n    },\n    \"wallTimeMs\": 254,\n    \"evalId\": \"EVAL-000005\",\n    \"adrId\": \"ADR-006\",\n    \"blocker\": \"Route log ROUTE-000001 already exists.\"\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "index": 4,
+      "exit_code": 0,
+      "signal": null,
+      "stdout": "{\n  \"status\": \"VERIFIED\",\n  \"receipt\": {\n    \"runId\": \"RUN-20260812073016268-03e885c6\",\n    \"outcome\": \"shipped\",\n    \"costUsd\": 0.004,\n    \"tokensByTier\": {\n      \"frontier\": 0,\n      \"mid\": 450,\n      \"cheap\": 150\n    },\n    \"wallTimeMs\": 594,\n    \"previewUrl\": \"file:///tmp/p0b-conc-UiOSoI/company/product/index.html\",\n    \"evalId\": \"EVAL-000009\",\n    \"gateLabelId\": \"LABEL-000001\",\n    \"adrId\": \"ADR-010\"\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "index": 5,
+      "exit_code": 2,
+      "signal": null,
+      "stdout": "{\n  \"status\": \"HALTED\",\n  \"receipt\": {\n    \"runId\": \"RUN-20260812073016370-327a4097\",\n    \"outcome\": \"halted_attempts\",\n    \"costUsd\": 0.001,\n    \"tokensByTier\": {\n      \"frontier\": 0,\n      \"mid\": 150,\n      \"cheap\": 0\n    },\n    \"wallTimeMs\": 192,\n    \"evalId\": \"EVAL-000004\",\n    \"adrId\": \"ADR-005\",\n    \"blocker\": \"Route log ROUTE-000001 already exists.\"\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "index": 6,
+      "exit_code": 2,
+      "signal": null,
+      "stdout": "{\n  \"status\": \"HALTED\",\n  \"receipt\": {\n    \"runId\": \"RUN-20260812073016404-425da175\",\n    \"outcome\": \"halted_attempts\",\n    \"costUsd\": 0.001,\n    \"tokensByTier\": {\n      \"frontier\": 0,\n      \"mid\": 150,\n      \"cheap\": 0\n    },\n    \"wallTimeMs\": 149,\n    \"evalId\": \"EVAL-000003\",\n    \"adrId\": \"ADR-004\",\n    \"blocker\": \"Route log ROUTE-000001 already exists.\"\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "index": 7,
+      "exit_code": 2,
+      "signal": null,
+      "stdout": "{\n  \"status\": \"HALTED\",\n  \"receipt\": {\n    \"runId\": \"RUN-20260812073016451-9da909a1\",\n    \"outcome\": \"halted_attempts\",\n    \"costUsd\": 0.001,\n    \"tokensByTier\": {\n      \"frontier\": 0,\n      \"mid\": 150,\n      \"cheap\": 0\n    },\n    \"wallTimeMs\": 195,\n    \"evalId\": \"EVAL-000008\",\n    \"adrId\": \"ADR-009\",\n    \"blocker\": \"Route log ROUTE-000002 already exists.\"\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "index": 8,
+      "exit_code": 0,
+      "signal": null,
+      "stdout": "{\n  \"status\": \"VERIFIED\",\n  \"receipt\": {\n    \"runId\": \"RUN-20260812073016407-691b6d46\",\n    \"outcome\": \"shipped\",\n    \"costUsd\": 0.004,\n    \"tokensByTier\": {\n      \"frontier\": 0,\n      \"mid\": 450,\n      \"cheap\": 150\n    },\n    \"wallTimeMs\": 485,\n    \"previewUrl\": \"file:///tmp/p0b-conc-UiOSoI/company/product/index.html\",\n    \"evalId\": \"EVAL-000010\",\n    \"gateLabelId\": \"LABEL-000002\",\n    \"adrId\": \"ADR-011\"\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "index": 9,
+      "exit_code": 2,
+      "signal": null,
+      "stdout": "{\n  \"status\": \"HALTED\",\n  \"receipt\": {\n    \"runId\": \"RUN-20260812073016386-7860eb49\",\n    \"outcome\": \"halted_attempts\",\n    \"costUsd\": 0.001,\n    \"tokensByTier\": {\n      \"frontier\": 0,\n      \"mid\": 150,\n      \"cheap\": 0\n    },\n    \"wallTimeMs\": 167,\n    \"evalId\": \"EVAL-000002\",\n    \"adrId\": \"ADR-003\",\n    \"blocker\": \"Route log ROUTE-000001 already exists.\"\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "index": 10,
+      "exit_code": 2,
+      "signal": null,
+      "stdout": "{\n  \"status\": \"HALTED\",\n  \"receipt\": {\n    \"runId\": \"RUN-20260812073016471-c5d0dcac\",\n    \"outcome\": \"halted_attempts\",\n    \"costUsd\": 0.001,\n    \"tokensByTier\": {\n      \"frontier\": 0,\n      \"mid\": 150,\n      \"cheap\": 0\n    },\n    \"wallTimeMs\": 176,\n    \"evalId\": \"EVAL-000007\",\n    \"adrId\": \"ADR-008\",\n    \"blocker\": \"Route log ROUTE-000002 already exists.\"\n  }\n}\n",
+      "stderr": ""
+    }
+  ],
+  "ledger": {
+    "route_rows": 8,
+    "eval_rows": 10,
+    "label_rows": 2,
+    "torn_lines": 0,
+    "duplicate_route_ids": 1,
+    "duplicate_call_ids": 1,
+    "duplicate_eval_ids": 0,
+    "duplicate_label_ids": 0,
+    "route_ids": [
+      "ROUTE-000001",
+      "ROUTE-000002",
+      "ROUTE-000003",
+      "ROUTE-000004",
+      "ROUTE-000005",
+      "ROUTE-000006",
+      "ROUTE-000006",
+      "ROUTE-000008"
+    ],
+    "eval_ids": [
+      "EVAL-000001",
+      "EVAL-000002",
+      "EVAL-000003",
+      "EVAL-000004",
+      "EVAL-000005",
+      "EVAL-000006",
+      "EVAL-000007",
+      "EVAL-000008",
+      "EVAL-000009",
+      "EVAL-000010"
+    ]
+  },
+  "exactly_once": {
+    "launched_runs": 10,
+    "runs_that_announced_a_run_id": 10,
+    "runs_with_no_receipt_at_all": 0,
+    "runs_with_route_logs": 2,
+    "runs_with_terminal_eval": 10,
+    "started_runs_with_no_terminal_eval": []
+  },
+  "adrs": {
+    "before": 2,
+    "after": 12,
+    "modified_accepted_adrs": []
+  },
+  "validate": {
+    "exit_code": 1,
+    "stdout_tail": "",
+    "stderr_tail": "Duplicate route log id: ROUTE-000006\nDuplicate agent call id: CALL-000006\n"
+  },
+  "company_dir": "(removed)",
+  "identifier_contention": {
+    "collision_halts": [
+      {
+        "run": 1,
+        "blocker": "Route log ROUTE-000001 already exists."
+      },
+      {
+        "run": 2,
+        "blocker": "Route log ROUTE-000001 already exists."
+      },
+      {
+        "run": 3,
+        "blocker": "Route log ROUTE-000001 already exists."
+      },
+      {
+        "run": 5,
+        "blocker": "Route log ROUTE-000001 already exists."
+      },
+      {
+        "run": 6,
+        "blocker": "Route log ROUTE-000001 already exists."
+      },
+      {
+        "run": 7,
+        "blocker": "Route log ROUTE-000002 already exists."
+      },
+      {
+        "run": 9,
+        "blocker": "Route log ROUTE-000001 already exists."
+      },
+      {
+        "run": 10,
+        "blocker": "Route log ROUTE-000002 already exists."
+      }
+    ],
+    "collision_halt_count": 8,
+    "runs_that_shipped": 2
+  },
+  "verdict": {
+    "A1_exactly_n_terminal_evals": true,
+    "A2_zero_duplicate_ids": false,
+    "A3_validate_exit_zero": false,
+    "A4_no_accepted_adr_modified": true,
+    "no_started_run_lost": true,
+    "no_torn_lines": true,
+    "no_identifier_collision_halts": false,
+    "every_run_shipped": false,
+    "all_clean": false
+  },
+  "defect_reproduced": true
+}

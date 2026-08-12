@@ -1,0 +1,25 @@
+{
+  "program": "agent-platform-foundation",
+  "repository": "prez-tailered-ai/tailered-ai",
+  "repository_exclusivity": "This program applies only to prez-tailered-ai/tailered-ai. No other first-party repository is a target, a dependency, or an implementation task.",
+  "ruflo_disposition": "REJECTED — read-only external reference. Not installed, not a dependency.",
+  "scope": "P0-B",
+  "technical_status": "IN_PROGRESS",
+  "human_gate": null,
+  "next_scope": "ADR-004",
+  "frozen_base_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c",
+  "p0_a_merge_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c",
+  "ruflo_audit_merge_sha": "e6a3bbf",
+  "branch": "fix/p0-b-ledger-concurrency",
+  "scopes": {
+    "P0-A": { "status": "MERGED", "merge_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c" },
+    "P0-B": { "status": "IN_PROGRESS", "branch": "fix/p0-b-ledger-concurrency" },
+    "ADR-004": { "status": "BLOCKED_ON_P0B_MERGE" },
+    "PROCESS-ISOLATION": { "status": "BLOCKED_ON_ADR004_ACCEPTANCE" }
+  },
+  "inherited_evidence": {
+    "note": "P0-A evidence is inherited in place. It is neither copied nor rewritten.",
+    "root": "docs/foundation/p0-agent-safety/p0-a/",
+    "ledger": "docs/foundation/p0-agent-safety/execution-ledger.jsonl"
+  }
+}

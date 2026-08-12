@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://prez-tailered-ai.github.io/tailered-ai/schemas/execution-event.schema.json",
+  "title": "Agent-platform foundation execution event",
+  "description": "One append-only record of a program step. Every step emits exactly two events: a step_started before work begins and a step_finished carrying a terminal status. An unmatched step_started means the work was interrupted and must never be read as success. This schema extends the P0-A execution-ledger shape rather than replacing it: the P0-A core fields (actor, branch, head_before, objective, command_or_action, expected, actual, exit_code, files_touched, evidence_refs, caused_by, blocker) are all retained.",
+  "type": "object",
+  "required": [
+    "event_id",
+    "event_type",
+    "scope",
+    "step_id",
+    "attempt",
+    "actor",
+    "repo",
+    "branch",
+    "head_before",
+    "started_at",
+    "objective",
+    "command_or_action",
+    "expected",
+    "caused_by"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "pattern": "^FND-[A-Za-z0-9-]+-A[0-9]+-(START|FINISH)$",
+      "description": "Unique event identifier. START and FINISH share the same stem."
+    },
+    "event_type": { "enum": ["step_started", "step_finished"] },
+    "scope": { "enum": ["P0-B", "ADR-004", "PROCESS-ISOLATION"] },
+    "step_id": { "type": "string", "minLength": 1 },
+    "attempt": { "type": "integer", "minimum": 1 },
+    "actor": { "type": "string", "minLength": 1 },
+    "status": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "BLOCKED",
+            "SKIP",
+            "NEEDS_PREZ",
+            "ABANDONED",
+            "SUPERSEDED"
+          ]
+        }
+      ],
+      "description": "null on step_started; required on step_finished. A SKIP is not a PASS and a BLOCKED result is not evidence of safety."
+    },
+    "repo": { "const": "prez-tailered-ai/tailered-ai" },
+    "branch": { "type": ["string", "null"] },
+    "head_before": { "type": ["string", "null"] },
+    "head_after": { "type": ["string", "null"] },
+    "started_at": { "type": "string", "format": "date-time" },
+    "finished_at": { "type": ["string", "null"], "format": "date-time" },
+    "duration_ms": { "type": ["integer", "null"], "minimum": 0 },
+    "objective": { "type": "string", "minLength": 1 },
+    "preconditions": { "type": "array", "items": { "type": "string" } },
+    "command_or_action": { "type": "string" },
+    "cwd": { "type": "string" },
+    "expected": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The observable postcondition, stated before the command runs."
+    },
+    "actual": { "type": ["string", "null"] },
+    "exit_code": {
+      "type": ["integer", "null"],
+      "description": "The TRUE process exit code. null when the process was terminated by a signal — never invented, never read through a pipe."
+    },
+    "signal": {
+      "type": ["string", "null"],
+      "description": "Populated when the process was terminated by a signal."
+    },
+    "files_touched": { "type": "array", "items": { "type": "string" } },
+    "evidence_refs": { "type": "array", "items": { "type": "string" } },
+    "evidence_sha256": {
+      "type": "object",
+      "additionalProperties": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+    },
+    "caused_by": { "type": "array", "items": { "type": "string" } },
+    "verification": {
+      "type": "object",
+      "properties": {
+        "method": { "type": ["string", "null"] },
+        "independent_checker": {
+          "type": ["string", "null"],
+          "description": "The separate tool or process that read the postcondition. A claim verified only by the component under test is not independent."
+        }
+      }
+    },
+    "blocker": { "type": ["string", "null"] },
+    "caveats": { "type": "array", "items": { "type": "string" } },
+    "next_action": { "type": ["string", "null"] },
+    "human_action_required": { "type": ["string", "null"] },
+    "environment_variable_names": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Variable NAMES only. Values are never recorded, in any event, for any reason."
+    }
+  }
+}
