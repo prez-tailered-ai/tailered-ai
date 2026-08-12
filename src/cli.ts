@@ -21,6 +21,7 @@ import {
   taileredShip,
   type HumanGate,
 } from "./ship.js";
+import { recoverCompany } from "./recover.js";
 import { validateCompany } from "./validate.js";
 
 const [, , command, ...argv] = process.argv;
@@ -44,6 +45,9 @@ try {
       break;
     case "demo":
       await runDemo(argv);
+      break;
+    case "recover":
+      await runRecover(argv);
       break;
     case "--help":
     case "-h":
@@ -346,6 +350,23 @@ function isGateVerdict(value: string): value is GateVerdict {
 
 function printJson(value: unknown): void {
   process.stdout.write(`${JSON.stringify(value, null, 2)}\n`);
+}
+
+async function runRecover(argv: string[]): Promise<void> {
+  const repo = resolve(option(argv, "--repo") ?? ".");
+  const runId = option(argv, "--run");
+  const dryRun = argv.includes("--dry-run");
+  const report = await recoverCompany(repo, {
+    ...(runId ? { runId } : {}),
+    ...(dryRun ? { dryRun: true } : {}),
+  });
+  console.log(JSON.stringify({ status: "RECOVERY", ...report }, null, 2));
+  const actions = new Set(report.results.map((result) => result.action));
+  if (actions.has("FAILED") || actions.has("REFUSED_LIVE_OWNER")) {
+    process.exitCode = 1;
+  } else if (actions.has("QUARANTINED")) {
+    process.exitCode = 2;
+  }
 }
 
 function printHelp(): void {

@@ -5,7 +5,7 @@
   "ruflo_disposition": "REJECTED \u2014 read-only external reference. Not installed, not a dependency.",
   "scope": "P0-B",
   "technical_status": "IN_PROGRESS",
-  "human_gate": "NEEDS_PREZ \u2014 intermediate design-authority gate: ratify amendments A-01 and A-02 (docs/foundation/p0-agent-safety/p0-b/PREZ-DECISIONS.md) before P0B-14 begins. This is not the P0-B merge gate.",
+  "human_gate": null,
   "next_scope": "ADR-004",
   "frozen_base_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c",
   "p0_a_merge_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c",
@@ -33,5 +33,9 @@
     "root": "docs/foundation/p0-agent-safety/p0-a/",
     "ledger": "docs/foundation/p0-agent-safety/execution-ledger.jsonl"
   },
-  "foundation_rule": "Per PR #5: 60adb63e is permanently invalid as a P0-B base; 978fbcc3 or any later main containing it is the minimum valid foundation. Satisfied by merge commit 4594ce99 (origin/main 38e08bfb merged into the branch)."
+  "foundation_rule": "Per PR #5: 60adb63e is permanently invalid as a P0-B base; 978fbcc3 or any later main containing it is the minimum valid foundation. Satisfied by merge commit 4594ce99 (origin/main 38e08bfb merged into the branch).",
+  "intermediate_design_gate": "APPROVED \u2014 A-01 and A-02 ratified by PREZ 2026-08-12 (gate-ledger.jsonl GATE-P0B-DESIGN-A01/A02). The earlier NEEDS_PREZ event stands in the program ledger, not overwritten.",
+  "next_step": "P0B-14",
+  "final_merge_gate": "NOT_REACHED",
+  "adr_numbering": "ADR-004 belongs to the Hermes-Honcho decision (PR #6, merged 482bc04a). The Ruflo decision uses the semantic handoff name RUFLO-DECISION-ADR; next_adr_id: RESOLVE_FROM_MAIN_AFTER_P0B_MERGE."
 }

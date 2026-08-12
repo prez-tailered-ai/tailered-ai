@@ -403,6 +403,47 @@ export async function withCompanyLock<T>(
 }
 
 /**
+ * Classify the current lock for recovery and validation. Never mutates, never guesses:
+ * a foreign host cannot be probed and stays "foreign"; unreadable metadata stays "corrupt".
+ */
+export type LockAssessment =
+  | { state: "none" }
+  | { state: "live"; owner: LockOwner }
+  | { state: "dead"; owner: LockOwner }
+  | { state: "foreign"; owner: LockOwner }
+  | { state: "corrupt"; reason: string };
+
+export async function assessCompanyLock(root: string): Promise<LockAssessment> {
+  const lockPath = lockPathFor(root);
+  try {
+    await readFile(ownerPath(lockPath), "utf8");
+  } catch (error) {
+    if (isNodeError(error) && error.code === "ENOENT") {
+      // Either no lock directory at all, or a directory with no owner file. The former is
+      // "none"; the latter is a half-written or damaged lock and must read as corrupt.
+      try {
+        await readFile(resolve(lockPath, ".."), "utf8");
+      } catch {
+        /* fallthrough to directory probe below */
+      }
+      const { access } = await import("node:fs/promises");
+      try {
+        await access(lockPath);
+        return { state: "corrupt", reason: "lock directory exists with no owner file" };
+      } catch {
+        return { state: "none" };
+      }
+    }
+  }
+  const current = await readOwner(lockPath);
+  if (current.kind === "absent") return { state: "corrupt", reason: "owner file vanished mid-read" };
+  if (current.kind === "unreadable") return { state: "corrupt", reason: current.reason };
+  if (current.owner.host !== hostname()) return { state: "foreign", owner: current.owner };
+  if (isProvablyDeadSameHost(current.owner)) return { state: "dead", owner: current.owner };
+  return { state: "live", owner: current.owner };
+}
+
+/**
  * Read the current holder, for diagnostics and validation. Never mutates.
  *
  * Returns `null` when no lock is held. A lock that exists but cannot be read is reported as a

@@ -42,6 +42,7 @@ function arg(name, fallback = null) {
 const has = (name) => process.argv.includes(name);
 
 const repoDir = resolve(arg("--repo-dir") ?? ".");
+const headArg = arg("--head");
 const N = Number(arg("--n", "3"));
 const outPath = arg("--out");
 const keep = has("--keep");
@@ -227,8 +228,13 @@ const modifiedAdrs = Object.keys(adrHashesBefore).filter(
 const report = {
   harness: "p0b-concurrency",
   repo_dir: repoDir,
-  repo_head: spawnSync("git", ["rev-parse", "HEAD"], { cwd: repoDir, encoding: "utf8" })
-    .stdout.trim(),
+  // A git worktree mounted alone in a container cannot resolve its own HEAD (the .git file
+  // points at the primary checkout), which left A6/A1 artifacts with repo_head "". The
+  // caller passes --head; git remains the fallback for a plain clone.
+  repo_head: headArg ??
+    (spawnSync("git", ["rev-parse", "HEAD"], { cwd: repoDir, encoding: "utf8" })
+      .stdout?.trim() ?? ""),
+  node_version: process.version,
   n: N,
   wall_ms: wallMs,
   generated_at: new Date().toISOString(),

@@ -617,7 +617,10 @@ export async function taileredShip(options: ShipOptions): Promise<RunReceipt> {
     evalId: evalRow.id,
     ...(gateLabel ? { gateLabelId: gateLabel.id } : {}),
     adrId: terminalAdrId,
-    ...(blocker ? { blocker } : {}),
+    // The receipt reports the CANONICAL row's blocker, which includes finalization notes
+    // (budget-assertion failures, spec-record failures). Reporting only the pre-finalization
+    // blocker understated what the ledger records.
+    ...(evalRow.blocker ? { blocker: evalRow.blocker } : {}),
   };
 }
 
@@ -846,7 +849,7 @@ function renderEditDiff(files: FileWrite[]): string {
  * Write a durable run artifact. Idempotent: an exact retry of an interrupted run re-writes the
  * same bytes and is a no-op, while different content for the same path is an integrity error.
  */
-async function writeRunArtifact(
+export async function writeRunArtifact(
   root: string,
   runId: string,
   relativeName: string,
