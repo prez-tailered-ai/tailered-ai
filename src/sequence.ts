@@ -216,6 +216,35 @@ async function readReservedIdentifiers(root: string): Promise<Record<SequenceFam
       reserved.ROUTE_CALL,
       await highestCallReservation(resolve(runsRoot, runDirectory, "calls")),
     ]);
+
+    // FinalizationIntentV2 reserves the terminal EVAL and ADR identifiers before either
+    // canonical write. A crash between the intent and the appends leaves those identifiers
+    // reserved-but-unconsumed; scanning the intent is what keeps them visible to a rebuild.
+    let intentRaw: string | null = null;
+    try {
+      intentRaw = await readFile(
+        resolve(runsRoot, runDirectory, "finalization-intent.json"),
+        "utf8",
+      );
+    } catch (error) {
+      if (!isNodeError(error) || error.code !== "ENOENT") throw error;
+    }
+    if (intentRaw !== null) {
+      let intent: { eval?: { id?: unknown }; adr?: { id?: unknown } };
+      try {
+        intent = JSON.parse(intentRaw) as typeof intent;
+      } catch (error) {
+        throw new SequenceStateError(
+          `evals/runs/${runDirectory}/finalization-intent.json is not valid JSON, so its ` +
+            `reserved identifiers cannot be honoured: ${
+              error instanceof Error ? error.message : String(error)
+            }`,
+          "malformed",
+        );
+      }
+      reserved.EVAL = highest([reserved.EVAL, parseSequenceNumber(intent.eval?.id, "EVAL")]);
+      reserved.ADR = highest([reserved.ADR, parseSequenceNumber(intent.adr?.id, "ADR")]);
+    }
   }
   return reserved;
 }

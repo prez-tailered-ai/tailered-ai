@@ -1,0 +1,31 @@
+{
+  "event_id": "FND-P0-B-P0B-COMPOSE-A3-FINISH",
+  "scope": "P0-B",
+  "step_id": "P0B-COMPOSE",
+  "attempt": 3,
+  "command": [
+    "docker",
+    "run",
+    "--rm",
+    "-v",
+    "/tmp/p0b-20260812/tailered-ai:/work",
+    "-w",
+    "/work",
+    "node:24",
+    "npm",
+    "test"
+  ],
+  "cwd": ".",
+  "started_at": "2026-08-12T09:51:03.877Z",
+  "finished_at": "2026-08-12T09:51:08.150Z",
+  "duration_ms": 4270,
+  "exit_code": 0,
+  "signal": null,
+  "spawn_error": null,
+  "allow_failure": false,
+  "status": "PASS",
+  "stdout_bytes": 7372,
+  "stderr_bytes": 209,
+  "stdout_sha256": "23d0f03d56ada655bb7c0bfee87e2babbce6a29dea7804169b29d880ec54caf1",
+  "stderr_sha256": "39ad07334ee0b3da51ab7f5232e274dfb5588dc1380a557f3f4d886a7173a9dd"
+}

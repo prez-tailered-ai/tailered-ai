@@ -121,3 +121,4 @@ scripts/foundation/**
 | --- | --- | --- | --- | --- |
 | 2026-08-12 preflight | `60adb63e` | No — identical to the frozen base | Yes: `src/files.ts`, `test/containment.test.ts` on unmerged PR #4 | Recorded; excluded both files |
 | 2026-08-12 pre-commit, `P0B-HARDEN` | `978fbcc3` | **Yes — PR #4 merged** | Same two files, now merged into `main` | Assessed non-conflicting; continued on the frozen base; `merge-tree` exit 0 |
+| 2026-08-12, `P0B-COMPOSE` | `38e08bfb` | **Yes — PR #5 merged** | None (documentation only) | **Composed.** PR #5 declared `60adb63e` permanently invalid as a P0-B base and `978fbcc3` the minimum valid foundation, which superseded the continue-on-frozen-base plan. `origin/main` was merged in via normal merge commit `4594ce99` (parents `94074af` + `38e08bf`); all four P0-B commits remain ancestors; the integrated head was fully reverified (91/91 tests, validate 0, demo `$0.068`, threat matrix 17/17, N=2/3/10 clean, mutation control healthy). |

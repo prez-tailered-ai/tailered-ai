@@ -1,4 +1,5 @@
 import { spawn } from "node:child_process";
+import { createHash } from "node:crypto";
 import { readFile, stat } from "node:fs/promises";
 import { hostname } from "node:os";
 import { resolve } from "node:path";
@@ -47,7 +48,7 @@ import {
   writeNewFile,
 } from "./files.js";
 import { barrier } from "./barrier.js";
-import { CompanyLedger } from "./ledger.js";
+import { CompanyLedger, canonicalRecordJson } from "./ledger.js";
 import { createRouteLog, route } from "./router.js";
 
 /** The single capability root agents and gates may write. */
@@ -464,11 +465,22 @@ export async function taileredShip(options: ShipOptions): Promise<RunReceipt> {
       blocker = String(error);
     }
   } finally {
-    // R2/F6. Every statement below is failure-tolerant on purpose. Pre-fix, this block called
+    // R2, F5-F7, and proposed amendment A-02. Pre-fix, this block called
     // `budget.assertSettled()` and `appendAdr()` directly, and a throw from either escaped the
     // `finally` before `appendTerminalEval` ran — so a run that had genuinely happened, and
-    // genuinely spent money, could leave no terminal record at all. Nothing here may skip the
-    // terminal row; failures are recorded INTO it.
+    // genuinely spent money, could leave no terminal record at all.
+    //
+    // The A-02 semantic (directed by PREZ, pending formal ratification): a terminal EvalRow is
+    // NEVER written without its OWN terminal ADR, and a historical causal ADR is never
+    // substituted. `docs/v1-contract.md:26` requires each terminal run to create an ADR;
+    // pointing `adr_id` at an older decision would make the row structurally valid and
+    // semantically false — the exact false-success class this program exists to remove.
+    // Instead, the COMPLETE intended ADR and the COMPLETE intended EvalRow are made durable in
+    // the finalization intent BEFORE either canonical write. A failure after that point leaves
+    // a run that is detectable (unmatched start, unresolved intent) and deterministically
+    // completable by `tailered recover`, which replays the exact recorded payloads. A run can
+    // therefore be: finalized, or recoverable, or (through recovery) quarantined — but never
+    // half-recorded and never `shipped` without its own decision.
     const finalizationNotes: string[] = [];
 
     if (!specWritten) {
@@ -491,67 +503,43 @@ export async function taileredShip(options: ShipOptions): Promise<RunReceipt> {
     const accounting = budget.snapshot();
 
     await ledger.transact({ operation: "finalize", runId }, async (tx) => {
-      const issued = await tx.allocate({ EVAL: 1 });
+      // Reserve BOTH identifiers up front. The increments are durable before use (S1), and
+      // the intent below makes the reservation attributable even after a crash (S8).
+      const issued = await tx.allocate({ EVAL: 1, ADR: 1 });
       const evalId = issued.EVAL[0];
-      if (evalId === undefined) {
-        throw new AccountingInvariantError("The allocator returned no terminal eval identifier.");
-      }
-
-      // F5: intent is durable before any ADR or terminal mutation, so a crash inside this
-      // section leaves a recovery pass something deterministic to complete.
-      await barrier("finalize:before-intent", runId);
-      await writeRunArtifact(root, runId, "finalization-intent.json", {
-        schema_version: 1,
-        run_id: runId,
-        spec_id: spec.id,
-        eval_id: evalId,
-        outcome,
-        settled_cost_usd: accounting.settledUsd,
-        ...(blocker ? { blocker } : {}),
-        intent_written_at: now().toISOString(),
-        caused_by: [spec.id],
-      });
-
-      let terminalAdr: ADR | undefined;
-      try {
-        const written = await tx.appendAdr({
-          title: adrDraft?.title ?? terminalAdrTitle(outcome),
-          context:
-            adrDraft?.context ??
-            `Run ${runId} attempted spec ${spec.id}. ${blocker ?? "All bounded checks and the human gate completed."}`,
-          decision:
-            adrDraft?.decision ??
-            `Record the run as ${outcome} and preserve its terminal accounting and causal links.`,
-          alternatives_rejected:
-            adrDraft?.alternativesRejected ?? [
-              "Omit a failed or rejected run from the evaluation ledger.",
-            ],
-          consequences:
-            adrDraft?.consequences ?? [
-              "The failure half of the tokens-per-outcome curve remains measurable.",
-            ],
-          status: "accepted",
-          caused_by: [spec.id, ...(gateLabel ? [gateLabel.id] : [])],
-        });
-        terminalAdr = written.adr;
-      } catch (error) {
-        // This is the exact throw that used to destroy the terminal record.
-        finalizationNotes.push(`terminal ADR could not be written: ${describeError(error)}`);
-      }
-
-      // `adr_id` must resolve or `validate` fails, so a run whose terminal ADR could not be
-      // written references the causal ADR it was provably started from, and says so.
-      const adrRef = terminalAdr?.id ?? causeAdr.id;
-      if (terminalAdr === undefined) {
-        finalizationNotes.push(
-          `this row references its causal ADR ${causeAdr.id} because no terminal ADR exists`,
+      const adrId = issued.ADR[0];
+      if (evalId === undefined || adrId === undefined) {
+        throw new AccountingInvariantError(
+          "The allocator returned no terminal eval or ADR identifier.",
         );
       }
-      terminalAdrId = adrRef;
+
+      // Build the EXACT payloads once. Recovery must be able to replay them byte-for-byte,
+      // so every field — including timestamps — is fixed here, before anything is written.
+      const createdAt = now().toISOString();
+      const terminalAdr: ADR = {
+        id: adrId,
+        title: adrDraft?.title ?? terminalAdrTitle(outcome),
+        context:
+          adrDraft?.context ??
+          `Run ${runId} attempted spec ${spec.id}. ${blocker ?? "All bounded checks and the human gate completed."}`,
+        decision:
+          adrDraft?.decision ??
+          `Record the run as ${outcome} and preserve its terminal accounting and causal links.`,
+        alternatives_rejected:
+          adrDraft?.alternativesRejected ?? [
+            "Omit a failed or rejected run from the evaluation ledger.",
+          ],
+        consequences:
+          adrDraft?.consequences ?? [
+            "The failure half of the tokens-per-outcome curve remains measurable.",
+          ],
+        status: "accepted",
+        caused_by: [spec.id, ...(gateLabel ? [gateLabel.id] : [])],
+      };
 
       const combinedBlocker = [...(blocker ? [blocker] : []), ...finalizationNotes].join(" | ");
-
-      evalRow = {
+      const intendedEval: EvalRow = {
         id: evalId,
         run_id: runId,
         spec_id: spec.id,
@@ -562,26 +550,56 @@ export async function taileredShip(options: ShipOptions): Promise<RunReceipt> {
         wall_time_ms: Math.round(performance.now() - startedAt),
         cost_usd: accounting.settledUsd,
         ...(previewUrl ? { preview_url: previewUrl } : {}),
-        adr_id: adrRef,
+        adr_id: adrId,
         ...(gateLabel ? { gate_label_id: gateLabel.id } : {}),
         ...(combinedBlocker ? { blocker: combinedBlocker } : {}),
-        created_at: now().toISOString(),
-        caused_by: [adrRef, spec.id, ...(gateLabel ? [gateLabel.id] : [])],
+        created_at: createdAt,
+        caused_by: [adrId, spec.id, ...(gateLabel ? [gateLabel.id] : [])],
       };
 
+      // F5: the COMPLETE intent — both exact payloads plus their hashes — is durable before
+      // any canonical mutation. This is FinalizationIntentV2; the v1 intent carried only
+      // summary fields and could not support byte-exact recovery.
+      await barrier("finalize:before-intent", runId);
+      await writeRunArtifact(root, runId, "finalization-intent.json", {
+        schema_version: 2,
+        run_id: runId,
+        spec_id: spec.id,
+        adr: terminalAdr,
+        eval: intendedEval,
+        accounting: {
+          settled_usd: accounting.settledUsd,
+          tokens_by_tier: accounting.tokensByTier,
+        },
+        payload_sha256: {
+          adr: sha256Hex(canonicalRecordJson(terminalAdr)),
+          eval: sha256Hex(canonicalRecordJson(intendedEval)),
+        },
+        intent_written_at: createdAt,
+        caused_by: [spec.id, adrId],
+      });
+
+      // A-02 ordering: the run's OWN decision first, the evaluation that references it second.
+      // A failure of either write propagates: the run stays recoverable, and no fallback ADR
+      // is ever substituted.
+      await tx.appendReservedAdr(terminalAdr);
+      terminalAdrId = adrId;
+
       await barrier("finalize:before-terminal-eval", runId);
-      await tx.appendTerminalEval(evalRow);
+      await tx.appendTerminalEval(intendedEval);
+      evalRow = intendedEval;
 
       // F7: the marker is written last and means every artifact above is on disk.
       await barrier("finalize:before-marker", runId);
       await writeRunArtifact(root, runId, "finalized.json", {
-        schema_version: 1,
+        schema_version: 2,
         run_id: runId,
         eval_id: evalId,
-        adr_id: adrRef,
+        adr_id: adrId,
         ...(gateLabel ? { gate_label_id: gateLabel.id } : {}),
         outcome,
         finalized_at: now().toISOString(),
+        caused_by: [evalId, adrId, spec.id],
       });
     });
   }
@@ -846,6 +864,10 @@ async function writeRunArtifact(
       `evals/runs/${runId}/${relativeName} already exists with different content.`,
     );
   }
+}
+
+function sha256Hex(content: string): string {
+  return createHash("sha256").update(content).digest("hex");
 }
 
 function describeError(error: unknown): string {

@@ -17,7 +17,7 @@ import {
 } from "./files.js";
 import { barrier } from "./barrier.js";
 import { renderAdr, validateAdrForWrite } from "./company.js";
-import { withCompanyLock, type LockHandle } from "./lock.js";
+import { withCompanyLock, assertLockHeld, type LockHandle } from "./lock.js";
 import {
   allocateIdentifiers,
   type AllocatedIdentifiers,
@@ -54,6 +54,40 @@ function canonicalJson(value: unknown): string {
 
 function sameRecord(left: unknown, right: unknown): boolean {
   return canonicalJson(left) === canonicalJson(right);
+}
+
+/** Exported so recovery and validation can compare payloads the same way appends do. */
+export function canonicalRecordJson(value: unknown): string {
+  return canonicalJson(value);
+}
+
+/**
+ * The lock-scoped mutation surface.
+ *
+ * This is an interface on purpose: the implementing class is NOT exported, its constructor is
+ * private, and the only code path that can construct one is {@link CompanyLedger.transact}.
+ * A caller therefore cannot fabricate a transaction, and every method re-proves lock ownership
+ * at the moment of use — a handle is a claim about the past, and the proof is what makes it a
+ * claim about now.
+ */
+export interface LedgerTx {
+  allocate(request: AllocationRequest): Promise<AllocatedIdentifiers>;
+  allocateRouteCall(): Promise<RouteCallPair>;
+  appendRouteLog(log: RouteLog): Promise<"appended" | "already-present">;
+  appendGateLabel(label: GateLabel): Promise<"appended" | "already-present">;
+  appendTerminalEval(row: EvalRow): Promise<"appended" | "already-present">;
+  /**
+   * Write an ADR whose identifier was already reserved through {@link LedgerTx.allocate}.
+   * Creation is `wx`; an exact retry is a no-op; different content for the same id is a
+   * {@link LedgerIntegrityError}. Accepted ADRs are never edited.
+   */
+  appendReservedAdr(adr: ADR): Promise<{ created: boolean }>;
+}
+
+interface LedgerPaths {
+  evals: string;
+  labels: string;
+  routes: string;
 }
 
 export class CompanyLedger {
@@ -121,17 +155,24 @@ export class CompanyLedger {
   }
 
   /**
-   * Run `work` inside the repository mutation lock, with a transaction object that is the ONLY
-   * way to allocate identifiers or append canonical rows.
+   * Run `work` inside the repository mutation lock, with the transaction object that is the
+   * ONLY way to allocate identifiers or append canonical rows.
    *
-   * F1: allocation, uniqueness verification, append, and durable settlement all happen between
-   * one acquire and one release. Splitting them is what produced the original race — two
-   * writers derived the same identifier from the same row count and one of them lost.
+   * F1 (as amended by A-01): allocation and its durable persistence happen inside one critical
+   * section; the append that consumes an identifier happens inside a critical section that
+   * re-verifies uniqueness. Splitting allocation from durability is what produced the original
+   * race — two writers derived the same identifier from the same row count and one of them
+   * lost.
    */
   async transact<T>(
     options: { operation: string; runId?: string | null; timeoutMs?: number },
-    work: (tx: LedgerTransaction) => Promise<T>,
+    work: (tx: LedgerTx) => Promise<T>,
   ): Promise<T> {
+    const paths: LedgerPaths = {
+      evals: this.#evalPath,
+      labels: this.#labelPath,
+      routes: this.#routePath,
+    };
     return withCompanyLock(
       this.root,
       {
@@ -139,33 +180,30 @@ export class CompanyLedger {
         runId: options.runId ?? null,
         ...(options.timeoutMs === undefined ? {} : { timeoutMs: options.timeoutMs }),
       },
-      async (handle) => work(new LedgerTransaction(this, handle)),
+      async (handle) => work(LedgerTransaction.begin(this.root, paths, handle)),
     );
-  }
-
-  /** @internal — reached through {@link LedgerTransaction}, which proves the lock is held. */
-  get paths(): { evals: string; labels: string; routes: string; runs: string } {
-    return {
-      evals: this.#evalPath,
-      labels: this.#labelPath,
-      routes: this.#routePath,
-      runs: this.#runsPath,
-    };
   }
 }
 
 /**
- * The lock-scoped surface. Every method assumes — and every allocation re-proves — that the
- * repository lock is held. There is no way to obtain one except through
- * {@link CompanyLedger.transact}.
+ * NOT exported. The private constructor plus the module-private factory are the encapsulation:
+ * no code outside this file can construct one, so no code outside this file can reach a
+ * canonical append except through `CompanyLedger.transact`, and therefore through the lock.
  */
-export class LedgerTransaction {
-  constructor(
-    private readonly ledger: CompanyLedger,
-    readonly handle: LockHandle,
+class LedgerTransaction implements LedgerTx {
+  private constructor(
+    private readonly root: string,
+    private readonly paths: LedgerPaths,
+    private readonly handle: LockHandle,
   ) {}
 
+  /** @internal Reached only from {@link CompanyLedger.transact}. */
+  static begin(root: string, paths: LedgerPaths, handle: LockHandle): LedgerTx {
+    return new LedgerTransaction(root, paths, handle);
+  }
+
   async allocate(request: AllocationRequest): Promise<AllocatedIdentifiers> {
+    // allocateIdentifiers re-proves the lock itself; no separate assertion needed here.
     return allocateIdentifiers(this.handle, request);
   }
 
@@ -185,6 +223,11 @@ export class LedgerTransaction {
    *   - absent            -> appended
    *   - present, IDENTICAL -> no-op, so an interrupted run can be replayed safely
    *   - present, DIFFERENT -> LedgerIntegrityError, never a duplicate row
+   *
+   * Lock ownership is proven at entry AND immediately before the write. The entry check
+   * refuses a transaction whose lock was already lost; the pre-write check closes the window
+   * between the uniqueness read and the append, which is the exact boundary the pre-fix code
+   * lost on.
    */
   async #appendUnique<T>(options: {
     path: string;
@@ -193,6 +236,8 @@ export class LedgerTransaction {
     matches: (candidate: T) => boolean;
     describeConflict: (existing: T) => string;
   }): Promise<"appended" | "already-present"> {
+    await assertLockHeld(this.handle);
+
     const existing = await readJsonLines<T>(options.path);
     const collision = existing.find(options.matches);
     if (collision !== undefined) {
@@ -215,13 +260,14 @@ export class LedgerTransaction {
       );
     }
 
+    await assertLockHeld(this.handle);
     await appendJsonLine(options.path, options.row);
     return "appended";
   }
 
   async appendRouteLog(log: RouteLog): Promise<"appended" | "already-present"> {
     return this.#appendUnique({
-      path: this.ledger.paths.routes,
+      path: this.paths.routes,
       row: log,
       kind: "route",
       matches: (candidate) => candidate.id === log.id,
@@ -231,7 +277,7 @@ export class LedgerTransaction {
 
   async appendGateLabel(label: GateLabel): Promise<"appended" | "already-present"> {
     return this.#appendUnique({
-      path: this.ledger.paths.labels,
+      path: this.paths.labels,
       row: label,
       kind: "label",
       matches: (candidate) => candidate.id === label.id || candidate.run_id === label.run_id,
@@ -242,7 +288,7 @@ export class LedgerTransaction {
 
   async appendTerminalEval(row: EvalRow): Promise<"appended" | "already-present"> {
     return this.#appendUnique({
-      path: this.ledger.paths.evals,
+      path: this.paths.evals,
       row,
       kind: "eval",
       matches: (candidate) => candidate.id === row.id || candidate.run_id === row.run_id,
@@ -252,40 +298,27 @@ export class LedgerTransaction {
     });
   }
 
-  /**
-   * Allocate an ADR identifier and create the file, inside the held lock.
-   *
-   * The identifier comes from the allocator rather than from `readdir` + max + 1, so it cannot
-   * be derived twice from the same directory listing. Creation stays `wx`, so even if the
-   * allocator were wrong the filesystem still refuses to overwrite an accepted decision (F3).
-   */
-  async appendAdr(input: Omit<ADR, "id">): Promise<{ adr: ADR; created: boolean }> {
-    const issued = await allocateIdentifiers(this.handle, { ADR: 1 });
-    const id = issued.ADR[0];
-    if (id === undefined) {
-      throw new LedgerIntegrityError("The allocator returned no ADR identifier.");
-    }
-
-    const adr: ADR = { ...input, id };
-    if (adr.supersedes && !adr.caused_by.includes(adr.supersedes)) {
-      adr.caused_by = [...adr.caused_by, adr.supersedes];
-    }
+  async appendReservedAdr(adr: ADR): Promise<{ created: boolean }> {
+    await assertLockHeld(this.handle);
     validateAdrForWrite(adr);
 
-    const path = resolve(this.ledger.root, "decisions", `${adr.id}.md`);
+    const path = resolve(this.root, "decisions", `${adr.id}.md`);
     const rendered = renderAdr(adr);
 
     await barrier("adr:before-create", adr.id);
 
+    await assertLockHeld(this.handle);
     try {
       await writeNewFile(path, rendered);
-      return { adr, created: true };
+      return { created: true };
     } catch (error) {
       if (!isNodeError(error) || error.code !== "EEXIST") throw error;
-      // An exact retry of an interrupted run re-creates the same decision; that is idempotent.
-      // Anything else is an attempt to rewrite an accepted ADR, which never happens.
+      // An exact retry of an interrupted finalization re-creates the same decision; that is
+      // idempotent. Anything else is an attempt to rewrite an accepted ADR, which never
+      // happens — and the `wx` create above means the filesystem refuses it even if this
+      // comparison were wrong.
       const onDisk = await readFile(path, "utf8");
-      if (onDisk === rendered) return { adr, created: false };
+      if (onDisk === rendered) return { created: false };
       throw new LedgerIntegrityError(
         `${adr.id} already exists with different content. Accepted ADRs are never edited.`,
       );

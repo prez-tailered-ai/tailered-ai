@@ -1,0 +1,11 @@
+MUT-000-baseline-unmutated: CONTROL_HEALTHY (exit 0, 0 test failures)
+MUT-A1-swallow-release-failure: CAUGHT (exit 1, 8 test failures)
+MUT-A2-release-without-ownership-proof: CAUGHT (exit 1, 12 test failures)
+MUT-B1-allocator-state-fails-open: CAUGHT (exit 1, 8 test failures)
+MUT-B4-bootstrap-marker-fails-open: CAUGHT (exit 1, 2 test failures)
+MUT-B2-adr-read-failure-becomes-empty: CAUGHT (exit 1, 2 test failures)
+MUT-B3-silent-rebuild-after-state-loss: CAUGHT (exit 1, 2 test failures)
+MUT-C1-allocation-without-lock-proof: CAUGHT (exit 1, 4 test failures)
+MUT-D1-route-and-call-counters-diverge: CAUGHT (exit 1, 2 test failures)
+
+control CONTROL_HEALTHY; 8 caught, 0 caught at compile, 0 partial, 0 NOT caught, 0 invalid

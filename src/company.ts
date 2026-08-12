@@ -150,25 +150,6 @@ export async function writeAdr(root: string, adr: ADR): Promise<void> {
   }
 }
 
-export async function nextAdrId(root: string): Promise<string> {
-  let entries: string[];
-  try {
-    entries = await readdir(resolve(root, "decisions"));
-  } catch (error) {
-    if (isNodeError(error) && error.code === "ENOENT") {
-      return "ADR-000";
-    }
-    throw error;
-  }
-
-  const numbers = entries
-    .map((entry) => /^ADR-(\d+)\.md$/u.exec(entry))
-    .filter((match): match is RegExpExecArray => match !== null)
-    .map((match) => Number(match[1]));
-  const next = numbers.length === 0 ? 0 : Math.max(...numbers) + 1;
-  return `ADR-${String(next).padStart(3, "0")}`;
-}
-
 export async function readAdrs(root: string): Promise<RenderedADR[]> {
   const directory = resolve(root, "decisions");
   const entries = (await readdir(directory))
@@ -191,18 +172,14 @@ export async function readAdrs(root: string): Promise<RenderedADR[]> {
   }));
 }
 
-export async function appendAdr(
-  root: string,
-  input: Omit<ADR, "id">,
-): Promise<ADR> {
-  const adr: ADR = { ...input, id: await nextAdrId(root) };
-  if (adr.supersedes && !adr.caused_by.includes(adr.supersedes)) {
-    adr.caused_by = [...adr.caused_by, adr.supersedes];
-  }
-  await writeAdr(root, adr);
-  return adr;
-}
-
+/**
+ * The unlocked `nextAdrId`/`appendAdr` pair was REMOVED here (P0-B, Phase 1.3).
+ * It derived the next ADR identifier from a directory listing, which is the same
+ * read-then-write shape as the original ledger race. Runtime ADR creation now goes
+ * through `CompanyLedger.transact` -> `LedgerTx.allocate({ ADR: 1 })` ->
+ * `LedgerTx.appendReservedAdr`, under the repository lock. `writeAdr` remains for
+ * minting, which writes fixed identifiers into a directory it just created.
+ */
 export function newRunId(date = new Date()): string {
   const timestamp = date.toISOString().replace(/[-:.TZ]/gu, "");
   return `RUN-${timestamp}-${randomUUID().slice(0, 8)}`;

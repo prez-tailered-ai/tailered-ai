@@ -1,0 +1,153 @@
+{
+  "$comment": "The single machine-readable source for R1-R8 and A1-A7 status. Every prose summary count MUST be derived from this file, never hand-counted: the 2026-08-12 status report stated 'four of eight requirements and five of seven criteria verified' while its own table showed neither number. Statuses: VERIFIED | PARTIAL | IMPLEMENTED_NOT_PROVEN | NOT_STARTED | BLOCKED | NEEDS_PREZ.",
+  "schema_version": 1,
+  "branch": "fix/p0-b-ledger-concurrency",
+  "evaluated_at_head": "the architecture-closure commit that introduces this file, child of merge 4594ce995666d41849fe2466661e2a2eac1c10b8 (git names the SHA; a file cannot know its own commit)",
+  "final_note": "Every VERIFIED below is verified ON THE STATED HEAD. Final acceptance requires re-running the concurrency matrix and regression on the closing P0B-19 head; rows carry final_reverification_pending accordingly.",
+  "requirements": {
+    "R1": {
+      "title": "Concurrency-safe identifiers; read-then-write over an unlocked append prohibited",
+      "status": "VERIFIED",
+      "final_reverification_pending": true,
+      "evidence": [
+        "test/lock.test.ts (18)",
+        "test/sequence.test.ts (22)",
+        "test/barrier.test.ts RED+GREEN",
+        "evidence/A1-fixed-n{2,3,10}.json + 3 reps",
+        "evidence/compose-n{2,3,10}.json",
+        "evidence/hardening-negative-control.json MUT-C1, MUT-D1"
+      ]
+    },
+    "R2": {
+      "title": "Exactly one terminal EvalRow per started run",
+      "status": "IMPLEMENTED_NOT_PROVEN",
+      "needs_prez": "A-02 redefines the guarantee as system-including-recovery; ratification pending",
+      "evidence": [
+        "src/ship.ts finalize block",
+        "test/ledger.test.ts recoverable-state test",
+        "NO red sample of Race B exists; NO SIGKILL trial has run (P0B-18)"
+      ]
+    },
+    "R3": {
+      "title": "Idempotent writes; duplicate detection independent of an invalidatable read",
+      "status": "PARTIAL",
+      "evidence": [
+        "test/ledger.test.ts: exact route retry no-op; conflicting route retry typed error; exact/conflicting reserved-ADR retry; ship-level terminal-eval conflict",
+        "gate-label case rides the shared #appendUnique path; its direct test lands in P0B-16"
+      ]
+    },
+    "R4": {
+      "title": "Crash-safe finalization; partial state attributable to a run_id",
+      "status": "IMPLEMENTED_NOT_PROVEN",
+      "evidence": [
+        "started.json, calls/*.started.json, FinalizationIntentV2, finalized.json",
+        "recovery NOT_STARTED (P0B-14); crash matrix NOT_STARTED (P0B-18)"
+      ]
+    },
+    "R5": {
+      "title": "Atomic or recoverable ledger mutation; torn lines detectable by validate",
+      "status": "IMPLEMENTED_NOT_PROVEN",
+      "evidence": [
+        "appendJsonLine: O_APPEND + fsync (src/files.ts:142)",
+        "torn line throws at src/files.ts:175 and aborts validation; per-file reporting and a dedicated test land in P0B-15/16"
+      ]
+    },
+    "R6": {
+      "title": "Deterministic contention tests",
+      "status": "PARTIAL",
+      "evidence": [
+        "allocation + append barriers exercised: test/barrier.test.ts, test/ledger.test.ts",
+        "finalization barriers (before-intent, before-terminal-eval, before-marker, adr:before-create) are placed but have no contention tests yet (P0B-16/18)"
+      ]
+    },
+    "R7": {
+      "title": "validate exits 0 after N concurrent runs, N in {2,3,10}, zero duplicate ids, ADRs unique and unmodified",
+      "status": "VERIFIED",
+      "final_reverification_pending": true,
+      "evidence": [
+        "evidence/A1-fixed-n{2,3,10}.json + reps 1-3 (head 94074af)",
+        "evidence/compose-n{2,3,10}.json (integrated head)"
+      ]
+    },
+    "R8": {
+      "title": "Abandoned-worker recovery; ownership distinguishes in-progress from abandoned",
+      "status": "PARTIAL",
+      "evidence": [
+        "ownership state + liveness + quarantine-at-lock-level VERIFIED: test/lock.test.ts",
+        "run-level recover/quarantine NOT_STARTED (P0B-14)"
+      ]
+    }
+  },
+  "acceptance": {
+    "A1": {
+      "title": "N concurrent runs -> exactly N terminal EvalRows",
+      "status": "VERIFIED",
+      "final_reverification_pending": true,
+      "evidence": [
+        "A1-fixed-*",
+        "compose-n*"
+      ]
+    },
+    "A2": {
+      "title": "Zero duplicate ledger identifiers",
+      "status": "VERIFIED",
+      "final_reverification_pending": true,
+      "evidence": [
+        "A1-fixed-*",
+        "compose-n*"
+      ]
+    },
+    "A3": {
+      "title": "validate exits 0, read directly",
+      "status": "VERIFIED",
+      "final_reverification_pending": true,
+      "evidence": [
+        "A1-fixed-*",
+        "compose-n*"
+      ]
+    },
+    "A4": {
+      "title": "Every ADR unique; no accepted ADR modified",
+      "status": "VERIFIED",
+      "final_reverification_pending": true,
+      "evidence": [
+        "modified_accepted_adrs: [] in all 9 clean runs"
+      ]
+    },
+    "A5": {
+      "title": "Killed mid-run -> detectable, attributable, recoverable",
+      "status": "NOT_STARTED",
+      "evidence": [
+        "P0B-18 harness does not exist"
+      ]
+    },
+    "A6": {
+      "title": "The contention test fails on the pre-fix code",
+      "status": "VERIFIED",
+      "evidence": [
+        "A6-prefix-n{2,3,10}.json",
+        "barrier.test.ts RED"
+      ]
+    },
+    "A7": {
+      "title": "Existing behavior unchanged",
+      "status": "VERIFIED",
+      "final_reverification_pending": true,
+      "evidence": [
+        "91/91 tests incl. 20 merged containment; validate 0; demo costUsd 0.068 byte-compared; threat matrix 17/17"
+      ]
+    }
+  },
+  "derived_counts": {
+    "$comment": "Derive with: node -e \"const s=require('./requirements-status.json'); const c=o=>Object.values(o).reduce((a,r)=>(a[r.status]=(a[r.status]||0)+1,a),{}); console.log(c(s.requirements), c(s.acceptance))\"",
+    "requirements": {
+      "VERIFIED": 2,
+      "PARTIAL": 3,
+      "IMPLEMENTED_NOT_PROVEN": 3
+    },
+    "acceptance": {
+      "VERIFIED": 6,
+      "NOT_STARTED": 1
+    }
+  }
+}

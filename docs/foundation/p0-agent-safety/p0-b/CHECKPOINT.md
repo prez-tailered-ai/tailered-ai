@@ -78,3 +78,16 @@ families; acceptance matrix N∈{2,3,10}×3; crash matrix across 7 kill points),
 
 The new primitives are **not yet wired into `src/ledger.ts` or `src/ship.ts`**, so the defect
 reproduced above is still present on this branch. Nothing here claims otherwise.
+
+---
+
+## Dated addendum — 2026-08-12, after the checkpoint (appended, never rewritten)
+
+Everything above describes the branch **at `df195c5`** and was accurate when written. It is
+now historical: later commits on this branch wired the primitives into `src/ledger.ts` and
+`src/ship.ts` (`94074af`), composed the corrected P0-A foundation required by PR #5
+(`4594ce99`, merging `origin/main` `38e08bfb`), and closed the transaction-encapsulation and
+terminal-ADR-semantics gaps found by PREZ review. The sentence "the defect reproduced above is
+still present on this branch" **no longer describes the branch head** — the same harness now
+records N=2/3/10 clean (`evidence/A1-fixed-*`, `evidence/compose-n*`). Live status:
+`requirements-status.json` and the program ledger, not this checkpoint.

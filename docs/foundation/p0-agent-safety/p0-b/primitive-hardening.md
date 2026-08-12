@@ -169,6 +169,11 @@ exactly one property per variant, rebuilds, and runs the suite.
 
 **Result: 8 of 8 mutations killed by tests, with a healthy control.**
 
+Scope of that claim, stated precisely: the artifact's `every_property_is_load_bearing` field
+means *all eight selected mutations were detected by the current test system*. Eight mutations
+cannot prove that every property of the system is load-bearing; they prove it for the eight
+properties they revert, and nothing more.
+
 | Variant | Property reverted | Verdict |
 | --- | --- | --- |
 | `MUT-000-baseline-unmutated` | none — control | `CONTROL_HEALTHY` |

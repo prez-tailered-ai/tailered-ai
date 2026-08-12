@@ -49,7 +49,7 @@ reason, and re-running the acceptance matrix — not an edit to this file.
 | F3 | Accepted ADRs are immutable. Creation stays `wx`; an existing id is an `AppendOnlyViolationError`. |
 | F4 | Run-start evidence is durable **before** the first possible spend. Call-start evidence is durable **before** agent invocation. |
 | F5 | Finalisation intent is written **before** any ADR or terminal mutation. |
-| F6 | **No failure of ADR writing or budget assertion may skip the terminal `EvalRow`.** The failure is recorded *into* the terminal row's `blocker`, never thrown past it. |
+| F6 | *(as amended by A-02, ratification pending — see amendment below and [`PREZ-DECISIONS.md`](./PREZ-DECISIONS.md))* A budget-assertion failure is recorded *into* the terminal row's `blocker` and downgrades a `shipped` outcome. A terminal-ADR failure never skips, forges, or substitutes: the run is left recoverable behind a complete FinalizationIntentV2, the evaluation is appended only **after** its own terminal ADR exists, and a terminal `EvalRow` never references anything but its own terminal ADR. |
 | F7 | A successful receipt is returned only after the ADR, the terminal eval, the finalised marker, and every cross-reference have been independently verified. |
 | F8 | An interrupted call remains attributable and is settled **conservatively** from its recorded ceilings, never optimistically. |
 
@@ -119,9 +119,24 @@ that changing one requires a new step, a recorded reason, and re-running the acc
 The first two are satisfied here; the third happens at P0B-17. PREZ should confirm the resolution
 before the branch merges.
 
+### A-02 — terminal-ADR semantics: no fallback, recoverable instead. **Needs PREZ ratification.**
+
+**Raised:** by PREZ review, 2026-08-12, after the status report exposed the causal-ADR
+fallback. The original F6 let a run whose terminal ADR failed keep a terminal row pointing at
+an **older** ADR — structurally valid, semantically false, and for a `shipped` outcome a direct
+violation of `docs/v1-contract.md:26` ("Each terminal run still creates an ADR"). Implemented
+as directed; the full packet, the exact language, the R2 consequence, and both decision
+statements are in [`PREZ-DECISIONS.md`](./PREZ-DECISIONS.md). §1.3 F6 above carries the amended
+text.
+
 ---
 
 ## 2. R1–R8 → code, test, evidence
+
+> **Status authority moved.** The per-requirement statuses below were correct when frozen and
+> are retained for the mapping; the LIVE status of every requirement and criterion is
+> [`requirements-status.json`](./requirements-status.json), and every prose count must be
+> derived from that file. Hand-counting produced a wrong headline once (2026-08-12).
 
 Status is stated per requirement. **`PENDING` means not yet satisfied on this branch**, with the
 step that will satisfy it named. Nothing here is marked satisfied on the strength of intent.

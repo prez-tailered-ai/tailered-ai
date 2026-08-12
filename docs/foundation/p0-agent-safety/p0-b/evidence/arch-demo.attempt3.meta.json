@@ -1,0 +1,32 @@
+{
+  "event_id": "FND-P0-B-P0B-ARCH-A3-FINISH",
+  "scope": "P0-B",
+  "step_id": "P0B-ARCH",
+  "attempt": 3,
+  "command": [
+    "docker",
+    "run",
+    "--rm",
+    "-v",
+    "/tmp/p0b-20260812/tailered-ai:/work",
+    "-w",
+    "/work",
+    "node:24",
+    "npm",
+    "run",
+    "demo"
+  ],
+  "cwd": ".",
+  "started_at": "2026-08-12T10:01:02.964Z",
+  "finished_at": "2026-08-12T10:01:04.975Z",
+  "duration_ms": 2010,
+  "exit_code": 0,
+  "signal": null,
+  "spawn_error": null,
+  "allow_failure": false,
+  "status": "PASS",
+  "stdout_bytes": 658,
+  "stderr_bytes": 209,
+  "stdout_sha256": "7b9d4a581535a219e234face867beb16386b1a6daedd7580a2b5643adedfa2e6",
+  "stderr_sha256": "39ad07334ee0b3da51ab7f5232e274dfb5588dc1380a557f3f4d886a7173a9dd"
+}
