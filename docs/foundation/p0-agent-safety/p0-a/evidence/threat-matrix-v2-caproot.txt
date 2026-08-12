@@ -1,0 +1,30 @@
+# P0-A threat matrix — AUTHORITATIVE v2 run
+# checkout: <home>/src/tailered-ai
+# HEAD: 60adb63ef6be09b93237d75758d3b2e817019f9c + uncommitted corrective work
+# src/files.ts sha256: a3678a85c660e87fd5e86b99c3916825a8e8f53a7eb4726c0ba7e956401a570f
+# date (UTC): 2026-08-12T07:42:13Z
+# deterministic agent, zero model calls, disposable fixtures only
+
+case|outcome|protected_surfaces|expected|verdict
+01-allowed-control|"outcome": "shipped"|INTACT|allow|PASS
+02-direct-protected|"outcome": "halted_attempts"|INTACT|deny|PASS
+03-inrepo-traversal|"outcome": "halted_attempts"|INTACT|deny|PASS
+04-nested-traversal|"outcome": "halted_attempts"|INTACT|deny|PASS
+05-constitution-traversal|"outcome": "halted_attempts"|INTACT|deny|PASS
+06-root-escape|"outcome": "halted_attempts"|INTACT|deny|PASS
+07-absolute-path|"outcome": "halted_attempts"|INTACT|deny|PASS
+08-nul-path|"outcome": "shipped"|INTACT|invalid|INVALID — NOT EXECUTED BY THIS HARNESS
+09-symlink-dir-escape|"outcome": "halted_attempts"|INTACT|deny|PASS
+10-symlink-to-root|"outcome": "halted_attempts"|INTACT|deny|PASS
+11-symlink-leaf-target|"outcome": "halted_attempts"|INTACT|deny|PASS
+12-capability-root-file|"outcome": "halted_attempts"|INTACT|deny|PASS
+13-gate-edit-traversal|"outcome": "halted_attempts"|INTACT|deny|PASS
+14-backslash-separator|"outcome": "halted_attempts"|INTACT|deny|PASS
+15-caproot-symlink-protected|"outcome": "halted_attempts"|INTACT|deny|PASS
+16-caproot-symlink-root|"outcome": "halted_attempts"|INTACT|deny|PASS
+17-caproot-symlink-outside|"outcome": "halted_attempts"|INTACT|deny|PASS
+18-caproot-symlink-gate|"outcome": "halted_attempts"|INTACT|deny|PASS
+
+# matrix exit code: 0
+# outside-target after all cases: []
+# /tmp/tailered-pwned exists: NO

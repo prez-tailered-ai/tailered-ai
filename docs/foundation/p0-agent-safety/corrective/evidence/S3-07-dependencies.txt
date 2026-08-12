@@ -1,0 +1,10 @@
+# S3-07 dependency integrity
+# date (UTC): 2026-08-12T07:43:26Z
+
+npm ci    exit=0
+  added 4 packages, and audited 5 packages in 510ms
+npm audit exit=0
+  found 0 vulnerabilities
+
+package.json / lockfile change vs 60adb63:
+  (empty above = unchanged)

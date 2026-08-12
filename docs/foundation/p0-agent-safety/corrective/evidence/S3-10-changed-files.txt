@@ -1,0 +1,91 @@
+# S3-10 final changed-file audit vs 60adb63
+# date (UTC): 2026-08-12T07:48:12Z
+
+## porcelain status (-uall)
+ M docs/foundation/p0-agent-safety/README.md
+ M docs/foundation/p0-agent-safety/execution-ledger.jsonl
+ M docs/foundation/p0-agent-safety/handoffs/P0-A-to-P0-B.md
+ M docs/foundation/p0-agent-safety/p0-a/containment-contract.md
+ M docs/foundation/p0-agent-safety/p0-a/evidence-manifest.json
+ M docs/foundation/p0-agent-safety/p0-a/evidence/threat-matrix.sh
+ M docs/foundation/p0-agent-safety/p0-a/report.md
+ M docs/foundation/p0-agent-safety/p0-a/test-matrix.md
+ M src/files.ts
+ M test/containment.test.ts
+?? docs/foundation/p0-agent-safety/corrective/PREZ-GATE-PACKET.md
+?? docs/foundation/p0-agent-safety/corrective/SCOPE-1-handoff.md
+?? docs/foundation/p0-agent-safety/corrective/SCOPE-2-handoff.md
+?? docs/foundation/p0-agent-safety/corrective/evidence/S1-03-status.txt
+?? docs/foundation/p0-agent-safety/corrective/evidence/S1-04-backup-hashes.txt
+?? docs/foundation/p0-agent-safety/corrective/evidence/S1-06-p0b-check.txt
+?? docs/foundation/p0-agent-safety/corrective/evidence/S1-07-summary.txt
+?? docs/foundation/p0-agent-safety/corrective/evidence/S1-08-protected-now.txt
+?? docs/foundation/p0-agent-safety/corrective/evidence/S3-01-requirement-line-map.md
+?? docs/foundation/p0-agent-safety/corrective/evidence/S3-02-cases.mjs
+?? docs/foundation/p0-agent-safety/corrective/evidence/S3-02-four-cases.txt
+?? docs/foundation/p0-agent-safety/corrective/evidence/S3-06-verification.txt
+?? docs/foundation/p0-agent-safety/corrective/evidence/S3-07-dependencies.txt
+?? docs/foundation/p0-agent-safety/corrective/evidence/S3-08-protected-final.txt
+?? docs/foundation/p0-agent-safety/corrective/evidence/S3-09-integrity.txt
+?? docs/foundation/p0-agent-safety/corrective/evidence/S3-10-changed-files.txt
+?? docs/foundation/p0-agent-safety/p0-a/evidence/capability-root-repro-v1.txt
+?? docs/foundation/p0-agent-safety/p0-a/evidence/capability-root-repro-v2.txt
+?? docs/foundation/p0-agent-safety/p0-a/evidence/capability-root-symlink-repro.mjs
+?? docs/foundation/p0-agent-safety/p0-a/evidence/tdd-red-run-caproot.txt
+?? docs/foundation/p0-agent-safety/p0-a/evidence/threat-matrix-v1-caproot.txt
+?? docs/foundation/p0-agent-safety/p0-a/evidence/threat-matrix-v2-caproot.txt
+
+## diffstat
+ docs/foundation/p0-agent-safety/README.md          |  34 +-
+ .../p0-agent-safety/execution-ledger.jsonl         |  10 +
+ .../p0-agent-safety/handoffs/P0-A-to-P0-B.md       |  50 ++-
+ .../p0-agent-safety/p0-a/containment-contract.md   | 145 +++++++--
+ .../p0-agent-safety/p0-a/evidence-manifest.json    | 362 +++++++++++++++++++--
+ .../p0-agent-safety/p0-a/evidence/threat-matrix.sh |  36 +-
+ docs/foundation/p0-agent-safety/p0-a/report.md     | 271 +++++++++++----
+ .../foundation/p0-agent-safety/p0-a/test-matrix.md | 146 +++++++--
+ src/files.ts                                       |  39 ++-
+ test/containment.test.ts                           | 119 ++++++-
+ 10 files changed, 1024 insertions(+), 188 deletions(-)
+
+## category assignment
+  P0-A DOCUMENTATION           docs/foundation/p0-agent-safety/README.md
+  P0-A EVIDENCE                docs/foundation/p0-agent-safety/execution-ledger.jsonl
+  P0-A HANDOFF                 docs/foundation/p0-agent-safety/handoffs/P0-A-to-P0-B.md
+  P0-A DOCUMENTATION           docs/foundation/p0-agent-safety/p0-a/containment-contract.md
+  P0-A EVIDENCE                docs/foundation/p0-agent-safety/p0-a/evidence-manifest.json
+  P0-A EVIDENCE                docs/foundation/p0-agent-safety/p0-a/evidence/threat-matrix.sh
+  P0-A DOCUMENTATION           docs/foundation/p0-agent-safety/p0-a/report.md
+  P0-A DOCUMENTATION           docs/foundation/p0-agent-safety/p0-a/test-matrix.md
+  CORRECTIVE PRODUCTION CODE   src/files.ts
+  CORRECTIVE TEST              test/containment.test.ts
+  P0-A HANDOFF                 docs/foundation/p0-agent-safety/corrective/PREZ-GATE-PACKET.md
+  P0-A HANDOFF                 docs/foundation/p0-agent-safety/corrective/SCOPE-1-handoff.md
+  P0-A HANDOFF                 docs/foundation/p0-agent-safety/corrective/SCOPE-2-handoff.md
+  P0-A EVIDENCE                docs/foundation/p0-agent-safety/corrective/evidence/S1-03-status.txt
+  P0-A EVIDENCE                docs/foundation/p0-agent-safety/corrective/evidence/S1-04-backup-hashes.txt
+  P0-A EVIDENCE                docs/foundation/p0-agent-safety/corrective/evidence/S1-06-p0b-check.txt
+  P0-A EVIDENCE                docs/foundation/p0-agent-safety/corrective/evidence/S1-07-summary.txt
+  P0-A EVIDENCE                docs/foundation/p0-agent-safety/corrective/evidence/S1-08-protected-now.txt
+  P0-A EVIDENCE                docs/foundation/p0-agent-safety/corrective/evidence/S3-01-requirement-line-map.md
+  P0-A EVIDENCE                docs/foundation/p0-agent-safety/corrective/evidence/S3-02-cases.mjs
+  P0-A EVIDENCE                docs/foundation/p0-agent-safety/corrective/evidence/S3-02-four-cases.txt
+  P0-A EVIDENCE                docs/foundation/p0-agent-safety/corrective/evidence/S3-06-verification.txt
+  P0-A EVIDENCE                docs/foundation/p0-agent-safety/corrective/evidence/S3-07-dependencies.txt
+  P0-A EVIDENCE                docs/foundation/p0-agent-safety/corrective/evidence/S3-08-protected-final.txt
+  P0-A EVIDENCE                docs/foundation/p0-agent-safety/corrective/evidence/S3-09-integrity.txt
+  P0-A EVIDENCE                docs/foundation/p0-agent-safety/corrective/evidence/S3-10-changed-files.txt
+  P0-A EVIDENCE                docs/foundation/p0-agent-safety/p0-a/evidence/capability-root-repro-v1.txt
+  P0-A EVIDENCE                docs/foundation/p0-agent-safety/p0-a/evidence/capability-root-repro-v2.txt
+  P0-A EVIDENCE                docs/foundation/p0-agent-safety/p0-a/evidence/capability-root-symlink-repro.mjs
+  P0-A EVIDENCE                docs/foundation/p0-agent-safety/p0-a/evidence/tdd-red-run-caproot.txt
+  P0-A EVIDENCE                docs/foundation/p0-agent-safety/p0-a/evidence/threat-matrix-v1-caproot.txt
+  P0-A EVIDENCE                docs/foundation/p0-agent-safety/p0-a/evidence/threat-matrix-v2-caproot.txt
+
+## P0-B production files (must be unchanged)
+  src/ledger.ts        UNMODIFIED
+  src/company.ts       UNMODIFIED
+  src/validate.ts      UNMODIFIED
+  src/ship.ts          UNMODIFIED
+  src/contracts.ts     UNMODIFIED
+  src/cli.ts           UNMODIFIED

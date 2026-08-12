@@ -1,0 +1,15 @@
+pwd=<home>/src/tailered-ai
+HEAD=60adb63ef6be09b93237d75758d3b2e817019f9c
+branch=fix/p0-a-capability-root-symlink
+
+npm run check exit=0
+npm test exit=0
+# tests 37
+# pass 37
+# fail 0
+# skipped 0
+npm run validate exit=0
+VERIFIED occurrences: 1
+npm run demo exit=0
+"outcome": "shipped"
+"costUsd": 0.068

@@ -1,0 +1,19 @@
+# S3-08 canonical protected surfaces — final recheck
+# date (UTC): 2026-08-12T07:43:37Z
+
+ea72e63e62cf1c2a7f00346842d08066f9211b652e5f8f4ed39ec70963662119  AGENTS.md
+f747d91d00888319af79135e7671bb168759ba8989d7d13ce3815311195ab08b  tailered.config.json
+af762540542e5ede6a09659cf0d1cf0129fa9182f80714ac1926b0f005c183a2  decisions/ADR-000.md
+0645357fa2864fc39fc79a1c074732b1ddc2283b319a58bc9031ae75ca7892d5  decisions/ADR-001.md
+8e33884076c9cbbab57b52230cf9d90c1af770938dacdfcb535d12a25ec14de7  decisions/ADR-002.md
+d94fae66522bbeab38883a3f6e2b3e837e53fdffd273015540dca64c9e393251  decisions/ADR-003.md
+3917c17e22979cc9c0d1aaf5b8f3095382c5672e3ed259a45259d40cfaa085a0  policies/gates.yaml
+3e493f30fd3536178b234f5d9ad41141186d1a7b9d3d778dca2212cec59c6443  loops/ship.yaml
+6a72920e3afa1d5634e38e96bf9ba34f3bba898f3f5f44c2683e9cde89c19ab5  seats/roster.yaml
+01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b  evals/ledger.jsonl
+01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b  evals/routes.jsonl
+01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b  labels/ledger.jsonl
+
+# comparison vs p0-a/evidence/baseline-protected-hashes.txt: IDENTICAL (12 surfaces)
+# accepted ADR inventory unchanged: ADR-000 ADR-001 ADR-002 ADR-003
+# no new ADR appended; no ledger pollution

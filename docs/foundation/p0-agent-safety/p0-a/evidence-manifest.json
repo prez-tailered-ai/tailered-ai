@@ -1,91 +1,429 @@
 {
   "scope": "P0-A",
-  "objective": "Agent write containment: writes authorized for product/ cannot escape the canonical product/ subtree.",
+  "objective": "Agent write containment: writes authorized for product/ cannot escape the canonical product/ subtree, and the capability root itself is verified rather than resolved.",
   "repo": "prez-tailered-ai/tailered-ai",
-  "baseline_sha": "5eea7766bdc770c5a6e75ad2da5aded85b2356a3",
-  "branch": "fix/p0-a-agent-write-containment",
+  "original_baseline_sha": "5eea7766bdc770c5a6e75ad2da5aded85b2356a3",
+  "v1_head_sha": "2f8fb9ae9e346a0313c27c6b6498483ad78c4754",
+  "v1_merge_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c",
+  "corrective_branch": "fix/p0-a-capability-root-symlink",
+  "corrective_merge_sha": "PENDING PREZ MERGE",
   "determinism": "All proofs used a deterministic agent. Zero model calls, zero API spend.",
   "fixtures": "Disposable temporary companies only; the canonical repository was never an attack target.",
+  "self_reference_exclusion": "This manifest deliberately does NOT list its own hash. A file cannot contain its own SHA-256 and remain valid, so p0-a/evidence-manifest.json is excluded by design. Verify it by recomputing every entry below, not by checking a stored self-hash.",
+  "paths_relative_to": "docs/foundation/p0-agent-safety/",
+  "evidence_type_legend": {
+    "vulnerable-fixture": "Disposable fixture under the DEFECTIVE implementation. Hash changes here are the defect being demonstrated.",
+    "corrected-fixture": "Disposable fixture under the CORRECTED implementation. No hash may change.",
+    "canonical-repository": "The real repository. Must be byte-identical to the P0-A baseline throughout.",
+    "historical-RED": "A watched failing run, preserved as history.",
+    "corrective-RED": "A watched failing run against the merged v1, preserved as history.",
+    "historical-GREEN": "A passing run that a later run supersedes.",
+    "verification": "Current authoritative verification output.",
+    "harness": "Executable used to produce evidence.",
+    "review": "Human-readable review artifact.",
+    "document": "Reconciled P0-A documentation."
+  },
   "evidence": [
     {
       "file": "p0-a/evidence/attack-agent.mjs",
       "sha256": "c235bbdfe8ab46ba17cbebad9ab98e15ff6223818e0cac6eb2d551d42335e1ab",
-      "bytes": 2047
+      "bytes": 2047,
+      "evidence_type": "harness",
+      "originating_step": "P0A-03",
+      "status": "CURRENT",
+      "tested_baseline_sha": "5eea7766bdc770c5a6e75ad2da5aded85b2356a3",
+      "note": "Deterministic attack agent used by the shell threat matrix."
     },
     {
       "file": "p0-a/evidence/baseline-demo.txt",
       "sha256": "30c772cd2306467b3e34eaff773c333e732ac8557f4026f6163bc6997b95594f",
-      "bytes": 790
+      "bytes": 790,
+      "evidence_type": "baseline",
+      "originating_step": "P0A-01",
+      "status": "CURRENT",
+      "tested_baseline_sha": "5eea7766bdc770c5a6e75ad2da5aded85b2356a3",
+      "note": "Baseline demo: shipped at $0.068."
     },
     {
       "file": "p0-a/evidence/baseline-npm-test.txt",
       "sha256": "1aae70a4e9a36e821005a85de07c6cf69d650c1b8d7972de35b8cdb83e5eb9f4",
-      "bytes": 3766
+      "bytes": 3766,
+      "evidence_type": "baseline",
+      "originating_step": "P0A-01",
+      "status": "CURRENT",
+      "tested_baseline_sha": "5eea7766bdc770c5a6e75ad2da5aded85b2356a3",
+      "note": "Baseline suite: 18/18."
     },
     {
       "file": "p0-a/evidence/baseline-protected-hashes.txt",
       "sha256": "88a6af7074edf85a3e2184db8675b395ddd65e117f44df21e3ed028b5eb1bc53",
-      "bytes": 1019
+      "bytes": 1019,
+      "evidence_type": "canonical-repository",
+      "originating_step": "P0A-01",
+      "status": "CURRENT",
+      "tested_baseline_sha": "5eea7766bdc770c5a6e75ad2da5aded85b2356a3",
+      "note": "The 12 canonical protected surfaces at the original P0-A baseline."
     },
     {
       "file": "p0-a/evidence/baseline-validate.txt",
       "sha256": "e5c280eb7454c14c94ed44fdd1778f658714c559859c26e72423bb955afdeb1f",
-      "bytes": 157
-    },
-    {
-      "file": "p0-a/evidence/final-demo.txt",
-      "sha256": "90dfe8b193f25716d60d03a7207fbb806bb849631a7565742f5c4e1c26df18b7",
-      "bytes": 790
-    },
-    {
-      "file": "p0-a/evidence/final-npm-test.txt",
-      "sha256": "e3d83017167a494597272fecf2f6dc1b7a115f2d43744243a335fbc0109d9c25",
-      "bytes": 6673
-    },
-    {
-      "file": "p0-a/evidence/final-protected-hashes.txt",
-      "sha256": "88a6af7074edf85a3e2184db8675b395ddd65e117f44df21e3ed028b5eb1bc53",
-      "bytes": 1019
+      "bytes": 157,
+      "evidence_type": "baseline",
+      "originating_step": "P0A-01",
+      "status": "CURRENT",
+      "tested_baseline_sha": "5eea7766bdc770c5a6e75ad2da5aded85b2356a3",
+      "note": "Baseline validate: VERIFIED, exit 0."
     },
     {
       "file": "p0-a/evidence/tdd-red-run.txt",
       "sha256": "db382c45ffe0fa21ed68619b9605a8adef1e51abe1c298225e2154bdd1cee7c3",
-      "bytes": 10235
+      "bytes": 10235,
+      "evidence_type": "historical-RED",
+      "originating_step": "P0A-05",
+      "status": "CURRENT",
+      "tested_baseline_sha": "5eea7766bdc770c5a6e75ad2da5aded85b2356a3",
+      "note": "v1 RED: 33 tests, 7 fail, genuine assertion failures."
+    },
+    {
+      "file": "p0-a/evidence/final-npm-test.txt",
+      "sha256": "e3d83017167a494597272fecf2f6dc1b7a115f2d43744243a335fbc0109d9c25",
+      "bytes": 6673,
+      "evidence_type": "historical-GREEN",
+      "originating_step": "P0A-10",
+      "status": "SUPERSEDED",
+      "tested_baseline_sha": "2f8fb9ae9e346a0313c27c6b6498483ad78c4754",
+      "note": "v1 GREEN 33/33. Superseded by the 38/38 run in corrective/evidence/S3-06-verification.txt."
+    },
+    {
+      "file": "p0-a/evidence/final-demo.txt",
+      "sha256": "90dfe8b193f25716d60d03a7207fbb806bb849631a7565742f5c4e1c26df18b7",
+      "bytes": 790,
+      "evidence_type": "historical-GREEN",
+      "originating_step": "P0A-11",
+      "status": "CURRENT",
+      "tested_baseline_sha": "2f8fb9ae9e346a0313c27c6b6498483ad78c4754",
+      "note": "v1 demo: shipped at $0.068, unchanged."
+    },
+    {
+      "file": "p0-a/evidence/final-protected-hashes.txt",
+      "sha256": "88a6af7074edf85a3e2184db8675b395ddd65e117f44df21e3ed028b5eb1bc53",
+      "bytes": 1019,
+      "evidence_type": "canonical-repository",
+      "originating_step": "P0A-11",
+      "status": "CURRENT",
+      "tested_baseline_sha": "2f8fb9ae9e346a0313c27c6b6498483ad78c4754",
+      "note": "Canonical surfaces after v1: identical to baseline."
     },
     {
       "file": "p0-a/evidence/threat-matrix-after.txt",
       "sha256": "aa381aee9762187cf1990d1db1158d8e8857c4d6637f18ba6891f705b0e5c946",
-      "bytes": 961
+      "bytes": 961,
+      "evidence_type": "historical-GREEN",
+      "originating_step": "P0A-10",
+      "status": "SUPERSEDED",
+      "tested_baseline_sha": "2f8fb9ae9e346a0313c27c6b6498483ad78c4754",
+      "note": "v1 14-case matrix. Preserved: it did not enumerate the capability-root classes. Superseded by threat-matrix-v2-caproot.txt."
     },
     {
       "file": "p0-a/evidence/threat-matrix.sh",
-      "sha256": "5602b6cd5e76fa42a37746a95f308e48ee200bf9d5c02064f884af5708561264",
-      "bytes": 4736
+      "sha256": "c1d6ac2af125830eb894665b8e4d242980e8bacc3357bfabc079535c8ebc3f04",
+      "bytes": 6261,
+      "evidence_type": "harness",
+      "originating_step": "S2-06",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c+uncommitted",
+      "note": "18-case shell harness. Cases 15-18 added post-merge; case 08 now scored INVALID, not PASS."
+    },
+    {
+      "file": "p0-a/evidence/tdd-red-run-caproot.txt",
+      "sha256": "5cb70a19919d1bd0f4fadedb5a5a5c918169372c6fe60d1e484b1fb7d57b1251",
+      "bytes": 9838,
+      "evidence_type": "corrective-RED",
+      "originating_step": "S2-07",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c",
+      "note": "v2 RED against the MERGED v1: 37 tests, 4 fail, every failure actual:'shipped'."
+    },
+    {
+      "file": "p0-a/evidence/capability-root-repro-v1.txt",
+      "sha256": "49e9ec9ca32b1cc4f75cd2282e0bd83ead193c4413ce6d91b4598896f38551ab",
+      "bytes": 2465,
+      "evidence_type": "vulnerable-fixture",
+      "originating_step": "S2-07",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c",
+      "note": "Disposable fixture under merged v1: ADR-000 c9b0e7c4 -> 0a42ac40, validate exit 1. Hash change here is the DEFECT, not damage to the canonical repository."
+    },
+    {
+      "file": "p0-a/evidence/capability-root-repro-v2.txt",
+      "sha256": "3451dd38ff644a50d66a3ec7609f4cc591e4cbf8b037cdae5594c0b38ea213ea",
+      "bytes": 4877,
+      "evidence_type": "corrected-fixture",
+      "originating_step": "S3-02",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c+uncommitted",
+      "note": "Same three link targets under v2: all CONTAINED, nothing written outside."
+    },
+    {
+      "file": "p0-a/evidence/threat-matrix-v1-caproot.txt",
+      "sha256": "e029818eba85360943e3b7c5b71aaf4dec19e37b93bd5a1256e02d4eeee1780d",
+      "bytes": 1400,
+      "evidence_type": "vulnerable-fixture",
+      "originating_step": "S2-07",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c",
+      "note": "18-case matrix against merged v1: cases 15-18 FAIL \u2014 ESCAPE SUCCEEDED."
+    },
+    {
+      "file": "p0-a/evidence/threat-matrix-v2-caproot.txt",
+      "sha256": "73eff3e0a1986d55774f3c961971a4a6391ec55366b1ad7151e0fac5cf6b77ea",
+      "bytes": 1731,
+      "evidence_type": "corrected-fixture",
+      "originating_step": "S3-05",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c+uncommitted",
+      "note": "Authoritative 18-case matrix: 17/17 executable PASS, case 08 INVALID, outside dir empty."
+    },
+    {
+      "file": "p0-a/evidence/capability-root-symlink-repro.mjs",
+      "sha256": "00d68ca67103d80825145541dcbbbdb6584503ff5d51f8a5259d026fe565e56e",
+      "bytes": 6162,
+      "evidence_type": "harness",
+      "originating_step": "S2-07",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c+uncommitted",
+      "note": "Standalone reproduction: mint, symlink the capability root, ship, hash, validate."
+    },
+    {
+      "file": "corrective/evidence/S1-03-status.txt",
+      "sha256": "365fd7512cb99532f1694a257a09edae19b327f6e54b915b736ed9cd6f68c396",
+      "bytes": 1342,
+      "evidence_type": "preservation",
+      "originating_step": "S1-03",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c",
+      "note": "Complete pre-edit worktree status."
+    },
+    {
+      "file": "corrective/evidence/S1-04-backup-hashes.txt",
+      "sha256": "0ec951823a5c27401ca62a9dea98b3bfe8f87cf70348c9f8138a6dedcabdbf4e",
+      "bytes": 1053,
+      "evidence_type": "preservation",
+      "originating_step": "S1-04",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c",
+      "note": "Hashes of the external recovery backup. Absolute machine path deliberately omitted."
+    },
+    {
+      "file": "corrective/evidence/S1-06-p0b-check.txt",
+      "sha256": "fb4354a447fc60fa3908d8ec26c97a9a1570cacf99dd5adfff299389409e4616",
+      "bytes": 619,
+      "evidence_type": "preservation",
+      "originating_step": "S1-06",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c",
+      "note": "P0-B sentinel files unmodified; only src/files.ts changed in production."
+    },
+    {
+      "file": "corrective/evidence/S1-07-summary.txt",
+      "sha256": "fe4b6c7e85d9de48a1bc242f99deaff52e8c7f728582dfc0c43f98a0e219bc42",
+      "bytes": 299,
+      "evidence_type": "preservation",
+      "originating_step": "S1-07",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c+uncommitted",
+      "note": "Current-state measurement, exit codes read directly."
+    },
+    {
+      "file": "corrective/evidence/S1-08-protected-now.txt",
+      "sha256": "7c646fe71859e7b627d349c6dd68d374a17922d326b0090bff85f18d7530a83a",
+      "bytes": 1072,
+      "evidence_type": "canonical-repository",
+      "originating_step": "S1-08",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c+uncommitted",
+      "note": "12 canonical protected surfaces, byte-identical to baseline."
+    },
+    {
+      "file": "corrective/evidence/S3-01-requirement-line-map.md",
+      "sha256": "d9277010a1f84daeedb351972adbccd1bc2b29164b2af4075535ce499281e77c",
+      "bytes": 3585,
+      "evidence_type": "review",
+      "originating_step": "S3-01",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c+uncommitted",
+      "note": "Requirement-to-line mapping for the corrective production diff."
+    },
+    {
+      "file": "corrective/evidence/S3-02-four-cases.txt",
+      "sha256": "fe58ecf44b721c96db25ae12e10722afec9be8addf0b032ef02f0cf7add54f2c",
+      "bytes": 3782,
+      "evidence_type": "corrected-fixture",
+      "originating_step": "S3-02",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c+uncommitted",
+      "note": "Cases 15-18 individually: outcome, EvalRow count, hashes before/after, outside-file existence, exit code. 4/4 PASS."
+    },
+    {
+      "file": "corrective/evidence/S3-02-cases.mjs",
+      "sha256": "79e26386ed11fc41cb662dd4871a0923142e1c56d025433e66a710d4a7732116",
+      "bytes": 7017,
+      "evidence_type": "harness",
+      "originating_step": "S3-02",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c+uncommitted",
+      "note": "Per-case verification harness."
+    },
+    {
+      "file": "corrective/evidence/S3-06-verification.txt",
+      "sha256": "cfda9a21981498d7d033f55522bb6e91fb466e872be473ea3a6eb8f761b3fd7f",
+      "bytes": 390,
+      "evidence_type": "verification",
+      "originating_step": "S3-06",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c+uncommitted",
+      "note": "check/test/validate/demo: 38/38, VERIFIED, shipped $0.068."
+    },
+    {
+      "file": "corrective/evidence/S3-07-dependencies.txt",
+      "sha256": "8a9cf7e361a74123f56bd10db99dcaaab38580e8735a973c35dd3d063c1f4d7c",
+      "bytes": 249,
+      "evidence_type": "verification",
+      "originating_step": "S3-07",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c+uncommitted",
+      "note": "npm ci + npm audit: 4 packages, 0 vulnerabilities, manifests unchanged."
+    },
+    {
+      "file": "corrective/evidence/S3-08-protected-final.txt",
+      "sha256": "20ff25176b663e8d6eae7a5b983fff5f10027a775abd98aa45871ebda5d18c8e",
+      "bytes": 1307,
+      "evidence_type": "canonical-repository",
+      "originating_step": "S3-08",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c+uncommitted",
+      "note": "Final recheck: 12 surfaces byte-identical, ADR inventory unchanged."
     },
     {
       "file": "p0-a/report.md",
-      "sha256": "e7f6529f63f6bf59da36bd5292d2f1522bacce6624af9a126657128a52874374",
-      "bytes": 9217
+      "sha256": "097d7b313a5ca4a16e8044f6caf7fee4040855bc4dd3cbda2a0bbb00128cb7ba",
+      "bytes": 18662,
+      "evidence_type": "document",
+      "originating_step": "S2-04",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c+uncommitted",
+      "note": "P0-A report incl. correction notice, root cause 3.2, process failure 16, chronology 17."
     },
     {
       "file": "p0-a/test-matrix.md",
-      "sha256": "727fb4c856c7c3a68e43fe0065293313c996981994d6dcde8037a45ac8e0c3eb",
-      "bytes": 4298
+      "sha256": "119de61efabbd7895fe6c7166ab9d882bb04563b6bcc4e37516e172318b496b2",
+      "bytes": 9810,
+      "evidence_type": "document",
+      "originating_step": "S2-06",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c+uncommitted",
+      "note": "Three-state matrix across v0/v1/v2 with literal counts."
     },
     {
       "file": "p0-a/containment-contract.md",
-      "sha256": "486db66e3062dc18e66f5e21ac959e2a73336ece7ac85a3d061f506cd7be02ac",
-      "bytes": 4303
+      "sha256": "b51d37591a2b2826b04de59cf1cda596dd5a9c7a7e80b59051a049a4cc46d0f0",
+      "bytes": 8872,
+      "evidence_type": "document",
+      "originating_step": "S2-05",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c+uncommitted",
+      "note": "12 separately proven rules; pre-existing condition vs TOCTOU race."
     },
     {
       "file": "README.md",
-      "sha256": "a6b2e89478bc981d4ee943c4855c820b95bf2b22de29ca8dc05b6a58359066d9",
-      "bytes": 3123
+      "sha256": "1818ebae1323de945ab322bc3357fad7fa795b2328f2d83758dd847c236f0f90",
+      "bytes": 4648,
+      "evidence_type": "document",
+      "originating_step": "S2-02",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c+uncommitted",
+      "note": "Program README with the correction notice."
     },
     {
       "file": "handoffs/P0-A-to-P0-B.md",
-      "sha256": "e72c88f2fe967982593d2110f8543131d7bf6e0d67928ac53565d6bc42de06bc",
-      "bytes": 4266
+      "sha256": "af0bb853195cb53d6bdd15ed8315085be4678f4651481886e5b17964c4b2407d",
+      "bytes": 5911,
+      "evidence_type": "document",
+      "originating_step": "S2-10",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c+uncommitted",
+      "note": "P0-B blocked; 60adb63 is not a valid base; corrective merge SHA PENDING PREZ MERGE."
+    },
+    {
+      "file": "corrective/SCOPE-1-handoff.md",
+      "sha256": "7c0e384ca8171d7aa989133a992d40fc8ef6d906212237ddeaf0a368195e0dcf",
+      "bytes": 5940,
+      "evidence_type": "document",
+      "originating_step": "S1-09",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c",
+      "note": "Preservation and recoverable baseline."
+    },
+    {
+      "file": "corrective/SCOPE-2-handoff.md",
+      "sha256": "435f6972979b7fda0d2f5d9155bdc72272b02df2aa6d112d422e8abfb8ca64c2",
+      "bytes": 7917,
+      "evidence_type": "document",
+      "originating_step": "S2-12",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c+uncommitted",
+      "note": "Chronology, supersession, reconciliation, consistency sweep."
+    },
+    {
+      "file": "corrective/PREZ-GATE-PACKET.md",
+      "sha256": "663deeefef48251774e67429f0c7dfb4674eb53ac67c7d58ccdf37c0da2e27c5",
+      "bytes": 5978,
+      "evidence_type": "document",
+      "originating_step": "S3-17",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c+uncommitted",
+      "note": "Everything the merge gate needs, in one place."
+    },
+    {
+      "file": "corrective/evidence/S3-10-changed-files.txt",
+      "sha256": "06554b12969bf9c58876f9203cdd6e93af4898018f41644ff591a550c8927c82",
+      "bytes": 6349,
+      "evidence_type": "review",
+      "originating_step": "S3-10",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c+uncommitted",
+      "note": "Final changed-file audit: 32 files, every one categorized, zero UNEXPECTED; six P0-B production files unmodified."
+    },
+    {
+      "file": "corrective/evidence/S3-12-post-commit.txt",
+      "sha256": "1dbecb75abe6d6f957f1c77e5759b6cc102a9429ac15f269dfc911b2266f7ac8",
+      "bytes": 588,
+      "evidence_type": "verification",
+      "originating_step": "S3-12",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c+corrective",
+      "note": "Post-commit verification: check 0, 38/38, validate 0; commit 8244a77, parent 60adb63."
+    },
+    {
+      "file": "corrective/evidence/S3-16-adversarial-review.md",
+      "sha256": "3f302febc7279975bd5c112b5ef3035a63a1789652d14127cf7e2846715e8e86",
+      "bytes": 4428,
+      "evidence_type": "review",
+      "originating_step": "S3-16",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c+corrective",
+      "note": "12 claims attacked; all hold; three precision changes made and recorded."
+    },
+    {
+      "file": "corrective/evidence/S3-16-post-review-verification.txt",
+      "sha256": "7ae008c8f102a547951143842d24e50a403c8b5ffb89bc86a2b07fafb48df647",
+      "bytes": 405,
+      "evidence_type": "verification",
+      "originating_step": "S3-16",
+      "status": "CURRENT",
+      "tested_baseline_sha": "60adb63ef6be09b93237d75758d3b2e817019f9c+corrective",
+      "note": "Re-verification after the review changes: 38/38, VERIFIED, $0.068, 12/12 protected surfaces identical."
     }
-  ]
+  ],
+  "redaction": "The developer home path prefix is replaced with the literal token <home> in raw evidence. No other alteration was made to any captured output."
 }

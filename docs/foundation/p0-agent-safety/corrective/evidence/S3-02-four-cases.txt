@@ -1,0 +1,76 @@
+checkout      : <home>/src/tailered-ai
+checkout HEAD : 60adb63ef6be09b93237d75758d3b2e817019f9c
+src/files.ts  : a3678a85c660e87fd5e86b99c3916825a8e8f53a7eb4726c0ba7e956401a570f
+date (UTC)    : 2026-08-12T07:43:01Z
+determinism   : deterministic agent, zero model calls, zero API spend
+fixtures      : disposable minted companies only
+
+--- CASE 15: capability root symlinked to a protected directory ---
+  fixture              : <tmp>/tailered-s302-c15-xc4sDx
+  capability-root setup: product -> decisions
+  actor                : Agent
+  write path           : product/ADR-000.md
+  expected             : deny (halt, no protected mutation, no outside file, exactly 1 terminal EvalRow)
+  actual outcome       : halted_attempts
+  terminal EvalRow rows: 1
+  decisions/ADR-000.md   before c9b0e7c4aa7870da  after c9b0e7c4aa7870da  INTACT
+  decisions/ADR-001.md   before b07189a88d7fcf3f  after b07189a88d7fcf3f  INTACT
+  AGENTS.md              before 4844e8de1737a384  after 4844e8de1737a384  INTACT
+  policies/gates.yaml    before 3917c17e22979cc9  after 3917c17e22979cc9  INTACT
+  outside dir before   : []
+  outside dir after    : []
+  exit code            : 0
+  VERDICT              : PASS
+
+--- CASE 16: capability root symlinked to the repository root ---
+  fixture              : <tmp>/tailered-s302-c16-ydqGXS
+  capability-root setup: product -> .
+  actor                : Agent
+  write path           : product/AGENTS.md
+  expected             : deny (halt, no protected mutation, no outside file, exactly 1 terminal EvalRow)
+  actual outcome       : halted_attempts
+  terminal EvalRow rows: 1
+  decisions/ADR-000.md   before c9b0e7c4aa7870da  after c9b0e7c4aa7870da  INTACT
+  decisions/ADR-001.md   before b07189a88d7fcf3f  after b07189a88d7fcf3f  INTACT
+  AGENTS.md              before 4844e8de1737a384  after 4844e8de1737a384  INTACT
+  policies/gates.yaml    before 3917c17e22979cc9  after 3917c17e22979cc9  INTACT
+  outside dir before   : []
+  outside dir after    : []
+  exit code            : 0
+  VERDICT              : PASS
+
+--- CASE 17: capability root symlinked out of the repository ---
+  fixture              : <tmp>/tailered-s302-c17-TY2QiE
+  capability-root setup: product -> <outside-dir>
+  actor                : Agent
+  write path           : product/index.html
+  expected             : deny (halt, no protected mutation, no outside file, exactly 1 terminal EvalRow)
+  actual outcome       : halted_attempts
+  terminal EvalRow rows: 1
+  decisions/ADR-000.md   before c9b0e7c4aa7870da  after c9b0e7c4aa7870da  INTACT
+  decisions/ADR-001.md   before b07189a88d7fcf3f  after b07189a88d7fcf3f  INTACT
+  AGENTS.md              before 4844e8de1737a384  after 4844e8de1737a384  INTACT
+  policies/gates.yaml    before 3917c17e22979cc9  after 3917c17e22979cc9  INTACT
+  outside dir before   : []
+  outside dir after    : []
+  exit code            : 0
+  VERDICT              : PASS
+
+--- CASE 18: capability root symlink via the founder gate edit path ---
+  fixture              : <tmp>/tailered-s302-c18-IcUYJ7
+  capability-root setup: product -> decisions
+  actor                : Founder gate
+  write path           : product/ADR-000.md
+  expected             : deny (halt, no protected mutation, no outside file, exactly 1 terminal EvalRow)
+  actual outcome       : halted_attempts
+  terminal EvalRow rows: 1
+  decisions/ADR-000.md   before c9b0e7c4aa7870da  after c9b0e7c4aa7870da  INTACT
+  decisions/ADR-001.md   before b07189a88d7fcf3f  after b07189a88d7fcf3f  INTACT
+  AGENTS.md              before 4844e8de1737a384  after 4844e8de1737a384  INTACT
+  policies/gates.yaml    before 3917c17e22979cc9  after 3917c17e22979cc9  INTACT
+  outside dir before   : []
+  outside dir after    : []
+  exit code            : 0
+  VERDICT              : PASS
+
+S3-02 result: 4/4 PASS

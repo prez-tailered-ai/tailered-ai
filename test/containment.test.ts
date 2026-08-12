@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { mkdtemp, readFile, symlink, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, readdir, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -80,6 +80,22 @@ async function assertProtectedIntact(
   assert.equal(after.mintAdr, before.mintAdr, "ADR-001 was modified");
   assert.equal(after.constitution, before.constitution, "AGENTS.md was modified");
   assert.equal(after.gates, before.gates, "policies/gates.yaml was modified");
+}
+
+/**
+ * Replaces the real `product/` directory with a symbolic link.
+ *
+ * This models a capability root that is not a real directory — a repository
+ * cloned with a symlinked `product/`, or one repointed by any other local
+ * process. It is a pre-existing on-disk condition, deterministically testable
+ * before any write, and therefore distinct from the residual TOCTOU race.
+ */
+async function replaceProductWithSymlink(
+  root: string,
+  target: string,
+): Promise<void> {
+  await rm(join(root, "product"), { recursive: true, force: true });
+  await symlink(target, join(root, "product"), "dir");
 }
 
 /** Deterministic agent that returns one attack payload plus a legitimate write. */
@@ -304,6 +320,107 @@ test("containment: the capability root itself cannot be overwritten as a file", 
     content: "OVERWRITTEN\n",
   });
   assert.notEqual(outcome, "shipped");
+  await assertProtectedIntact(root, before);
+});
+
+test("containment: a legitimate write still succeeds through an operator-owned parent alias", async () => {
+  // Positive control for rule 2. The repository is reached through a symlinked
+  // PARENT — the shape of `/tmp` -> `/private/tmp` or a home-directory alias.
+  // That symlink belongs to the operator's filesystem layout, is not agent
+  // reachable, and must not be confused with a symlinked capability root.
+  const parent = await mkdtemp(join(tmpdir(), "tailered-containment-parent-"));
+  const real = join(parent, "real-company");
+  await mintCompany(real, {
+    what: "We are building a bounded artifact that exercises the product write containment boundary.",
+    forWhom:
+      "It serves one accountable auditor proving that agent writes cannot escape their capability root.",
+    winningLooksLike:
+      "Winning means every escape payload is denied and every protected surface is byte identical.",
+    constraints:
+      "The fixture stays below five dollars, makes no network calls, and lives in a disposable directory.",
+  });
+  await symlink("real-company", join(parent, "alias"), "dir");
+  const root = join(parent, "alias");
+
+  const before = await snapshotProtected(root);
+  const outcome = await attemptAgentEscape(root, {
+    path: "product/about.html",
+    content: "<!doctype html><title>about</title>\n",
+  });
+  assert.equal(
+    outcome,
+    "shipped",
+    "an operator-owned parent alias must not block legitimate product writes",
+  );
+  await assertProtectedIntact(root, before);
+  assert.equal(
+    await readFile(join(real, "product/about.html"), "utf8"),
+    "<!doctype html><title>about</title>\n",
+    "the write must land in the real repository, not beside the alias",
+  );
+});
+
+test("containment: the capability root itself cannot be a symlink to a protected directory", async () => {
+  const root = await makeCompany();
+  await replaceProductWithSymlink(root, "decisions");
+  const before = await snapshotProtected(root);
+  const outcome = await attemptAgentEscape(root, {
+    path: "product/ADR-000.md",
+    content: "OVERWRITTEN VIA A SYMLINKED CAPABILITY ROOT\n",
+  });
+  assert.notEqual(outcome, "shipped");
+  await assertProtectedIntact(root, before);
+});
+
+test("containment: the capability root itself cannot be a symlink to the repository root", async () => {
+  const root = await makeCompany();
+  await replaceProductWithSymlink(root, ".");
+  const before = await snapshotProtected(root);
+  const outcome = await attemptAgentEscape(root, {
+    path: "product/AGENTS.md",
+    content: "OVERWRITTEN VIA A SYMLINKED CAPABILITY ROOT\n",
+  });
+  assert.notEqual(outcome, "shipped");
+  await assertProtectedIntact(root, before);
+});
+
+test("containment: the capability root itself cannot be a symlink out of the repository", async () => {
+  const root = await makeCompany();
+  const outside = await mkdtemp(join(tmpdir(), "tailered-containment-outside-"));
+  await replaceProductWithSymlink(root, outside);
+  const before = await snapshotProtected(root);
+  const outcome = await attemptAgentEscape(root, {
+    path: "product/index.html",
+    content: "ESCAPED THE REPOSITORY VIA A SYMLINKED CAPABILITY ROOT\n",
+  });
+  assert.notEqual(outcome, "shipped");
+  await assertProtectedIntact(root, before);
+  assert.deepEqual(
+    await readdir(outside),
+    [],
+    "no byte may be written outside the repository through a symlinked capability root",
+  );
+});
+
+test("containment: the founder gate edit path is denied a symlinked capability root", async () => {
+  const root = await makeCompany();
+  await replaceProductWithSymlink(root, "decisions");
+  const before = await snapshotProtected(root);
+  const receipt = await taileredShip({
+    root,
+    specText: "Build a bounded artifact with a product index page for the audit.",
+    agent: new EscapeAgent({
+      path: "product/index.html",
+      content: "<!doctype html><title>ok</title>\n",
+    }),
+    gate: new FixedGate({
+      verdict: "edit",
+      reasonText:
+        "The founder edits this artifact because the gate path must share the same boundary.",
+      edits: [{ path: "product/ADR-000.md", content: "EDITED BY GATE\n" }],
+    }),
+  });
+  assert.notEqual(receipt.outcome, "shipped");
   await assertProtectedIntact(root, before);
 });
 
