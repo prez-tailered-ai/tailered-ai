@@ -71,9 +71,10 @@ export async function resolveContainedWritePath(
   // traversing a symbolic link at any point below the repository root.
   // Canonicalising it instead — `realpath(root/product)` — would silently
   // ACCEPT a symlinked `product/` and adopt its target as the boundary, which
-  // makes the boundary whatever the link points at. Symlinks ABOVE the
+  // makes the boundary whatever the link points at. Symlinks AT OR ABOVE the
   // repository root belong to the operator's own filesystem layout (`/tmp` ->
-  // `/private/tmp`), are not agent-reachable, and are resolved here once.
+  // `/private/tmp`, an aliased checkout), are supplied by the operator rather
+  // than the agent, and are resolved here once.
   let canonicalCapabilityRoot: string;
   try {
     canonicalCapabilityRoot = await realpath(root);

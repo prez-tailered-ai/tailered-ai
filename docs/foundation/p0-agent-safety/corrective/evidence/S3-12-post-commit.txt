@@ -1,0 +1,19 @@
+# S3-12 post-commit verification
+# date (UTC): 2026-08-12T07:49:08Z
+# commit: 8244a77eae135f4b03e9b71c05632346850e7e14
+# parent: 60adb63ef6be09b93237d75758d3b2e817019f9c
+
+8244a77 fix(security): reject symlinked product capability roots
+ docs/foundation/p0-agent-safety/README.md          |  34 +-
+ .../p0-agent-safety/corrective/PREZ-GATE-PACKET.md | 118 +++++++
+
+npm run check    exit=0
+npm test         exit=0
+  # tests 38
+  # pass 38
+  # fail 0
+  # skipped 0
+npm run validate exit=0
+
+working tree clean: NO
+insertions/deletions:  32 files changed, 2627 insertions(+), 188 deletions(-)

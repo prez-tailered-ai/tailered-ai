@@ -108,6 +108,21 @@ The path is innocent. **The boundary moved.** That is the authority lesson of th
 scope: a capability root is a *claim to verify*, never a value to resolve. Canonicalizing
 an authority boundary hands its definition to whoever controls the link.
 
+### 3.2.1 Exploitability bound — stated, because it is load-bearing
+
+An agent **cannot create this condition itself**. `src/` contains no `symlink()` call at
+all, and `FileWrite` is `{ path, content }` — there is no path through the ship loop that
+creates a symbolic link, and `product/../x` was already blocked by v1. The symlinked
+capability root must **pre-exist** on disk: carried by a clone (git stores symlinks), a
+restore from backup, an operator action, or another local process.
+
+That bounds the severity — it is not a one-step agent escape from a clean repository — and
+it does **not** reduce the need for the fix. A company repository is checked out from
+somewhere; "the boundary is whatever the checkout says it is" is not an authority model.
+The condition is also *observable before the write*, which is exactly what puts it in scope
+for the check that precedes the write, and exactly what distinguishes it from the TOCTOU
+residual.
+
 ### 3.3 Why the two defects are the same mistake
 
 v0 compared a path to a **string**. v1 compared a path to a **followed link**. Both

@@ -7,7 +7,7 @@ No other production file is touched. Line numbers refer to `src/files.ts` after 
 
 | # | Requirement | Lines | How it is satisfied |
 |---|---|---|---|
-| 1 | canonicalizes the repository root once | **77-86** | `canonicalCapabilityRoot = await realpath(root)` inside a `try`, with a fail-closed `ValidationError` on any error. Called once per resolution. |
+| 1 | canonicalizes the repository root once (symlinks at or above the root are the operator's, not the agent's) | **77-86** | `canonicalCapabilityRoot = await realpath(root)` inside a `try`, with a fail-closed `ValidationError` on any error. Called once per resolution. |
 | 2 | does **not** trust `realpath(root/product)` as proof of capability identity | **79** (was `realpath(lexicalCapabilityRoot)`) | The `realpath` argument changed from the capability root to the repository root. The capability root is never passed to `realpath`. |
 | 3 | walks the lexical capability-root components | **88-90, 91-113** | `relative(resolve(root), lexicalCapabilityRoot)` split on `sep`, empty segments filtered; the loop descends one component at a time from the canonical repository root. |
 | 4 | requires the capability root to exist | **93-101** | `lstat(candidate)`; **any** error — including `ENOENT` — throws. Note the deliberate contrast with the descendant walk at **124-133**, where `ENOENT` legitimately `break`s because a not-yet-created destination is normal. |

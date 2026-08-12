@@ -12,8 +12,8 @@ The exact invariant enforced by `resolveContainedWritePath`.
 ## Rules
 
 Each rule is a **separate obligation that must be positively proven**. v1 failed because
-two of them (R4-R6) were assumed to follow from one `realpath()` call. Nothing here is
-derived from anything else.
+three of them — rules 4, 5 and 6 — were assumed to follow from a single `realpath()`
+call. Nothing here is derived from anything else.
 
 ### The input
 
@@ -24,9 +24,10 @@ derived from anything else.
 ### The boundary — proven, never derived
 
 2. **Repository-root canonicalization.** The repository root is resolved to its canonical
-   form **once**. Symlinks *above* the repository belong to the operator's own filesystem
-   layout (`/tmp` → `/private/tmp`, a home directory alias), are not agent reachable, and
-   are legitimate.
+   form **once**. Symlinks *at or above* the repository root — including the root itself
+   being an alias — belong to the operator's own filesystem layout (`/tmp` →
+   `/private/tmp`, an aliased checkout). They are supplied by the operator via `--repo`,
+   not by the agent, and are legitimate. The positive control exercises exactly this.
 3. **Capability-root lexical identity.** The capability root is computed lexically from
    the repository root (`resolveRepoPath(root, "product")`), so its identity is fixed by
    configuration and cannot be influenced by the requested path.
@@ -141,7 +142,7 @@ is not:
 | Condition | **Pre-existing** on disk before the run | A swap **during** the run |
 | Detectable before the write? | **Yes**, deterministically | No — that is the definition of the race |
 | Arrives via | a clone, a restore, any earlier local write | a concurrent local process |
-| Status | **CLOSED** by rule 2, tested by four classes | **OPEN**, stated above |
+| Status | **CLOSED** by rule 6, tested by four classes | **OPEN**, stated above |
 
 The first implementation treated the first row as if it were the second — it
 canonicalized the root and deferred to the TOCTOU disclosure. That was wrong: a
